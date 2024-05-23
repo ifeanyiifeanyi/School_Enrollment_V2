@@ -11,7 +11,12 @@ use App\Models\SiteSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EmailSetRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
+
 
 class DashboardController extends Controller
 {
@@ -68,7 +73,7 @@ class DashboardController extends Controller
             'facultyCount',
             'departmentData',
             'facultyData',
-            'paymentData', 
+            'paymentData',
             'totalPayments'
         ));
     }
@@ -87,7 +92,14 @@ class DashboardController extends Controller
 
     public function siteSettings()
     {
-        return view('admin.siteSetting.index');
+
+        return view('admin.siteSetting.index', [
+            'smtp_host' => env('MAIL_HOST'),
+            'smtp_port' => env('MAIL_PORT'),
+            'smtp_username' => env('MAIL_USERNAME'),
+            'smtp_password' => env('MAIL_PASSWORD'),
+            'encryption' => env('MAIL_ENCRYPTION'),
+        ]);
     }
 
     public function siteSettingStore(Request $request)
@@ -106,14 +118,14 @@ class DashboardController extends Controller
             'site_favicon' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:10000',
         ]);
 
-        $site = SiteSetting::firstOrNew();
+        $site = SiteSetting::firstOrNew([]);
 
         if ($request->hasFile('site_logo')) {
             $thumb = $request->file('site_logo');
             $extension = $thumb->getClientOriginalExtension();
             $profilePhoto = time() . "." . $extension;
             $thumb->move('site/', $profilePhoto);
-            $site->site_icon = 'site/' . $profilePhoto;
+            $site->site_logo = 'site/' . $profilePhoto;
         }
 
         if ($request->hasFile('site_favicon')) {
@@ -135,11 +147,34 @@ class DashboardController extends Controller
         $site->google_analytics = $request->google_analytics_code;
         $site->save();
 
-        $notification = [
-            'message' => 'Site Settings Created!',
-            'alert-type' => 'success'
-        ];
+        return response()->json(['message' => 'Site Settings Created!']);
+    }
 
-        return redirect()->back()->with($notification);
+    public function emailSetup(EmailSetRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        $envPath = base_path('.env');
+
+        if (!File::exists($envPath)) {
+            return response()->json(['error' => '.env file not found'], 404);
+        }
+
+        $envContent = File::get($envPath);
+
+        // update the email connection params in .env file
+        $envContent = preg_replace('/^MAIL_HOST=.*/m', 'MAIL_HOST=' . $validatedData['smtp_host'], $envContent);
+        $envContent = preg_replace('/^MAIL_PORT=.*/m', 'MAIL_PORT=' . $validatedData['smtp_port'], $envContent);
+        $envContent = preg_replace('/^MAIL_USERNAME=.*/m', 'MAIL_USERNAME=' . $validatedData['smtp_username'], $envContent);
+        $envContent = preg_replace('/^MAIL_PASSWORD=.*/m', 'MAIL_PASSWORD=' . $validatedData['smtp_password'], $envContent);
+        $envContent = preg_replace('/^MAIL_ENCRYPTION=.*/m', 'MAIL_ENCRYPTION=' . $validatedData['encryption'], $envContent);
+
+        File::put($envPath, $envContent);
+
+        // Clear the cache
+        Artisan::call('config:cache');
+        Artisan::call('config:clear');
+
+        return response()->json(['message' => 'Email Settings Created!']);
     }
 }

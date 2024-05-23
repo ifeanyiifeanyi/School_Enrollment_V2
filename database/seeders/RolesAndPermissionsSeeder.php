@@ -38,10 +38,11 @@ class RolesAndPermissionsSeeder extends Seeder
             'manage-faculties', 'create-faculty', 'edit-faculty', 'delete-faculty', 'view-faculty',
             'manage-payments', 'create-payment', 'edit-payment', 'delete-payment', 'view-payment',
             'manage-payment-methods', 'create-payment-method', 'edit-payment-method', 'delete-payment-method', 'view-payment-method',
-            'manage-site-settings', 'edit-site-settings', 'view-site-settings',
+            'manage-site-settings', 'edit-site-settings', 'view-site-settings', 'create-site-settings', 'delete-site-settings',
             'manage-students', 'create-student', 'edit-student', 'delete-student', 'view-student',
             'manage-admins', 'create-admin', 'edit-admin', 'delete-admin', 'view-admin',
-            'manage-scholarship', 'create-scholarship', 'edit-scholarship', 'view-scholarship', 'delete-scholarship'
+            'manage-scholarship', 'create-scholarship', 'edit-scholarship', 'view-scholarship', 'delete-scholarship',
+            'manage-email-settings', 'edit-email-settings', 'view-email-settings', 'create-email-settings', 'delete-email-settings',
         ];
 
         // Create permissions
@@ -92,7 +93,12 @@ class RolesAndPermissionsSeeder extends Seeder
             'faculty-manager' => ['manage-faculties', 'create-faculty', 'edit-faculty', 'delete-faculty', 'view-faculty'],
             'department-manager' => ['manage-departments', 'create-department', 'edit-department', 'delete-department', 'view-department'],
             'payment-manager' => ['manage-payments', 'create-payment', 'edit-payment', 'delete-payment', 'view-payment', 'manage-payment-methods', 'create-payment-method', 'edit-payment-method', 'delete-payment-method', 'view-payment-method'],
-            'site-settings-manager' => ['manage-site-settings', 'edit-site-settings', 'view-site-settings'],
+
+            'site-settings-manager' => [
+                'manage-site-settings', 'edit-site-settings', 'view-site-settings', 'create-site-settings', 'delete-site-settings',
+                'manage-email-settings', 'edit-email-settings', 'view-email-settings', 'create-email-settings', 'delete-email-settings'
+            ],
+
             'student-manager' => ['manage-students', 'create-student', 'edit-student', 'delete-student', 'view-student'],
             'admin-manager' => ['manage-admins', 'create-admin', 'edit-admin', 'delete-admin', 'view-admin'],
             'exam-manager' => [
