@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ManageAdminController;
 use App\Http\Controllers\Admin\ManageRolePermissionController;
 use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\ScholarshipController;
+use App\Http\Controllers\Admin\ScholarshipQuestionController;
 use App\Http\Controllers\Admin\StudentManagementController;
 use App\Http\Controllers\Installer\InstallerController;
 use App\Http\Controllers\Student\ApplicationProcessController;
@@ -220,6 +221,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
 
     Route::middleware(['permission:manage-scholarship'])->group(function () {
 
+        // create scholarships
         Route::controller(ScholarshipController::class)->group(function () {
             Route::get('scholarships', 'index')->name('admin.manage.scholarship');
             Route::get('scholarships/view/{slug}', 'show')->name('admin.view.scholarship');
@@ -228,6 +230,13 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
             Route::put('scholarships/update/{slug}', 'update')->name('admin.update.scholarship');
             Route::get('scholarships/delete/{slug}', 'destroy')->name('admin.delete.scholarship');
         });
+
+
+        // create scholarship questions
+        Route::controller(ScholarshipQuestionController::class)->group(function(){
+            Route::get('scholarship-questions', 'index')->name('admin.scholarship.question.view');
+        });
+
     });
 });
 

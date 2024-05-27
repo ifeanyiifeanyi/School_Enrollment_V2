@@ -97,20 +97,31 @@
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-cog fa-spin"></i><span>Permission
                         & Roles</span></a>
                 <ul class="dropdown-menu">
-                    <li><a navigate:wire class="nav-link" href="{{ route('admin.create.permission') }}">Create Permission</a></li>
+                    <li><a navigate:wire class="nav-link" href="{{ route('admin.create.permission') }}">Create
+                            Permission</a></li>
                     <li><a navigate:wire class="nav-link" href="{{ route('admin.create.role') }}">Create Roles</a></li>
                     <li><a navigate:wire class="nav-link" href="{{ route('admin.view.role') }}">View Roles</a></li>
-                    <li><a navigate:wire class="nav-link" href="{{ route('admin.permissions.view') }}">View Permission</a></li>
+                    <li><a navigate:wire class="nav-link" href="{{ route('admin.permissions.view') }}">View
+                            Permission</a></li>
 
                 </ul>
             </li>
-            <li class="dropdown" {{ request()->routeIs('admin.manage.scholarship') || request()->routeIs('admin.studentApplication.payment') ? 'parent' : '' }}>
+            <li class="dropdown"
+                {{ request()->routeIs('admin.manage.scholarship') || request()->routeIs('admin.studentApplication.payment') ? 'parent' : '' }}>
                 <a href="#" class="nav-link has-dropdown"><i
                         class="fas fa-cog fa-spin"></i><span>Scholarship</span></a>
                 <ul class="dropdown-menu">
-                    <li><a navigate:wire class="nav-link" href="">Applications</a></li>
-                    <li><a navigate:wire class="nav-link"
-                            href="{{ route('admin.manage.scholarship') }}">Scholarships</a></li>
+                    <li>
+                        <a navigate:wire class="nav-link" href="{{ route('admin.manage.scholarship') }}">
+                            Scholarships
+                        </a>
+                    </li>
+
+                    <li>
+                        <a navigate:wire class="nav-link" href="{{ route('admin.scholarship.question.view') }}">
+                            Questions
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>
