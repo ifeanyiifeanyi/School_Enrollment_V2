@@ -162,14 +162,24 @@ class DashboardController extends Controller
 
         $envContent = File::get($envPath);
 
-        // update the email connection params in .env file
-        $envContent = preg_replace('/^MAIL_HOST=.*/m', 'MAIL_HOST=' . $validatedData['smtp_host'], $envContent);
-        $envContent = preg_replace('/^MAIL_PORT=.*/m', 'MAIL_PORT=' . $validatedData['smtp_port'], $envContent);
-        $envContent = preg_replace('/^MAIL_USERNAME=.*/m', 'MAIL_USERNAME=' . $validatedData['smtp_username'], $envContent);
-        $envContent = preg_replace('/^MAIL_PASSWORD=.*/m', 'MAIL_PASSWORD=' . $validatedData['smtp_password'], $envContent);
-        $envContent = preg_replace('/^MAIL_ENCRYPTION=.*/m', 'MAIL_ENCRYPTION=' . $validatedData['encryption'], $envContent);
+        // Backup the original content in case something goes wrong
+        $backupEnvPath = base_path('.env.backup');
+        File::put($backupEnvPath, $envContent);
 
-        File::put($envPath, $envContent);
+        // Update the email connection params in the .env file
+        $newEnvContent = preg_replace('/^MAIL_HOST=.*/m', 'MAIL_HOST=' . $validatedData['smtp_host'], $envContent);
+        $newEnvContent = preg_replace('/^MAIL_PORT=.*/m', 'MAIL_PORT=' . $validatedData['smtp_port'], $newEnvContent);
+        $newEnvContent = preg_replace('/^MAIL_USERNAME=.*/m', 'MAIL_USERNAME=' . $validatedData['smtp_username'], $newEnvContent);
+        $newEnvContent = preg_replace('/^MAIL_PASSWORD=.*/m', 'MAIL_PASSWORD=' . $validatedData['smtp_password'], $newEnvContent);
+        $newEnvContent = preg_replace('/^MAIL_ENCRYPTION=.*/m', 'MAIL_ENCRYPTION=' . $validatedData['encryption'], $newEnvContent);
+
+        if (strlen($newEnvContent) > 0) {
+            File::put($envPath, $newEnvContent);
+        } else {
+            // Restore the backup if something goes wrong
+            File::put($envPath, File::get($backupEnvPath));
+            return response()->json(['error' => 'Failed to update .env file'], 500);
+        }
 
         // Clear the cache
         Artisan::call('config:cache');

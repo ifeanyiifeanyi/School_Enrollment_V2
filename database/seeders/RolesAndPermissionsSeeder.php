@@ -7,62 +7,71 @@ use App\Models\User;
 use App\Models\Admin;
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
+    use WithoutModelEvents;
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        // Define roles
-        $roles = [
-            'admin',
-            'application-manager',
-            'department-manager',
-            'exam-manager',
-            'faculty-manager',
-            'payment-manager',
-            'site-settings-manager',
-            'student-manager',
-            'admin-manager',
-            'scholarship-manager'
-        ];
+        $roles = Config::get('roles');
+        $permissions = Config::get('permissions');
 
-        // Define permissions for each role
-        $adminPermissions = [
-            'manage-applications', 'create-application', 'edit-application', 'delete-application', 'view-application',
-            'manage-departments', 'create-department', 'edit-department', 'delete-department', 'view-department',
-            'manage-exams', 'create-exam', 'edit-exam', 'delete-exam', 'view-exam',
-            'manage-faculties', 'create-faculty', 'edit-faculty', 'delete-faculty', 'view-faculty',
-            'manage-payments', 'create-payment', 'edit-payment', 'delete-payment', 'view-payment',
-            'manage-payment-methods', 'create-payment-method', 'edit-payment-method', 'delete-payment-method', 'view-payment-method',
-            'manage-site-settings', 'edit-site-settings', 'view-site-settings', 'create-site-settings', 'delete-site-settings',
-            'manage-students', 'create-student', 'edit-student', 'delete-student', 'view-student',
-            'manage-admins', 'create-admin', 'edit-admin', 'delete-admin', 'view-admin',
-            'manage-scholarship', 'create-scholarship', 'edit-scholarship', 'view-scholarship', 'delete-scholarship',
-            'manage-email-settings', 'edit-email-settings', 'view-email-settings', 'create-email-settings', 'delete-email-settings',
-        ];
+        DB::transaction(function () use ($roles, $permissions) {
+            $this->createPermissions();
+            $this->createRolesAndAssignPermissions($roles, $permissions);
+            $this->createAdminUser();
+        });
+    }
 
-        // Create permissions
-        foreach ($adminPermissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
+
+    /**
+     * Create permissions for the given permission names.
+     *
+     * @param array $permissionNames
+     * @return void
+     */
+    private function createPermissions(): void
+    {
+        $permissions = array_keys(Config::get('permissions'));
+
+        foreach ($permissions as $permissionName) {
+            Permission::firstOrCreate([
+                'name' => $permissionName,
+            ]);
         }
+    }
 
-        // Create roles and assign permissions
-        foreach ($roles as $role) {
-            $newRole = Role::firstOrCreate(['name' => $role]);
 
-            if ($role === 'admin') {
-                $this->assignPermissionsToRole($newRole, $adminPermissions);
-            } else {
-                $rolePermissions = $this->getRolePermissions($role);
-                $this->assignPermissionsToRole($newRole, $rolePermissions);
-            }
+    /**
+     * Create roles and assign permissions based on the given configuration.
+     *
+     * @param array $roles
+     * @param array $permissions
+     * @return void
+     */
+    private function createRolesAndAssignPermissions(array $roles, array $permissions): void
+    {
+        foreach ($roles as $roleName => $rolePermissions) {
+            $role = Role::firstOrCreate(['name' => $roleName]);
+            $permissionModels = Permission::whereIn('name', $rolePermissions)->get();
+            $role->permissions()->sync($permissionModels->pluck('id')->toArray());
         }
+    }
 
-        // Create the initial admin account
+    /**
+     * Create the initial admin user account.
+     *
+     * @return void
+     */
+    private function createAdminUser(): void
+    {
         $admin = User::create([
             'first_name' => 'Admin',
             'last_name' => 'Admin',
@@ -80,39 +89,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'address' => 'No. 1 Str Road, City State, Country'
         ]);
 
-        // Assign 'admin' role to the main admin user
         $adminRole = Role::where('name', 'admin')->first();
         $admin->roles()->sync([$adminRole->id]);
-    }
-
-    private function getRolePermissions($roleName)
-    {
-        // Define permissions for each role
-        $rolePermissions = [
-            'application-manager' => ['manage-applications', 'create-application', 'edit-application', 'delete-application', 'view-application'],
-            'faculty-manager' => ['manage-faculties', 'create-faculty', 'edit-faculty', 'delete-faculty', 'view-faculty'],
-            'department-manager' => ['manage-departments', 'create-department', 'edit-department', 'delete-department', 'view-department'],
-            'payment-manager' => ['manage-payments', 'create-payment', 'edit-payment', 'delete-payment', 'view-payment', 'manage-payment-methods', 'create-payment-method', 'edit-payment-method', 'delete-payment-method', 'view-payment-method'],
-
-            'site-settings-manager' => [
-                'manage-site-settings', 'edit-site-settings', 'view-site-settings', 'create-site-settings', 'delete-site-settings',
-                'manage-email-settings', 'edit-email-settings', 'view-email-settings', 'create-email-settings', 'delete-email-settings'
-            ],
-
-            'student-manager' => ['manage-students', 'create-student', 'edit-student', 'delete-student', 'view-student'],
-            'admin-manager' => ['manage-admins', 'create-admin', 'edit-admin', 'delete-admin', 'view-admin'],
-            'exam-manager' => [
-                'manage-exams', 'create-exam', 'edit-exam', 'delete-exam', 'view-exam',
-            ],
-            'scholarship-manager' => ['manage-scholarship', 'create-scholarship', 'edit-scholarship', 'view-scholarship', 'delete-scholarship']
-        ];
-
-        return $rolePermissions[$roleName] ?? [];
-    }
-
-    private function assignPermissionsToRole(Role $role, array $permissionNames): void
-    {
-        $permissions = Permission::whereIn('name', $permissionNames)->get();
-        $role->permissions()->sync($permissions->pluck('id')->toArray());
     }
 }

@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('scholarships', function (Blueprint $table) {
+        Schema::create('scholar_applications', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->unique();
-            $table->enum('status', ['active', 'inactive'])->default('inactive');
-            $table->text('description');
-            $table->string('requirements');
-            // $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('scholarship_id')->constrained('scholarships')->onDelete('cascade');
+            $table->string('status')->default('pending');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('scholarships');
+        Schema::dropIfExists('scholar_applications');
     }
 };

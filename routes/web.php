@@ -44,10 +44,10 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::controller(InstallerController::class)->group(function () {
-    Route::get('install', 'index')->name('install.view');
-    Route::post('install', 'store')->name('install.store');
-});
+// Route::controller(InstallerController::class)->group(function () {
+//     Route::get('install', 'index')->name('install.view');
+//     Route::post('install', 'store')->name('install.store');
+// });
 
 
 
@@ -222,6 +222,11 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
 
         Route::controller(ScholarshipController::class)->group(function () {
             Route::get('scholarships', 'index')->name('admin.manage.scholarship');
+            Route::get('scholarships/create', 'create')->name('admin.create.scholarship');
+            Route::post('scholarships/store', 'store')->name('admin.store.scholarship');
+            Route::get('scholarships/edit/{slug}', 'edit')->name('admin.edit.scholarship');
+            Route::put('scholarships/update/{slug}', 'update')->name('admin.update.scholarship');
+
         });
     });
 });
