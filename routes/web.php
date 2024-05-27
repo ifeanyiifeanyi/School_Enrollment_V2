@@ -222,11 +222,11 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
 
         Route::controller(ScholarshipController::class)->group(function () {
             Route::get('scholarships', 'index')->name('admin.manage.scholarship');
-            Route::get('scholarships/create', 'create')->name('admin.create.scholarship');
+            Route::get('scholarships/view/{slug}', 'show')->name('admin.view.scholarship');
             Route::post('scholarships/store', 'store')->name('admin.store.scholarship');
             Route::get('scholarships/edit/{slug}', 'edit')->name('admin.edit.scholarship');
             Route::put('scholarships/update/{slug}', 'update')->name('admin.update.scholarship');
-
+            Route::get('scholarships/delete/{slug}', 'destroy')->name('admin.delete.scholarship');
         });
     });
 });

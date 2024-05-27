@@ -26,13 +26,14 @@
                                     action="{{ isset($scholarship) ? route('admin.update.scholarship', $scholarship->slug) : route('admin.store.scholarship') }}">
 
                                     @csrf
-                                    @if(isset($scholarship))
+                                    @if (isset($scholarship))
                                         @method('PUT')
                                     @endif
                                     <div class="form-group mb-3">
                                         <label for="name">Scholarship Name</label>
                                         <input type="text" class="form-control @error('name') border-danger @enderror"
-                                            name="name" placeholder="Scholarship Name" value="{{ isset($scholarship) ? $scholarship->name : old('name') }}">
+                                            name="name" placeholder="Scholarship Name"
+                                            value="{{ isset($scholarship) ? $scholarship->name : old('name') }}">
                                         @error('name')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -45,7 +46,8 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                    <input type="submit" value="{{ isset($scholarship) ? 'Update' : 'Submit' }}" class="btn btn-info">
+                                    <input type="submit" value="{{ isset($scholarship) ? 'Update' : 'Submit' }}"
+                                        class="btn btn-info">
                                 </form>
                             </div>
                         </div>
@@ -54,9 +56,6 @@
                         <div class="card">
 
                             <div class="card-body">
-                                {{-- <a width="20px" href="{{ route('admin.create.scholarship') }}"
-                                    class="mb-4 btn btn-primary">Create
-                                    Scholarship</a> --}}
                                 <div class="table-responsive">
 
                                     <table class="table table-hover">
@@ -72,12 +71,18 @@
                                                 <td>{{ Str::title($ship->name) }}</td>
                                                 <td>
                                                     <div class="btn-group">
-                                                        <a href="{{ route('admin.edit.scholarship', $ship->slug) }}"
+                                                        <a title="edit scholarship" href="{{ route('admin.edit.scholarship', $ship->slug) }}"
                                                             class="btn btn-info">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <a href="" class="btn btn-info"></a>
-                                                        <a href="" class="btn btn-info"></a>
+                                                        <a title="view details" href="{{ route('admin.view.scholarship', $ship->slug) }}" class="btn btn-primary">
+                                                            <i class="fas fa-user"></i>
+                                                        </a>
+                                                        <a title="delete scolarship" href="#!" data-toggle="modal" data-target="#exampleModal"
+                                                            data-scholarship-slug="{{ $ship->slug }}"
+                                                            class="btn btn-danger">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -93,11 +98,37 @@
 
             </div>
         </section>
+        <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-danger"><i class="fas fa-exclamation-triangle fa-3x"></i> Warning</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are You Sure? <br> This action can not be undone. Do you want to continue?</p>
+                    </div>
+                    <div class="modal-footer bg-whitesmoke br">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <a href="#" class="btn btn-danger" id="deleteScholarship">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 
 
 
 @section('js')
-
+    <script>
+        $('#exampleModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var slug = button.data('scholarship-slug');
+            var modal = $(this);
+            modal.find('#deleteScholarship').attr('href', '/admin/scholarships/delete/' + slug);
+        });
+    </script>
 @endsection

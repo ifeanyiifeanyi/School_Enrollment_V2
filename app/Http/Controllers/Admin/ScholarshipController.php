@@ -20,13 +20,7 @@ class ScholarshipController extends Controller
         return view('admin.scholarships.index', compact('scholarships'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    // public function create()
-    // {
-    //     //
-    // }
+
 
     /**
      * Store a newly created resource in storage.
@@ -54,9 +48,10 @@ class ScholarshipController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Scholarship $slug)
+    public function show($slug)
     {
-        dd($slug);
+        $scholarship = Scholarship::where('slug', $slug)->first();
+        return view('admin.scholarships.view', compact('scholarship'));
     }
 
     /**
@@ -94,14 +89,21 @@ class ScholarshipController extends Controller
         ];
 
         return redirect()->back()->with($notification);
-
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Scholarship $scholarship)
+    public function destroy($slug)
     {
-        //
+        $scholarship = Scholarship::where('slug', $slug)->first();
+        $scholarship->delete();
+
+        $notification = [
+            'message' => 'Scholarship Deleted!',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->back()->with($notification);
     }
 }
