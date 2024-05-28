@@ -26,13 +26,13 @@
                     @foreach ($scholarships as $scholarship)
                         @if ($scholarship->questions->isNotEmpty())
                             <div class="card mb-4 shadow">
-                                
+
                                 <div class="card-header bg-primary text-white">
-                                   <p>
-                                    <a href="" class="btn btn-warning mb-2"><i class="fas fa-edit"></i> </a> <br>
-                                    <a href="" class="btn btn-danger"><i class="fas fa-trash"></i> </a>
-                                </p>
-                                   &nbsp;&nbsp;
+                                    <p>
+                                        <a href="" class="btn btn-warning mb-2"><i class="fas fa-edit"></i> </a> <br>
+                                        <a href="" class="btn btn-danger"><i class="fas fa-trash"></i> </a>
+                                    </p>
+                                    &nbsp;&nbsp;
                                     <h5 class="mb-0">{{ Str::title($scholarship->name) }}</h5>
                                 </div>
                                 <div class="card-body">
