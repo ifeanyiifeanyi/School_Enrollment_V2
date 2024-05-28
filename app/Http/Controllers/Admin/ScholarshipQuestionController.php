@@ -19,13 +19,7 @@ class ScholarshipQuestionController extends Controller
         return view('admin.scholarshipQuestions.index', compact('scholarships'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    
 
     /**
      * Store a newly created resource in storage.
@@ -64,9 +58,11 @@ class ScholarshipQuestionController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+        $scholarships = Scholarship::with('questions')->get();
+        return view('admin.scholarshipQuestions.show', compact('scholarships'));
+
     }
 
     /**

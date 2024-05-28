@@ -32,7 +32,7 @@
                             @endif
 
                             <div class="card-body">
-                                <a href="" class="btn btn-primary float-right">View All Questions</a>
+                                <a href="{{ route('admin.scholarship.question.show') }}" class="btn btn-primary float-right">View All Questions</a>
 
                                 <form action="{{ route('admin.scholarship.question.store') }}" method="POST"
                                     id="question-form" class="container my-5">
