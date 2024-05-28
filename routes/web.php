@@ -235,6 +235,7 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
         // create scholarship questions
         Route::controller(ScholarshipQuestionController::class)->group(function(){
             Route::get('scholarship-questions', 'index')->name('admin.scholarship.question.view');
+            Route::post('scholarship-questions/store', 'store')->name('admin.scholarship.question.store');
         });
 
     });

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ScholarQuestion extends Model
 {
     use HasFactory;
-    protected $fillable = ['scholarship_id', 'question_text', 'type', 'options'];
+    protected $guarded = [];
 
     protected $casts = [
         'options' => 'array',
