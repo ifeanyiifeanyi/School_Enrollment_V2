@@ -29,7 +29,7 @@ class ScholarshipController extends Controller
     {
         $request->validate([
             'name' => 'required|string|min:2|max:190',
-            'description' => 'nullable|string|max:255'
+            'description' => 'nullable|string'
         ]);
         Scholarship::create([
             'slug' => Str::slug($request->name),
@@ -73,7 +73,7 @@ class ScholarshipController extends Controller
     {
         $request->validate([
             'name' => 'required|string|min:2|max:190',
-            'description' => 'nullable|string|max:255'
+            'description' => 'nullable|string'
         ]);
         $scholarship = Scholarship::where('slug', $slug)->first();
 

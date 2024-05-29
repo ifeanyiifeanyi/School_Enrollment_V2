@@ -98,12 +98,12 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
         //     'permission:create-email-settings',
         //     'permission:delete-email-settings'
         // ])->group(function () {
-            Route::get('site-settings', 'siteSettings')->name('site.settings');
-            Route::post('site-settings/store', 'siteSettingStore')->name('site.setting.store');
+        Route::get('site-settings', 'siteSettings')->name('site.settings');
+        Route::post('site-settings/store', 'siteSettingStore')->name('site.setting.store');
 
-            // email settings
-            Route::post('email-setup', 'emailSetup')->name('admin.email.setup');
-        });
+        // email settings
+        Route::post('email-setup', 'emailSetup')->name('admin.email.setup');
+    });
     // });
 
     Route::controller(AdminProfileController::class)->group(function () {
@@ -234,12 +234,11 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
 
 
         // create scholarship questions
-        Route::controller(ScholarshipQuestionController::class)->group(function(){
+        Route::controller(ScholarshipQuestionController::class)->group(function () {
             Route::get('scholarship-questions', 'index')->name('admin.scholarship.question.view');
             Route::post('scholarship-questions/store', 'store')->name('admin.scholarship.question.store');
             Route::get('scholarship-questions/show', 'show')->name('admin.scholarship.question.show');
         });
-
     });
 });
 
@@ -293,12 +292,19 @@ Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->grou
 
 
     // student will apply for scholarship section
-    Route::controller(ScholarshipApplicationController::class)->group(function(){
+    Route::controller(ScholarshipApplicationController::class)->group(function () {
         Route::get('scholarship', 'index')->name('student.scholarship.view');
+        Route::post('scholarship/apply', 'apply')->name('student.scholarship.apply');
         Route::get('/scholarships/{id}', 'showDetail')->name('scholarships.show.detail');
-
         Route::get('scholarships/{id}/questions', 'getQuestions')->name('student.getQuestions');
-    });
 
+        // application success route
+        Route::get('scholarship-status', 'scholarshipStatus')->name('student.scholarships.status')->middleware('scholarship.submitted');
+
+
+
+
+
+    });
 });
 require __DIR__ . '/auth.php';

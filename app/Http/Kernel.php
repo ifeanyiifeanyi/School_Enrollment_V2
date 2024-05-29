@@ -67,6 +67,9 @@ class Kernel extends HttpKernel
         'role' => \App\Http\Middleware\Role::class,
         'permission' => \App\Http\Middleware\PermissionMiddleware::class,
 
+        //this is used for scholarship application status
+        'scholarship.submitted' => \App\Http\Middleware\ScholarshipStatus::class,
+
 
         // this line is used to make student most pay after filling the application form
         'check.payment.status' => \App\Http\Middleware\CheckPaymentStatusRole::class,

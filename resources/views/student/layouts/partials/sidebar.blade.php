@@ -35,6 +35,12 @@
                         <p>Scholarships</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a wire:navigate href="{{ route('student.scholarships.status') }}" class="nav-link">
+                        <i class="nav-icon fas fa-graduation-cap"  aria-hidden="true"></i>
+                        <p>Scholarships status</p>
+                    </a>
+                </li>
                 <li class="nav-item menu-close">
                     <a href="{{ route('student.profile') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>

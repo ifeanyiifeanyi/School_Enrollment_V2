@@ -19,7 +19,7 @@ class ScholarshipQuestionController extends Controller
         return view('admin.scholarshipQuestions.index', compact('scholarships'));
     }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
@@ -30,7 +30,7 @@ class ScholarshipQuestionController extends Controller
             $validatedData = $request->validate([
                 'scholarship_id' => 'required|exists:scholarships,id',
                 'questions' => 'required|array',
-                'questions.*.question_text' => 'required|string|max:255',
+                'questions.*.question_text' => 'required|string',
                 'questions.*.type' => 'required|string|in:text,multiple-choice,checkbox',
                 'questions.*.options.*' => 'nullable|required_if:questions.*.type,multiple-choice,checkbox|string',
             ]);

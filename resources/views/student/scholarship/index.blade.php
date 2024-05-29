@@ -39,7 +39,24 @@
                                 <h3 class="text-center">Apply for Scholarships</h3>
                             </div>
                         </div>
-                        <form action="" method="POST">
+                        <!-- Display errors and success messages here -->
+                        @if ($errors->any())
+                            <div class="alert alert-danger mb-2">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        @if (session('success'))
+                            <div class="alert alert-success mb-2">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+
+                        <form action="{{ route('student.scholarship.apply') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label for="scholarship_id">Select Scholarship</label>
@@ -158,30 +175,31 @@
 
 
 @section('js')
-<script>
-    $(document).ready(function() {
-        // Show scholarship modal
-        $('.show-scholarship-modal').click(function(e) {
-            e.preventDefault();
-            var scholarshipId = $(this).data('id');
-            var modal = $('#scholarshipModal');
-            var modalTitle = modal.find('.modal-title');
-            var modalBody = modal.find('.modal-body');
+    <script>
+        $(document).ready(function() {
+            // Show scholarship modal
+            $('.show-scholarship-modal').click(function(e) {
+                e.preventDefault();
+                var scholarshipId = $(this).data('id');
+                var modal = $('#scholarshipModal');
+                var modalTitle = modal.find('.modal-title');
+                var modalBody = modal.find('.modal-body');
 
-            // Make AJAX request to fetch scholarship details
-            $.ajax({
-                url: '{{ route('scholarships.show.detail', ['id' => '__ID__']) }}'.replace('__ID__', scholarshipId),
-                type: 'GET',
-                success: function(data) {
-                    modalTitle.text(data.name);
-                    modalBody.html('<p>' + data.description + '</p>');
-                    modal.modal('show');
-                },
-                error: function() {
-                    alert('Error fetching scholarship details');
-                }
+                // Make AJAX request to fetch scholarship details
+                $.ajax({
+                    url: '{{ route('scholarships.show.detail', ['id' => '__ID__']) }}'.replace(
+                        '__ID__', scholarshipId),
+                    type: 'GET',
+                    success: function(data) {
+                        modalTitle.text(data.name);
+                        modalBody.html('<p>' + data.description + '</p>');
+                        modal.modal('show');
+                    },
+                    error: function() {
+                        alert('Error fetching scholarship details');
+                    }
+                });
             });
         });
-    });
- </script>
+    </script>
 @endsection

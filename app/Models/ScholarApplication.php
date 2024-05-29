@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ScholarApplication extends Model
 {
     use HasFactory;
-    protected $fillable = ['student_id', 'scholarship_id', 'status'];
+    protected $fillable = ['user_id', 'scholarship_id', 'status'];
 
     public function user()
     {
