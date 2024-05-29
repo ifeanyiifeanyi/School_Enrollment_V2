@@ -35,7 +35,7 @@
   <meta name="description" content="{{ $siteSetting->site_description ?? '' }}">
   <style>
     *{
-        font-weight: bolder !important;
+        font-weight: bold !important;
     }
   </style>
 

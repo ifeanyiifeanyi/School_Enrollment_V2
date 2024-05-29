@@ -14,7 +14,7 @@
             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
                 @include('layouts.logo')
 
-                <div class="card card-danger shadow">
+                <div class="shadow card card-danger">
                     <div class="card-header">
                         <h4>Sign up here</h4>
                     </div>
@@ -23,14 +23,14 @@
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
                             <div class="row">
-                                <div class="form-group col-6">
+                                <div class="form-group col-md-6">
                                     <label for="first_name">First Name</label>
                                     <input id="first_name" type="text" name="first_name" class="form-control @error('first_name') border-danger @enderror" autofocus value="{{ old('first_name') }}">
                                     @error('first_name')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group col-6">
+                                <div class="form-group col-md-6">
                                     <label for="last_name">Last Name</label>
                                     <input id="last_name" type="text" class="form-control @error('last_name') border-danger @enderror" name="last_name" value="{{ old('last_name') }}">
                                     @error('last_name')
@@ -40,15 +40,15 @@
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-6">
+                                <div class="form-group col-md-6">
                                     <label for="other_names" class="d-block">Other Names</label>
                                     <input id="other_names" type="text" class="form-control @error('other_names') border-danger @enderror" name="other_names" value="{{ old('other_names') }}">
                                     @error('other_names')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
-                                    
+
                                 </div>
-                                <div class="form-group col-6">
+                                <div class="form-group col-md-6">
                                     <label for="phone" class="d-block">Phone Number</label>
                                     <input id="phone" type="tel" class="form-control @error('last_name') border-danger @enderror" name="phone" value="{{ old('phone') }}">
                                     @error('phone')
@@ -67,7 +67,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="form-group col-6">
+                                <div class="form-group col-md-6">
                                     <label for="password" class="d-block">Password</label>
                                     <input id="password" type="password" class="form-control pwstrength @error('password') border-danger @enderror"
                                         data-indicator="pwindicator" name="password">
@@ -79,7 +79,7 @@
                                         <span class="mt-3 text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group col-6">
+                                <div class="form-group col-md-6">
                                     <label for="password_confirmation" class="d-block">Password Confirmation</label>
                                     <input id="password_confirmation" type="password" class="form-control" name="password_confirmation">
                                 </div>

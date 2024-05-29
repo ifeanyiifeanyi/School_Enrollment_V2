@@ -9,7 +9,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <!-- Sidebar user panel (optional) -->
-        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="pb-3 mt-3 mb-3 user-panel d-flex">
             <div class="image">
                 <img src="{{ empty(auth()->user()->student->passport_photo) ? "https://placehold.it/150x100" :
                     Storage::url(auth()->user()->student->passport_photo) }}" class="elevation-2" alt="User Image">
@@ -30,7 +30,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a wire:navigate href="{{ route('student.dashboard') }}" class="nav-link">
+                    <a wire:navigate href="{{ route('student.scholarship.view') }}" class="nav-link">
                         <i class="nav-icon fas fa-graduation-cap"  aria-hidden="true"></i>
                         <p>Scholarships</p>
                     </a>
@@ -64,6 +64,7 @@
                         </li> --}}
                     </ul>
                 </li>
+
                 <li class="nav-item bg-danger">
                     <a href="{{ route('student.logout') }}" class="nav-link">
                         <i class="nav-icon fas fa-user-lock"></i>

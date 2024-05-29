@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ScholarshipQuestionController;
 use App\Http\Controllers\Admin\StudentManagementController;
 use App\Http\Controllers\Installer\InstallerController;
 use App\Http\Controllers\Student\ApplicationProcessController;
+use App\Http\Controllers\Student\ScholarshipApplicationController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentProfileController;
 use Illuminate\Support\Facades\Artisan;
@@ -289,5 +290,15 @@ Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->grou
 
         Route::get('/payment/success', 'showSuccess')->name('student.payment.success');
     });
+
+
+    // student will apply for scholarship section
+    Route::controller(ScholarshipApplicationController::class)->group(function(){
+        Route::get('scholarship', 'index')->name('student.scholarship.view');
+        Route::get('/scholarships/{id}', 'showDetail')->name('scholarships.show.detail');
+
+        Route::get('scholarships/{id}/questions', 'getQuestions')->name('student.getQuestions');
+    });
+
 });
 require __DIR__ . '/auth.php';

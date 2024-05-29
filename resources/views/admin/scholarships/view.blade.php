@@ -15,16 +15,17 @@
             </div>
 
             <div class="section-body">
-                <div class="col-md-8 mx-auto">
+                <div class="mx-auto col-md-8">
+                    <a href="{{ route('admin.manage.scholarship') }}" class="mb-2 btn btn-primary btn-sm">Back</a>
                     <div class="card">
-                        <div class="card-body shadow p-3">
+                        <div class="p-3 shadow card-body">
                             <h3>{{ Str::title($scholarship->name) }}</h3>
                             <hr>
-                            <p>{!! e($scholarship->description ?? 'N/A') !!}</p>
+                            <p style="font-weight: normal !important">{!! e($scholarship->description ?? 'N/A') !!}</p>
                         </div>
                     </div>
                     @if ($scholarship->questions->isNotEmpty())
-                        <div class="card">
+                        <div class="shadow card">
                             <div class="card-body">
                                 <ul class="list-group">
                                     @foreach ($scholarship->questions as $question)
@@ -33,7 +34,7 @@
                                                 <h6 class="mb-1">{{ $question->question_text }}</h6>
                                                 @if ($question->type !== 'text')
                                                     <small>Options:</small>
-                                                    <ul class="list-inline mb-0">
+                                                    <ul class="mb-0 list-inline">
                                                         @foreach ($question->options as $option)
                                                             <li class="list-inline-item badge badge-secondary">
                                                                 {{ $option }}</li>

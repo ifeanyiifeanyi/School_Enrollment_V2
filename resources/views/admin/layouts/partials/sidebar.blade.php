@@ -113,7 +113,7 @@
                 <ul class="dropdown-menu">
                     <li>
                         <a navigate:wire class="nav-link" href="{{ route('admin.manage.scholarship') }}">
-                            Scholarships
+                           Create Scholarships
                         </a>
                     </li>
 
