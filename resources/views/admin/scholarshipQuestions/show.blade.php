@@ -50,11 +50,22 @@
                                                             @endforeach
                                                         </ul>
                                                     @endif
+                                                    <div class="m-1">
+                                                        <a href="" class="btn btn-warning btn-sm"><i
+                                                                class="fas fa-edit"></i></a>
+
+                                                        <a href="" class="btn btn-danger btn-sm"><i
+                                                                class="fas fa-trash"></i></a>
+
+                                                    </div>
                                                 </div>
+
                                                 <span
                                                     class="badge badge-info">{{ ucfirst(str_replace('-', ' ', $question->type)) }}</span>
+
                                             </li>
                                         @endforeach
+
                                     </ul>
                                 </div>
                             </div>

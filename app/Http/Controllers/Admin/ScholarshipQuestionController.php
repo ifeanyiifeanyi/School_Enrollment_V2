@@ -68,9 +68,9 @@ class ScholarshipQuestionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(ScholarQuestion $question)
     {
-        //
+        return view('admin.scholarshipQuestions.edit', compact('question'));
     }
 
     /**

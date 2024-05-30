@@ -71,14 +71,9 @@ class ScholarshipApplicationController extends Controller
     //
     public function scholarshipStatus()
     {
-        // dd('hello');
         $application = ScholarApplication::where('user_id', auth()->id())->firstOrFail();
         return view('student.scholarship.status', compact('application'));
-        // return view('student.scholarship.index', compact('scholarships'));
 
     }
 
-    public function NewView(){
-        return view('student.scholarship.new');
-    }
 }
