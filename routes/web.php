@@ -239,7 +239,9 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
             Route::post('scholarship-questions/store', 'store')->name('admin.scholarship.question.store');
             Route::get('scholarship-questions/show', 'show')->name('admin.scholarship.question.show');
 
-            Route::get('edit-scholarship-question/{question}/edit', 'edit')->name('admin.scholarshipQuestion.edit');
+            Route::get('edit-scholarship-question/{id}/edit', 'edit')->name('admin.scholarshipQuestion.edit');
+            Route::get('delete-scholarship-question/{id}', 'destroy')->name('admin.scholarshipQuestion.destroy');
+
             Route::put('edit-scholarship-question/{question}/update', 'update')->name('admin.scholarshipQuestion.update');
         });
     });

@@ -15,7 +15,10 @@ class ScholarshipQuestionController extends Controller
      */
     public function index()
     {
-        $scholarships = Scholarship::query()->get();
+        $scholarships = Scholarship::with('questions')
+        ->whereHas('questions')
+        ->latest()->get();
+
         return view('admin.scholarshipQuestions.index', compact('scholarships'));
     }
 
@@ -62,30 +65,62 @@ class ScholarshipQuestionController extends Controller
     {
         $scholarships = Scholarship::with('questions')->get();
         return view('admin.scholarshipQuestions.show', compact('scholarships'));
-
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ScholarQuestion $question)
+    public function edit($id)
     {
-        return view('admin.scholarshipQuestions.edit', compact('question'));
+        $question = ScholarQuestion::findOrFail($id);
+        $scholarships = Scholarship::all();
+        return view('admin.scholarshipQuestions.edit', compact('question', 'scholarships'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'scholarship_id' => 'required|exists:scholarships,id',
+            'question_text' => 'required|string|max:255',
+            'type' => 'required|string|in:text,multiple-choice,checkbox',
+            'options' => 'nullable|array',
+            'options.*' => 'required_if:type,multiple-choice,checkbox|string',
+        ]);
+
+        $question = ScholarQuestion::findOrFail($id);
+        $question->update([
+            'scholarship_id' => $request->scholarship_id,
+            'question_text' => $request->question_text,
+            'type' => $request->type,
+            'options' => $request->options,
+        ]);
+        $notification = [
+            'message' => "Scholarship Question Updated Successfully!",
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('admin.scholarship.question.show')->with($notification);
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+
+        $question = ScholarQuestion::findOrFail($id);
+        $question->delete();
+
+        $notification = [
+            'message' => "Scholarship Question Deleted Successfully!",
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->route('admin.scholarship.question.show')->with($notification);
     }
 }
