@@ -122,6 +122,11 @@
                             Questions
                         </a>
                     </li>
+                    <li>
+                        <a navigate:wire class="nav-link" href="{{ route('admin.scholarship.applicants') }}">
+                            Applications
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

@@ -22,6 +22,6 @@ class ScholarApplication extends Model
 
     public function answers()
     {
-        return $this->hasMany(ScholarAnswer::class);
+        return $this->hasMany(ScholarAnswer::class, 'application_id');
     }
 }

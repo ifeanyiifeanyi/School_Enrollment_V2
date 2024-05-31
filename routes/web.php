@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\ScholarshipQuestionController;
 use App\Http\Controllers\Admin\StudentManagementController;
+use App\Http\Controllers\Admin\StudentScholarshipApplicationController;
 use App\Http\Controllers\Installer\InstallerController;
 use App\Http\Controllers\Student\ApplicationProcessController;
 use App\Http\Controllers\Student\ScholarshipApplicationController;
@@ -244,6 +245,14 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
 
             Route::put('edit-scholarship-question/{question}/update', 'update')->name('admin.scholarshipQuestion.update');
         });
+
+
+        // student scholarship applications
+        Route::controller(StudentScholarshipApplicationController::class)->group(function(){
+            Route::get('scholarship-applications', 'index')->name('admin.scholarship.applicants');
+            Route::get('scholarship-applications/{id}/details', 'show')->name('admin.scholarship.applicantShow');
+            // Route::get('scholarship-applications', 'index')->name('admin.scholarship.applicants');
+        });
     });
 });
 
@@ -305,11 +314,6 @@ Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->grou
 
         // application success route
         Route::get('scholarship-status', 'scholarshipStatus')->name('student.scholarships.status')->middleware('scholarship.submitted');
-
-
-
-
-
     });
 });
 require __DIR__ . '/auth.php';

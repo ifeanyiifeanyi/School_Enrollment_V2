@@ -65,7 +65,7 @@ class ScholarshipApplicationController extends Controller
             'message' => 'Application Submitted Successfully!',
             'alert-type' => 'success'
         ];
-        return redirect()->route('scholarships.status.detail')->with($notification);
+        return redirect()->back()->with($notification);
     }
 
     //

@@ -12,16 +12,16 @@ class ScholarAnswer extends Model
 
     public function application()
     {
-        return $this->belongsTo(ScholarApplication::class);
+        return $this->belongsTo(ScholarApplication::class, 'application_id');
     }
 
     public function question()
     {
-        return $this->belongsTo(ScholarQuestion::class);
+        return $this->belongsTo(ScholarQuestion::class, 'scholar_question_id');
     }
 
     public function scholarship()
     {
-        return $this->belongsTo(Scholarship::class);
+        return $this->belongsTo(Scholarship::class, 'scholarship_id');
     }
 }
