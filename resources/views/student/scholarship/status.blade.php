@@ -25,11 +25,11 @@
                         </center>
                         <h4 class="mb-0 text-center">Scholarship</h4>
                         <p class="text-muted text-center">{{ $application->scholarship->name }}</p>
-                        <p class="p-3 text-muted">
+                        {{-- <p class="p-3 text-muted">
                             {{ $application->scholarship->description ?? 'N/A' }}
-                        </p>
+                        </p> --}}
                         <div class="card-body">
-                            <p style="font-size: 20px">Status: <span
+                            <p style="font-size: 20px; text-align:center">Status: <span
                                     class="badge badge-{{ $application->status == 'approved' ? 'success' : ($application->status == 'pending' ? 'warning' : 'danger') }}">{{ ucfirst($application->status) }}</span>
                             </p>
                         </div>
