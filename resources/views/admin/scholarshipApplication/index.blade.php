@@ -88,7 +88,7 @@
                                                 </td>
                                             </tr>
                                             @empty
-
+                                            <div class="alert alert-danger">No Application At The Momemt</div>
                                             @endforelse
                                         </tbody>
                                     </table>

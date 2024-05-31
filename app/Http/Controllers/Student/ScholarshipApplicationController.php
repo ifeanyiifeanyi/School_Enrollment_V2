@@ -43,15 +43,28 @@ class ScholarshipApplicationController extends Controller
             'answers' => 'required|array',
             'answers.*' => 'required|string',
         ]);
-
-        // store application
+    
+        // Check if the student has already applied for the selected scholarship
+        $existingApplication = ScholarApplication::where('user_id', auth()->user()->id)
+            ->where('scholarship_id', $request->scholarship_id)
+            ->first();
+    
+        if ($existingApplication) {
+            $notification = [
+                'message' => 'You have already applied for this scholarship.',
+                'alert-type' => 'error'
+            ];
+            return redirect()->back()->with($notification);
+        }
+    
+        // Store application
         $application = ScholarApplication::create([
             'user_id' => auth()->user()->id,
             'scholarship_id' => $request->scholarship_id,
             'status' => 'pending',
         ]);
-
-        // store the answered questions
+    
+        // Store the answered questions
         foreach ($request->answers as $question_id => $answer_text) {
             ScholarAnswer::create([
                 'application_id' => $application->id,
@@ -60,13 +73,15 @@ class ScholarshipApplicationController extends Controller
                 'answer_text' => $answer_text,
             ]);
         }
-
+    
         $notification = [
             'message' => 'Application Submitted Successfully!',
             'alert-type' => 'success'
         ];
-        return redirect()->back()->with($notification);
+    
+        return redirect()->route('student.scholarships.status')->with($notification);
     }
+    
 
     //
     public function scholarshipStatus()

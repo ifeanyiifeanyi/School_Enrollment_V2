@@ -88,7 +88,7 @@ class ScholarshipQuestionController extends Controller
             'question_text' => 'required|string|max:255',
             'type' => 'required|string|in:text,multiple-choice,checkbox',
             'options' => 'nullable|array',
-            'options.*' => 'required_if:type,multiple-choice,checkbox|string',
+            'options.*' => 'nullable|required_if:type,multiple-choice,checkbox|string',
         ]);
 
         $question = ScholarQuestion::findOrFail($id);
