@@ -50,8 +50,9 @@ class ScholarshipController extends Controller
      */
     public function show($slug)
     {
+        $user = auth()->user();
         $scholarship = Scholarship::where('slug', $slug)->first();
-        return view('admin.scholarships.view', compact('scholarship'));
+        return view('admin.scholarships.view', compact('scholarship', 'user'));
     }
 
     /**

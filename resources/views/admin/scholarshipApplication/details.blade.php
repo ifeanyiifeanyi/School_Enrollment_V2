@@ -31,6 +31,10 @@
                             <p><strong>Scholarship:</strong> {{ $application->scholarship->name }}</p>
                             <p><strong>Status:</strong> {{ $application->status }}</p>
                         </div>
+                        <div class="col-md-6">
+                            <p><strong>Department:</strong> {{ $application->departments->name ?? 'N/A' }}</p>
+                            <p><strong>Faculty:</strong> {{ $application->faculty->name ?? 'N/A' }}</p>
+                        </div>
                     </div>
 
                     <hr>
