@@ -63,8 +63,8 @@
         @endif
 
 
-        <p>Please click the button below to proceed with the payment and finalize your registration:</p>
-        <p><a href="{{ route('payment.view') }}" class="button">Proceed to Payment</a></p>
+        <p>Please proceed with the payment to finalize your registration:</p>
+        {{-- <p><a href="{{ route('payment.view') }}" class="button">Proceed to Payment</a></p> --}}
 
         <p>Thanks,<br>{{ config('app.name') }}</p>
     </div>

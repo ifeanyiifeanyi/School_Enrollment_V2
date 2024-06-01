@@ -8,7 +8,7 @@
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f4f4f4;">
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
         <tr>
-            <td style="background: #f5adb1; padding: 10px 20px;">
+            <td style="padding: 10px 20px;">
                 <h1 style="color: #1c0202; text-align: center;">Admission Application Update</h1>
                 <p style="text-align: center">
                     <img src="{{ asset('logo.png') }}" width="150" height="150" alt="">

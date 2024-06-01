@@ -38,7 +38,7 @@ class ScholarshipApplicationController extends Controller
         return response()->json($scholarship);
     }
 
-    // apply for scholarship
+    // students applying for scholarship
     public function apply(Request $request)
     {
         $request->validate([

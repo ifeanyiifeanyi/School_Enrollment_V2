@@ -247,10 +247,16 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
         });
 
 
-        // student scholarship applications
-        Route::controller(StudentScholarshipApplicationController::class)->group(function(){
+        // student scholarship applications manager
+        Route::controller(StudentScholarshipApplicationController::class)->group(function () {
             Route::get('scholarship-applications', 'index')->name('admin.scholarship.applicants');
             Route::get('scholarship-applications/{id}/details', 'show')->name('admin.scholarship.applicantShow');
+
+            //import and export of the scholarship applicants
+            Route::get('admin/scholarships/applications/export', 'export')->name('admin.scholarship.applications.export');
+            Route::post('admin/scholarships/applications/import', 'import')->name('admin.scholarship.applications.import');
+
+
             // Route::get('scholarship-applications', 'index')->name('admin.scholarship.applicants');
         });
     });
