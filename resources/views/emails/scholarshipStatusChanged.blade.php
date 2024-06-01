@@ -21,8 +21,8 @@
 <body>
     <div class="container">
         <h1 class="text-center mb-4">Scholarship Application Status Updated</h1>
-        <p>Dear {{ $application->user->full_name }},</p>
-        <p>The status of your application for the <strong>{{ $application->scholarship->name }}</strong> scholarship has been updated to <strong>{{ $application->status }}</strong>.</p>
+        <p>Dear {{ Str::title($application->user->full_name) }},</p>
+        <p>The status of your application for the <strong>{{ Str::title($application->scholarship->name) }}</strong> scholarship has been updated to <strong>{{ Str::upper($application->status) }}</strong>.</p>
         <p>Thank you for applying.</p>
         <p class="lead">Best regards,<br>{{ config('app.name') }}</p>
     </div>
