@@ -65,6 +65,7 @@ class DashboardController extends Controller
         // dd($departmentData);
 
 
+
         // dd($paymentTransactions);
         return view('admin.dashboard', compact(
             'studentCount',
@@ -92,6 +93,7 @@ class DashboardController extends Controller
 
     public function siteSettings()
     {
+        $siteSetting = SiteSetting::first();
 
         return view('admin.siteSetting.index', [
             'smtp_host' => env('MAIL_HOST'),
@@ -99,56 +101,63 @@ class DashboardController extends Controller
             'smtp_username' => env('MAIL_USERNAME'),
             'smtp_password' => env('MAIL_PASSWORD'),
             'encryption' => env('MAIL_ENCRYPTION'),
+            'siteSetting' => $siteSetting,
         ]);
     }
 
     public function siteSettingStore(Request $request)
     {
-        $request->validate([
-            'site_title' => 'nullable|string',
-            'site_color' => 'nullable|string',
-            'form_price' => 'nullable|numeric',
-            'site_description' => 'nullable|string',
-            'google_analytics_code' => 'nullable|string',
-            'phone' => 'nullable|string',
-            'email' => 'nullable|email',
-            'address' => 'nullable|string',
-            'about' => 'nullable|string',
-            'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:10000',
-            'site_favicon' => 'nullable|image|mimes:jpeg,png,jpg,svg|max:10000',
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'site_title' => 'required|string',
+                'site_color' => 'nullable|string',
+                'form_price' => 'required|numeric',
+                'site_description' => 'nullable|string',
+                'google_analytics_code' => 'nullable|string',
+                'phone' => 'nullable|string',
+                'email' => 'required|email',
+                'address' => 'nullable|string',
+                'about' => 'nullable|string',
+                'site_logo' => 'required|image|mimes:jpeg,png,jpg,svg|max:10000',
+                'site_favicon' => 'required|image|mimes:jpeg,png,jpg,svg|max:10000',
+            ]);
 
-        $site = SiteSetting::firstOrNew([]);
+            $site = SiteSetting::firstOrNew([]);
 
-        if ($request->hasFile('site_logo')) {
-            $thumb = $request->file('site_logo');
-            $extension = $thumb->getClientOriginalExtension();
-            $profilePhoto = time() . "." . $extension;
-            $thumb->move('site/', $profilePhoto);
-            $site->site_logo = 'site/' . $profilePhoto;
+            if ($request->hasFile('site_logo')) {
+                $file = $request->file('site_logo');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('site/'), $filename);
+                $site->site_icon = 'site/' . $filename;
+            }
+
+            if ($request->hasFile('site_favicon')) {
+                $file = $request->file('site_favicon');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('site/'), $filename);
+                $site->site_favicon = 'site/' . $filename;
+            }
+
+            $site->site_title = $request->site_title;
+            $site->site_color = $request->site_color;
+            $site->site_description = $request->site_description;
+            $site->form_price = $request->form_price;
+            $site->phone = $request->phone;
+            $site->email = $request->email;
+            $site->address = $request->address;
+            $site->about = $request->about;
+            $site->google_analytics = $request->google_analytics_code;
+            $site->save();
+
+            return response()->json(['message' => 'Site Settings Created!']);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'errors' => $e->errors()
+            ], 422);
         }
-
-        if ($request->hasFile('site_favicon')) {
-            $thumb = $request->file('site_favicon');
-            $extension = $thumb->getClientOriginalExtension();
-            $profilePhoto = time() . "." . $extension;
-            $thumb->move('site/', $profilePhoto);
-            $site->site_favicon = 'site/' . $profilePhoto;
-        }
-
-        $site->site_title = $request->site_title;
-        $site->site_color = $request->site_color;
-        $site->site_description = $request->site_description;
-        $site->form_price = $request->form_price;
-        $site->phone = $request->phone;
-        $site->email = $request->email;
-        $site->address = $request->address;
-        $site->about = $request->about;
-        $site->google_analytics = $request->google_analytics_code;
-        $site->save();
-
-        return response()->json(['message' => 'Site Settings Created!']);
     }
+
+
 
     public function emailSetup(EmailSetRequest $request)
     {

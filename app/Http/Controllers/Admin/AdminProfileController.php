@@ -76,9 +76,6 @@ class AdminProfileController extends Controller
 
         $user = User::find(Auth::user()->id);
 
-        // if (Hash::check($user->password, $request->password)) {
-        //     return redirect()->back()->withErrors('password', 'New password cannot be the same as your current password');
-        // }
 
         $user->update([
             'password' => Hash::make($request->password)
