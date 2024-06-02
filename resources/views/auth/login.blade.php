@@ -99,7 +99,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-danger btn-lg btn-block" style="background: #961f31"tabindex="4">
+                                    <button type="submit" class="btn btn-danger btn-lg btn-block" style="background: #ef2e4b" tabindex="4">
                                         Login
                                     </button>
                                 </div>

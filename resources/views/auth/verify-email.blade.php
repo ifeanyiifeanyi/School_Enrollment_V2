@@ -8,9 +8,9 @@
 @section('guest')
 <section class="section">
     <div class="container mt-5">
-        <div class="row mt-5">
-            <div class="col-md-5 col-lg-6 col-sm-8 col-xs-8 mx-auto">
-                <div class="card card-primary shadow">
+        <div class="mt-5 row">
+            <div class="mx-auto col-md-5 col-lg-6 col-sm-8 col-xs-8">
+                <div class="shadow card card-danger">
                     <div class="card-header">
                         <h4>Thanks for signing up!</h4>
                     </div>
@@ -30,7 +30,7 @@
                         <form method="POST" action="{{ route('verification.send') }}">
                             @csrf
                             <div>
-                                <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                                <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4" style="background: #ef2e4b">
                                     {{ __('Resend Verification Email') }}
                                 </button>
                             </div>
@@ -38,7 +38,7 @@
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
-                            <button type="submit" class="btn btn-danger btn-lg btn-block mt-5">
+                            <button type="submit" class="mt-5 btn btn-danger btn-lg btn-block" style="background: #961f31" >
                                 {{ __('Log Out') }}
                             </button>
                         </form>
