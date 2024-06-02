@@ -196,4 +196,63 @@ class DashboardController extends Controller
 
         return response()->json(['message' => 'Email Settings Created!']);
     }
+
+
+    public function storeFlutterwaveSettings(Request $request)
+    {
+        $request->validate([
+            'flw_public_key' => 'required|string',
+            'flw_secret_key' => 'required|string',
+            'flw_secret_hash' => 'required|string',
+        ]);
+
+        $this->updateEnv([
+            'FLW_PUBLIC_KEY' => $request->flw_public_key,
+            'FLW_SECRET_KEY' => $request->flw_secret_key,
+            'FLW_SECRET_HASH' => $request->flw_secret_hash,
+        ]);
+
+        return response()->json(['message' => 'Flutterwave settings updated successfully!']);
+    }
+
+    public function storePaystackSettings(Request $request)
+    {
+        $request->validate([
+            'paystack_public_key' => 'required|string',
+            'paystack_secret_key' => 'required|string',
+            'merchant_email' => 'required|email',
+        ]);
+
+        $this->updateEnv([
+            'PAYSTACK_PUBLIC_KEY' => $request->paystack_public_key,
+            'PAYSTACK_SECRET_KEY' => $request->paystack_secret_key,
+            'MERCHANT_EMAIL' => $request->merchant_email,
+        ]);
+
+        return response()->json(['message' => 'Paystack settings updated successfully!']);
+    }
+
+    protected function updateEnv(array $data)
+    {
+        $envFile = base_path('.env');
+        $str = file_get_contents($envFile);
+
+        $envLines = explode("\n", $str);
+        foreach ($data as $key => $value) {
+            $keyExists = false;
+            foreach ($envLines as $index => $line) {
+                if (strpos($line, $key . '=') === 0) {
+                    $envLines[$index] = $key . '=' . $value;
+                    $keyExists = true;
+                    break;
+                }
+            }
+            if (!$keyExists) {
+                $envLines[] = $key . '=' . $value;
+            }
+        }
+
+        $str = implode("\n", $envLines);
+        file_put_contents($envFile, $str);
+    }
 }

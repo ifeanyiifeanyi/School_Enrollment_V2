@@ -87,25 +87,19 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
         Route::get('dashboard', 'index')->name('admin.dashboard');
         Route::get('logout', 'logout')->name('admin.logout');
 
-        // Route::middleware([
-        //     'permission:manage-site-settings',
-        //     'permission:edit-site-settings',
-        //     'permission:view-site-settings',
-        //     'permission:create-site-settings',
-        //     'permission:delete-site-settings',
-        //     'permission:manage-email-settings',
-        //     'permission:edit-email-settings',
-        //     'permission:view-email-settings',
-        //     'permission:create-email-settings',
-        //     'permission:delete-email-settings'
-        // ])->group(function () {
-        Route::get('site-settings', 'siteSettings')->name('site.settings');
-        Route::post('site-settings/store', 'siteSettingStore')->name('site.setting.store');
+        Route::middleware([
+            'permission:manage-site-settings',
+        ])->group(function () {
+            Route::get('site-settings', 'siteSettings')->name('site.settings');
+            Route::post('site-settings/store', 'siteSettingStore')->name('site.setting.store');
 
-        // email settings
-        Route::post('email-setup', 'emailSetup')->name('admin.email.setup');
+            // email settings
+            Route::post('email-setup', 'emailSetup')->name('admin.email.setup');
+
+            Route::post('flutterwave/setup', 'storeFlutterwaveSettings')->name('admin.flutterwave.setup');
+            Route::post('paystack/setup', 'storePaystackSettings')->name('admin.paystack.setup');
+        });
     });
-    // });
 
     Route::controller(AdminProfileController::class)->group(function () {
         Route::get('profile', 'show')->name('admin.profile');
