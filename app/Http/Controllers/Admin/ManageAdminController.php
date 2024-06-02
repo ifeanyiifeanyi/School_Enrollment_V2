@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Role;
 use App\Models\User;
 use App\Models\Admin;
 use Illuminate\Http\Request;
@@ -19,7 +20,8 @@ class ManageAdminController extends Controller
 
     public function create()
     {
-        return view('admin.manageAdmin.create');
+        $roles = Role::all();
+        return view('admin.manageAdmin.create', compact('roles'));
     }
 
     public function store(Request $request)
@@ -33,6 +35,8 @@ class ManageAdminController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|string|confirmed',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+            'roles' => 'required|array',
+            'roles.*' => 'exists:roles,id',
         ]);
 
         $user = User::create([
@@ -45,6 +49,7 @@ class ManageAdminController extends Controller
             'nameSlug' => $request->first_name . '' . $request->last_name,
             'email_verified_at' => now(),
         ]);
+
         $adminData = [
             'user_id' => $user->id,
             'phone' => $request->phone,
@@ -59,7 +64,10 @@ class ManageAdminController extends Controller
         }
 
 
-        Admin::create($adminData);
+        $admin = Admin::create($adminData);
+        // assign access role and permission to an admin account
+        $user->roles()->sync($request->roles);
+
         $notification = [
             'message' => 'New Administrator Created!',
             'alert-type' => 'success'
@@ -153,8 +161,4 @@ class ManageAdminController extends Controller
         ];
         return redirect()->route('admin.manage.admin')->with($notification);
     }
-
-
-
-
 }
