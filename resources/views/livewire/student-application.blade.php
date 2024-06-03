@@ -390,6 +390,7 @@
     {{-- step three starts --}}
     @if($currentStep == 3)
     <div class="step-three">
+
         <div class="shadow card">
             <div class="text-white card-header bg-info">
                 STEP <b>{{ $currentStep }}</b> OF {{ $totalSteps }}, SELECT DEPARTMENT(PROGRAM OF CHOICE)
@@ -402,6 +403,19 @@
                             thoroughly researched the department's requirements and qualifications. Applying for the
                             right department increases your chances of successful admission and aligns with your
                             academic and career goals.</div>
+
+                            <div class="form-group">
+                                <label for="academic_session">Academic Session</label>
+                                <select wire:model.lazy="academic_session_id" id="academic_session" class="form-control">
+                                    {{-- <option value="">Select Academic Session</option> --}}
+                                        <option selected value="{{ $academicSessions->id }}">{{ $academicSessions->session }}</option>
+                                </select>
+                                @error('academic_session_id')
+                                <div class="text-danger">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
 
                         <div class="form-group">
                             <label for="department_id">Select Department <span class="text-danger">*</span></label>

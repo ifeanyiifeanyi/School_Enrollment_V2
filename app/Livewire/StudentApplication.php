@@ -11,6 +11,7 @@ use App\Models\ExamSubject;
 use Illuminate\Support\Str;
 use GuzzleHttp\Psr7\Request;
 use Livewire\WithFileUploads;
+use App\Models\AcademicSession;
 use Illuminate\Validation\Rule;
 use App\Jobs\ProcessRegistration;
 use Illuminate\Support\Facades\Auth;
@@ -77,9 +78,13 @@ class StudentApplication extends Component
     public $subjects2 = [];
     public $showSecondSitting = false;
 
+    public $academic_session_id;
+
 
     public function mount()
     {
+
+
 
         $user = User::with('student')->find(auth()->user()->id);
         $this->examSubjects = ExamSubject::pluck('name', 'name');
@@ -221,8 +226,12 @@ class StudentApplication extends Component
         } elseif ($this->currentStep == 3) {
             $this->validate([
                 'department_id' => 'required',
+                'academic_session_id' => 'required|exists:academic_sessions,id',
             ], [
                 'department_id.required' => 'Please select a department',
+                'academic_session_id.required' => 'Please select an academic session',
+                'academic_session_id.exists' => 'Selected academic session does not exist',
+
             ]);
         } elseif ($this->currentStep == 4) {
             $validationRules = [
@@ -289,10 +298,19 @@ class StudentApplication extends Component
     {
 
         $departments = Department::all();
+        // Load academic sessions
+        $academicSessions = AcademicSession::where('status', 'current')->first();
+        // Set the academic session ID if it is not already set
+        if (!$this->academic_session_id && $academicSessions) {
+            $this->academic_session_id = $academicSessions->id;
+        }
+
         return view('livewire.student-application', [
             'departments' => $departments,
             'examSubjects' => $this->examSubjects,
-            'countries' => $this->countries
+            'countries' => $this->countries,
+            'academicSessions' => $academicSessions
+
         ]);
     }
 
@@ -626,6 +644,7 @@ class StudentApplication extends Component
             [
                 'user_id' => $this->userId,
                 'department_id' => $this->department_id,
+                'academic_session_id' => $this->academic_session_id,
                 'invoice_number' => mt_rand(100000, 999999)
             ]
         );

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AcademicSessionController;
 use App\Http\Controllers\Student\BarcodeViewController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -133,6 +134,18 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
         });
     });
     // Route::resource("department",DepartmentController::class);
+
+    Route::middleware(['permission:manage-departments', 'permission:manage-faculties'])->group(function () {
+        Route::controller(AcademicSessionController::class)->group(function(){
+            Route::get('academic-sessions', 'index')->name('admin.academicSession.view');
+            Route::get('academic-sessions/create', 'create')->name('admin.academicSession.create');
+            Route::post('academic-sessions/store', 'store')->name('admin.academicSession.store');
+            Route::get('academic-sessions/{academicSession}', 'edit')->name('admin.academicSession.edit');
+            Route::patch('academic-sessions/update/{academicSession}', 'update')->name('admin.academicSession.update');
+            Route::get('delete-session/{academicSession}', 'destroy')->name('admin.academicSession.destroy');
+
+        });
+    });
 
     Route::middleware(['permission:manage-exams'])->group(function () {
 

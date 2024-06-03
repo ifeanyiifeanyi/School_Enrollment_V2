@@ -11,19 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('students', function (Blueprint $table) {
-            $table->enum('admission_status', ['pending', 'approved', 'denied'])->nullable()->default('pending')->after('exam_score');
+        Schema::create('academic_sessions', function (Blueprint $table) {
+            $table->id();
+            $table->string('session')->unique();
+            $table->enum('status', ['current', 'previous'])->default('current');
+            $table->timestamps();
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('students', function (Blueprint $table) {
-            $table->dropColumn('admission_status');
-        });
+        Schema::dropIfExists('academic_sessions');
     }
 };

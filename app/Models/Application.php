@@ -9,13 +9,13 @@ class Application extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'user_id',
-        'department_id',
-        'payment_id',
-        'invoice_number',
-        'admission_status'
-    ];
+    protected $guarded = [];
+
+    public function academicSession()
+{
+    return $this->belongsTo(AcademicSession::class);
+}
+
 
     protected $table = 'applications';
 

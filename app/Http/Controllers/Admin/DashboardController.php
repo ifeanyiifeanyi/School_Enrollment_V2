@@ -102,6 +102,14 @@ class DashboardController extends Controller
             'smtp_password' => env('MAIL_PASSWORD'),
             'encryption' => env('MAIL_ENCRYPTION'),
             'siteSetting' => $siteSetting,
+
+            'flw_public_key' => env('FLW_PUBLIC_KEY'),
+            'flw_secret_key' => env('FLW_SECRET_KEY'),
+            'flw_secret_hash' => env('FLW_SECRET_HASH'),
+
+            'paystack_secret_key' => env('PAYSTACK_SECRET_KEY'),
+            'paystack_public_key' => env('PAYSTACK_PUBLIC_KEY'),
+            'merchant_email' => env('MERCHANT_EMAIL'),
         ]);
     }
 

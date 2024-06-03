@@ -13,7 +13,7 @@
                     <label for="paystack-public-key" class="form-control-label col-sm-3 text-md-right">Paystack Public
                         Key</label>
                     <div class="col-sm-6 col-md-9">
-                        <input type="text" name="paystack_public_key" class="form-control" id="paystack-public-key">
+                        <input type="text" name="paystack_public_key" class="form-control" id="paystack-public-key" value="{{ old('paystack_public_key', $paystack_public_key ?? '') }}">
                     </div>
                     @error('paystack_public_key')
                         <span class="text-danger">{{ $message }}</span>
@@ -24,7 +24,7 @@
                     <label for="paystack-secret-key" class="form-control-label col-sm-3 text-md-right">Paystack Secret
                         Key</label>
                     <div class="col-sm-6 col-md-9">
-                        <input type="text" name="paystack_secret_key" class="form-control" id="paystack-secret-key">
+                        <input type="text" name="paystack_secret_key" class="form-control" id="paystack-secret-key" value="{{ old('paystack_secret_key', $paystack_secret_key ?? '') }}">
                     </div>
                     @error('paystack_secret_key')
                         <span class="text-danger">{{ $message }}</span>
@@ -34,7 +34,7 @@
                 <div class="form-group row align-items-center">
                     <label for="merchant-email" class="form-control-label col-sm-3 text-md-right">Merchant Email</label>
                     <div class="col-sm-6 col-md-9">
-                        <input type="email" name="merchant_email" class="form-control" id="merchant-email">
+                        <input type="email" name="merchant_email" class="form-control" id="merchant-email" value="{{ old('merchant_email', $merchant_email ?? '') }}">
                     </div>
                     @error('merchant_email')
                         <span class="text-danger">{{ $message }}</span>

@@ -23,6 +23,23 @@
                             href="{{ route('admin.manage.department') }}">Manage Department</a></li>
                 </ul>
             </li>
+
+
+            <li
+                class="dropdown {{ request()->routeIs('admin.academicSession.view')  }}">
+                <a href="#" class="nav-link has-dropdown"><i class="fab fa-steam-symbol"></i><span>Academic Sessions</span></a>
+                <ul class="dropdown-menu">
+                    <li><a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.academicSession.view') ? 'active' : '' }}"
+                            href="{{ route('admin.academicSession.view') }}">Manage Session</a></li>
+                </ul>
+            </li>
+
+
+
+
+
+
             <li
                 class="dropdown {{ request()->routeIs('admin.exam.manager') || request()->routeIs('admin.exam.details') || request()->routeIs('admin.subject') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-columns"></i> <span>Exam/Subject

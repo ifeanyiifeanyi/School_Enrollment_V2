@@ -12,7 +12,7 @@
                                     <div class="form-group row align-items-center">
                                         <label for="flw-public-key" class="form-control-label col-sm-3 text-md-right">FLW Public Key</label>
                                         <div class="col-sm-6 col-md-9">
-                                            <input type="text" name="flw_public_key" class="form-control" id="flw-public-key">
+                                            <input type="text" name="flw_public_key" class="form-control" id="flw-public-key" value="{{ old('flw_public_key', $flw_public_key ?? '') }}">
                                         </div>
                                         @error('flw_public_key')
                                             <span class="text-danger">{{ $message }}</span>
@@ -22,7 +22,7 @@
                                     <div class="form-group row align-items-center">
                                         <label for="flw-secret-key" class="form-control-label col-sm-3 text-md-right">FLW Secret Key</label>
                                         <div class="col-sm-6 col-md-9">
-                                            <input type="text" name="flw_secret_key" class="form-control" id="flw-secret-key">
+                                            <input type="text" name="flw_secret_key" class="form-control" id="flw-secret-key" value="{{ old('flw_secret_key', $flw_secret_key ?? '') }}">
                                         </div>
                                         @error('flw_secret_key')
                                             <span class="text-danger">{{ $message }}</span>
@@ -32,7 +32,7 @@
                                     <div class="form-group row align-items-center">
                                         <label for="flw-secret-hash" class="form-control-label col-sm-3 text-md-right">FLW Secret Hash</label>
                                         <div class="col-sm-6 col-md-9">
-                                            <input type="text" name="flw_secret_hash" class="form-control" id="flw-secret-hash">
+                                            <input type="text" name="flw_secret_hash" class="form-control" id="flw-secret-hash" value="{{ old('flw_secret_hash', $flw_secret_hash ?? '') }}">
                                         </div>
                                         @error('flw_secret_hash')
                                             <span class="text-danger">{{ $message }}</span>
