@@ -9,6 +9,7 @@
         "barryvdh/laravel-dompdf": "^2.1",
         "doctrine/dbal": "^3.5.1",
         "guzzlehttp/guzzle": "^7.2",
+        "intervention/image": "^3.6",
         "kingflamez/laravelrave": "^4.2",
         "laravel/breeze": "^1.29",
         "laravel/framework": "^10.10",
