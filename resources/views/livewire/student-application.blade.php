@@ -360,7 +360,7 @@
                 </div>
                 <hr>
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="jamb_reg_no">Jamb Registration Number <span class="text-danger">*</span></label>
                             <input wire:model.lazy="jamb_reg_no" type="text" class="form-control" id="jamb_reg_no"
@@ -370,7 +370,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="jamb_score">Jamb Score <span class="text-danger">*</span></label>
                             <input wire:model.lazy="jamb_score" type="number" class="form-control" id="jamb_score"
@@ -380,6 +380,21 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="jamb_selection">Did you select our university in JAMB, or when you did a change of school, or are you coming for direct entry? <span class="text-danger">*</span></label>
+                        <select wire:model="jamb_selection" id="jamb_selection" class="form-control">
+                            <option value="" disabled>Select an option</option>
+                            <option value="selected_in_jamb">Selected in JAMB</option>
+                            <option value="change_of_school">Change of School</option>
+                            <option value="direct_entry">Direct Entry</option>
+                        </select>
+                        @error('jamb_selection')
+                        <div class="text-danger">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+
                 </div>
             </div>
         </div>

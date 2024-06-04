@@ -210,7 +210,7 @@
             //  1. site settings post request
             document.getElementById('general-save-btn').addEventListener('click', function() {
                 const formData = new FormData(document.getElementById('general-settings-form'));
-                fetch('{{ route('site.setting.store') }}', {
+                fetch('{{ secure_url('site.setting.store') }}', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -243,7 +243,7 @@
             //  2. email setting post request
             document.getElementById('email-save-btn').addEventListener('click', function() {
                 const formData = new FormData(document.getElementById('email-settings-form'));
-                fetch('{{ route('admin.email.setup', ['tab' => 'email-setup']) }}', {
+                fetch('{{ secure_url('admin.email.setup', ['tab' => 'email-setup']) }}', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -276,7 +276,7 @@
             //  3. flutterwave setting post request
             document.getElementById('flutterwave-save-btn').addEventListener('click', function() {
                 const formData = new FormData(document.getElementById('flutterwave-settings-form'));
-                fetch('{{ route('admin.flutterwave.setup') }}', {
+                fetch('{{ secure_url('admin.flutterwave.setup') }}', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -309,7 +309,7 @@
             //  4. paystack setting post request
             document.getElementById('paystack-save-btn').addEventListener('click', function() {
                 const formData = new FormData(document.getElementById('paystack-settings-form'));
-                fetch('{{ route('admin.paystack.setup') }}', {
+                fetch('{{ secure_url('admin.paystack.setup') }}', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
