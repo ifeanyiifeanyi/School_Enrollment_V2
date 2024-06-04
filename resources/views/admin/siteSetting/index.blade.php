@@ -243,7 +243,7 @@
             //  2. email setting post request
             document.getElementById('email-save-btn').addEventListener('click', function() {
                 const formData = new FormData(document.getElementById('email-settings-form'));
-                fetch('{{ route('admin.email.setup', ['tab' => 'email-setup']) }}', {
+                fetch('{{ route('admin.email.setup') }}', {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
