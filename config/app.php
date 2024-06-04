@@ -169,8 +169,9 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\SiteSettingServiceProvider::class,
         // \Yabacon\Paystack\PaystackServiceProvider::class,
-
         
+
+
     ])->toArray(),
 
     /*
