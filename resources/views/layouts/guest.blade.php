@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="{{ asset("") }}admin/assets/css/style.css">
   <link rel="stylesheet" href="{{ asset("") }}admin/assets/css/components.css">
 
-  <link rel="shortcut icon" href="{{ asset($sitesetting->site_favicon ?? '') }}">
+  <link rel="shortcut icon" href="{{ asset($siteSetting->site_favicon ?? '') }}">
   @yield('css')
 </head>
 
