@@ -10,6 +10,7 @@
   <meta name="description" content="{{ $siteSetting->site_description ?? '' }}">
 
 
+
   <!-- General CSS Files -->
   <link rel="stylesheet" href="{{ asset("") }}admin/assets/modules/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="{{ asset("") }}admin/assets/modules/fontawesome/css/all.min.css">
@@ -22,6 +23,8 @@
   <link rel="stylesheet" href="{{ asset("") }}admin/assets/css/components.css">
 
   <link rel="shortcut icon" href="{{ asset($siteSetting->site_favicon ?? '') }}">
+  <meta name="theme-color" content="{{ asset($siteSetting->site_color ?? '') }}" />
+
   @yield('css')
 </head>
 

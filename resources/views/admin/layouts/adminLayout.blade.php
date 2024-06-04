@@ -33,6 +33,8 @@
     href="{{ asset("") }}admin/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
 
   <meta name="description" content="{{ $siteSetting->site_description ?? '' }}">
+  <meta name="theme-color" content="{{ asset($siteSetting->site_color ?? '') }}" />
+
   <style>
     *{
         font-weight: bold !important;
