@@ -41,10 +41,10 @@
                     @enderror
                 </div>
             </div>
-            <div class="card-footer bg-whitesmoke text-md-right">
+            {{-- <div class="card-footer bg-whitesmoke text-md-right">
                 <button class="btn btn-primary" type="button" id="paystack-save-btn">Save Changes</button>
                 <button class="btn btn-secondary" type="button">Reset</button>
-            </div>
+            </div> --}}
         </div>
     </form>
 </div>
