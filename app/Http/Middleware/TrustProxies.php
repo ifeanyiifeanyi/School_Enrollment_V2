@@ -20,9 +20,20 @@ class TrustProxies extends Middleware
      * @var int
      */
     protected $headers =
-        Request::HEADER_X_FORWARDED_FOR |
+    Request::HEADER_X_FORWARDED_FOR |
         Request::HEADER_X_FORWARDED_HOST |
         Request::HEADER_X_FORWARDED_PORT |
         Request::HEADER_X_FORWARDED_PROTO |
         Request::HEADER_X_FORWARDED_AWS_ELB;
+
+    /**
+     * Determine if the request has a URI scheme of "https".
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function isSecure(Request $request)
+    {
+        return $request->isSecure() || $request->header('X-Forwarded-Proto') == 'https';
+    }
 }
