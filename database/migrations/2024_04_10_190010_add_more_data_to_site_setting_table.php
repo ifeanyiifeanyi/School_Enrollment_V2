@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('site_settings', function (Blueprint $table) {
             $table->string('phone')->nullable()->after('form_price');
             $table->string('email')->nullable()->after('phone');
-            $table->string('address')->nullable()->after('email');
+            $table->text('address')->nullable()->after('email');
             $table->text('about')->nullable()->after('address');
         });
     }
