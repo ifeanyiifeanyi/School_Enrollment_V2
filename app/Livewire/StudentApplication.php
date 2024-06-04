@@ -97,6 +97,8 @@ class StudentApplication extends Component
     public $marital_status;
     public $jamb_selection;
 
+    public $examYear1;
+    public $examYear2;
 
     public function mount()
     {
@@ -261,44 +263,37 @@ class StudentApplication extends Component
         } elseif ($this->currentStep == 4) {
             $validationRules = [
                 'sittings' => 'required|integer|in:1,2',
-                'examBoard1' => 'required_if:sittings,1|in:waec,neco,gce',
-                'examBoard2' => 'required_if:sittings,2|in:waec,neco,gce',
-                'examYear1' => 'required_if:sittings,1|digits:4',
-                'examYear2' => 'required_if:sittings,2|digits:4',
+                'examBoard1' => 'required|in:waec,neco,gce',
+                'examYear1' => 'required|digits:4',
                 'subjects1' => 'required|array|min:4',
-                'subjects1.*' => 'required',
-                'subjects1.*.subject' => 'required_with:subjects1|distinct|min:4',
-                'subjects1.*.score' => 'required_with:subjects1|regex:/^[A-F][1-9]$/',
-                'subjects2' => 'required_if:sittings,2|array',
-                'subjects2.*' => 'required_if:sittings,2',
-                'subjects2.*.subject' => 'required_with:subjects2|distinct|min:4',
-                'subjects2.*.score' => 'required_with:subjects2|regex:/^[A-F][1-9]$/',
+                'subjects1.*.subject' => 'required|distinct',
+                'subjects1.*.score' => 'required|regex:/^[A-F][1-9]$/',
             ];
+
+            if ($this->sittings == 2) {
+                $validationRules['examBoard2'] = 'required|in:waec,neco,gce';
+                $validationRules['examYear2'] = 'required|digits:4';
+                $validationRules['subjects2'] = 'required|array|min:4';
+                $validationRules['subjects2.*.subject'] = 'required|distinct';
+                $validationRules['subjects2.*.score'] = 'required|regex:/^[A-F][1-9]$/';
+            }
 
             $validationMessages = [
                 'subjects1.required' => 'Please add at least one subject and score for Sitting 1.',
-                'subjects2.required' => 'Please add at least one subject and score for Sitting 2.',
+                'subjects2.required_if' => 'Please add at least one subject and score for Sitting 2.',
                 'subjects1.*.subject.required' => 'The subject is required.',
                 'subjects1.*.score.required' => 'The score is required.',
                 'subjects1.*.score.regex' => 'The score must be in the format A1, B2, C3, ..., F9.',
-                'subjects2.*.subject.required' => 'The subject is required.',
-                'subjects2.*.score.required' => 'The score is required.',
+                'subjects2.*.subject.required_if' => 'The subject is required.',
+                'subjects2.*.score.required_if' => 'The score is required.',
                 'subjects2.*.score.regex' => 'The score must be in the format A1, B2, C3, ..., F9.',
-                'subjects2.*.subject.min' => 'The subjects2 field must have at least 4 items.',
-                'examYear1.required_if' => 'The exam year is required for Sitting 1.',
+                'examYear1.required' => 'The exam year is required for Sitting 1.',
                 'examYear2.required_if' => 'The exam year is required for Sitting 2.',
                 'examYear1.digits' => 'The exam year must be a 4-digit number.',
                 'examYear2.digits' => 'The exam year must be a 4-digit number.',
             ];
 
-            $validationAttributes = [
-                'subjects1.*.subject' => 'subject',
-                'subjects1.*.score' => 'score',
-                'subjects2.*.subject' => 'subject',
-                'subjects2.*.score' => 'score',
-            ];
-
-            $this->validate($validationRules, $validationMessages, $validationAttributes);
+            $this->validate($validationRules, $validationMessages);
         }
     }
 

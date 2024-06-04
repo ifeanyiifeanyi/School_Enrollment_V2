@@ -37,9 +37,6 @@
 
 
 
-
-
-
             <li
                 class="dropdown {{ request()->routeIs('admin.exam.manager') || request()->routeIs('admin.exam.details') || request()->routeIs('admin.subject') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-columns"></i> <span>Exam/Subject

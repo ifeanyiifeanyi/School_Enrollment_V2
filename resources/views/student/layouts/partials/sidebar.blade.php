@@ -1,3 +1,7 @@
+@php
+$userHasApplication = DB::table('applications')->where('user_id', auth()->user()->id)->exists();
+@endphp
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{ route('student.dashboard') }}" class="brand-link" wire:navigate>
@@ -29,6 +33,8 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                @if ($userHasApplication)
+
                 <li class="nav-item">
                     <a wire:navigate href="{{ route('student.scholarship.view') }}" class="nav-link">
                         <i class="nav-icon fas fa-graduation-cap"  aria-hidden="true"></i>
@@ -41,6 +47,7 @@
                         <p>Scholarships status</p>
                     </a>
                 </li>
+                @endif
                 <li class="nav-item menu-close">
                     <a href="{{ route('student.profile') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>

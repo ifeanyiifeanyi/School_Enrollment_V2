@@ -543,63 +543,60 @@
                         </div>
                     </div>
                     @if ($sittings === 1)
-                        <div class="form-group">
-                            <label>Exam Board: <span class="text-danger">*</span></label>
-                            <select wire:model="examBoard1" class="form-control">
-                                <option disabled selected>Select Exam Board</option>
-                                <option value="waec">WAEC</option>
-                                <option value="neco">NECO</option>
-                                <option value="gce">GCE</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Exam Year: <span class="text-danger">*</span></label>
-                            <input type="text" wire:model="examYear1" class="form-control"
-                                placeholder="Enter Exam Year">
-                            @error('examYear1')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
-                        </div>
-                    @else
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Exam Board 1: <span class="text-danger">*</span></label>
-                                    <select wire:model="examBoard1" class="form-control">
-                                        <option value="waec">WAEC</option>
-                                        <option value="neco">NECO</option>
-                                        <option value="gce">GCE</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Exam Year 1: <span class="text-danger">*</span></label>
-                                    <input type="text" wire:model="examYear1" class="form-control"
-                                        placeholder="Enter Exam Year">
-                                    @error('examYear1')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                    <div class="form-group">
+                        <label>Exam Board: <span class="text-danger">*</span></label>
+                        <select wire:model="examBoard1" class="form-control">
+                            <option disabled selected>Select Exam Board</option>
+                            <option value="waec">WAEC</option>
+                            <option value="neco">NECO</option>
+                            <option value="gce">GCE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Exam Year: <span class="text-danger">*</span></label>
+                        <input type="text" wire:model="examYear1" class="form-control" placeholder="Enter Exam Year">
+                        @error('examYear1')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                @else
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Exam Board 1: <span class="text-danger">*</span></label>
+                                <select wire:model="examBoard1" class="form-control">
+                                    <option value="waec">WAEC</option>
+                                    <option value="neco">NECO</option>
+                                    <option value="gce">GCE</option>
+                                </select>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Exam Board 2: <span class="text-danger">*</span></label>
-                                    <select wire:model="examBoard2" class="form-control">
-                                        <option value="waec">WAEC</option>
-                                        <option value="neco">NECO</option>
-                                        <option value="gce">GCE</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Exam Year 2: <span class="text-danger">*</span></label>
-                                    <input type="text" wire:model="examYear2" class="form-control"
-                                        placeholder="Enter Exam Year">
-                                    @error('examYear2')
-                                        <div class="text-danger">{{ $message }}</div>
-                                    @enderror
-                                </div>
+                            <div class="form-group">
+                                <label>Exam Year 1: <span class="text-danger">*</span></label>
+                                <input type="text" wire:model="examYear1" class="form-control" placeholder="Enter Exam Year">
+                                @error('examYear1')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
-                    @endif
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Exam Board 2: <span class="text-danger">*</span></label>
+                                <select wire:model="examBoard2" class="form-control">
+                                    <option value="waec">WAEC</option>
+                                    <option value="neco">NECO</option>
+                                    <option value="gce">GCE</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Exam Year 2: <span class="text-danger">*</span></label>
+                                <input type="text" wire:model="examYear2" class="form-control" placeholder="Enter Exam Year">
+                                @error('examYear2')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                     <div class="row">
                         <div class="col-md-6">
