@@ -1,5 +1,5 @@
 <div id="general-form" class="{{ request('tab') === 'email-setup' ? 'hidden' : '' }}">
-    <form id="general-settings-form" method="POST" enctype="multipart/form-data" action="{{ route('site.setting.store') }}">
+    <form id="general-settings-form" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="card" id="settings-card">
             <div class="card-header">

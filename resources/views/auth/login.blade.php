@@ -41,7 +41,6 @@
                         </ol>
                         <p>Please note that incomplete or inaccurate applications may be rejected. If you have any questions
                             or need assistance, please contact our admissions office.</p>
-                        <img src="{{ asset('st001.webp') }}" alt="Students Image" class="mt-4 img-fluid">
                     </div>
                 </div>
                 <div class="col-lg-6">
