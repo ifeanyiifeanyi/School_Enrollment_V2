@@ -543,60 +543,63 @@
                         </div>
                     </div>
                     @if ($sittings === 1)
-                    <div class="form-group">
-                        <label>Exam Board: <span class="text-danger">*</span></label>
-                        <select wire:model="examBoard1" class="form-control">
-                            <option disabled selected>Select Exam Board</option>
-                            <option value="waec">WAEC</option>
-                            <option value="neco">NECO</option>
-                            <option value="gce">GCE</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Exam Year: <span class="text-danger">*</span></label>
-                        <input type="text" wire:model="examYear1" class="form-control" placeholder="Enter Exam Year">
-                        @error('examYear1')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-                @else
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Exam Board 1: <span class="text-danger">*</span></label>
-                                <select wire:model="examBoard1" class="form-control">
-                                    <option value="waec">WAEC</option>
-                                    <option value="neco">NECO</option>
-                                    <option value="gce">GCE</option>
-                                </select>
+                        <div class="form-group">
+                            <label>Exam Board: <span class="text-danger">*</span></label>
+                            <select wire:model="examBoard1" class="form-control">
+                                <option disabled selected>Select Exam Board</option>
+                                <option value="waec">WAEC</option>
+                                <option value="neco">NECO</option>
+                                <option value="gce">GCE</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Exam Year: <span class="text-danger">*</span></label>
+                            <input type="text" wire:model="examYear1" class="form-control"
+                                placeholder="Enter Exam Year">
+                            @error('examYear1')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    @else
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Exam Board 1: <span class="text-danger">*</span></label>
+                                    <select wire:model="examBoard1" class="form-control">
+                                        <option value="waec">WAEC</option>
+                                        <option value="neco">NECO</option>
+                                        <option value="gce">GCE</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Exam Year 1: <span class="text-danger">*</span></label>
+                                    <input type="text" wire:model="examYear1" class="form-control"
+                                        placeholder="Enter Exam Year">
+                                    @error('examYear1')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label>Exam Year 1: <span class="text-danger">*</span></label>
-                                <input type="text" wire:model="examYear1" class="form-control" placeholder="Enter Exam Year">
-                                @error('examYear1')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Exam Board 2: <span class="text-danger">*</span></label>
+                                    <select wire:model="examBoard2" class="form-control">
+                                        <option value="waec">WAEC</option>
+                                        <option value="neco">NECO</option>
+                                        <option value="gce">GCE</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Exam Year 2: <span class="text-danger">*</span></label>
+                                    <input type="text" wire:model="examYear2" class="form-control"
+                                        placeholder="Enter Exam Year">
+                                    @error('examYear2')
+                                        <div class="text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Exam Board 2: <span class="text-danger">*</span></label>
-                                <select wire:model="examBoard2" class="form-control">
-                                    <option value="waec">WAEC</option>
-                                    <option value="neco">NECO</option>
-                                    <option value="gce">GCE</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Exam Year 2: <span class="text-danger">*</span></label>
-                                <input type="text" wire:model="examYear2" class="form-control" placeholder="Enter Exam Year">
-                                @error('examYear2')
-                                    <div class="text-danger">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                @endif
+                    @endif
 
                     <div class="row">
                         <div class="col-md-6">
@@ -694,7 +697,6 @@
                     STEP <b>{{ $currentStep }}</b> OF {{ $totalSteps }}, SUBMIT COPIES OF ALL REQUIRED DOCUMENTS
                 </div>
                 <div class="card-body">
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -742,44 +744,135 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="col-md-12">
                             <div class="row">
                                 <hr>
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="passport_photo">Passport Photo <span
                                                 class="text-danger">*</span></label>
                                         <input type="file" wire:model="passport_photo" id="passport_photo"
                                             class="form-control" capture accept="image/*">
-
                                         @error('passport_photo')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    @if ($passport_photo)
+                                        <img src="{{ $passport_photo->temporaryUrl() }}" alt="Passport Photo Preview"
+                                            class="img-thumbnail mt-2" width="150">
+                                    @endif
+                                </div>
                             </div>
-
                         </div>
                     </div>
                     <hr>
-
                     <div class="mt-5 form-group form-check">
                         <label for="terms" class="d-block">
                             <input type="checkbox" class="form-check-input" wire:model="terms" id="terms"> You
-                            must agree to
-                            our
-                            <a href="#!" id="showTermButton" class="link">terms
-                                and conditions.</a>
+                            must agree to our
+                            <a href="#termsModal" data-toggle="modal" class="link">terms and conditions.</a>
                         </label>
                         @error('terms')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                    <!-- Terms Modal -->
+                    <!-- Terms Modal -->
+                    <div class="modal fade" id="termsModal" tabindex="-1" role="dialog"
+                        aria-labelledby="termsModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <h5>Terms and Conditions</h5>
+                                    <p>
+                                        <strong>1. Accuracy of Information:</strong><br>
+                                        I hereby declare that all information provided in this application is accurate
+                                        and true to the best of my knowledge. I understand that providing false
+                                        information or withholding material information may result in the rejection of
+                                        my application, withdrawal of an offer of admission, or dismissal from the
+                                        university if discovered at a later date.
+                                    </p>
+                                    <p>
+                                        <strong>2. Document Submission:</strong><br>
+                                        I agree to submit all required documents in the specified format (PDF or image
+                                        format, max 2MB each) as part of my application. I understand that failure to
+                                        submit the required documents may result in delays or rejection of my
+                                        application.
+                                    </p>
+                                    <p>
+                                        <strong>3. Compliance with University Policies:</strong><br>
+                                        I agree to abide by all policies, rules, and regulations of the university if
+                                        admitted. I understand that non-compliance with university policies may result
+                                        in disciplinary action, including suspension or expulsion.
+                                    </p>
+                                    <p>
+                                        <strong>4. Admission Process:</strong><br>
+                                        I understand that the university reserves the right to request additional
+                                        information or documentation to verify the information provided in my
+                                        application. I acknowledge that meeting the minimum admission requirements does
+                                        not guarantee admission to the university. I agree to comply with any additional
+                                        requirements specified by the university during the admission process.
+                                    </p>
+                                    <p>
+                                        <strong>5. Use of Personal Data:</strong><br>
+                                        I consent to the collection, processing, and use of my personal data for the
+                                        purposes of admission and enrollment at the university. I understand that my
+                                        personal data will be handled in accordance with the university's privacy
+                                        policy.
+                                    </p>
+                                    <p>
+                                        <strong>6. Fee Payment:</strong><br>
+                                        I acknowledge that if offered admission, I will be required to pay the necessary
+                                        tuition and fees as per the university's fee structure. I understand that
+                                        failure to pay the required fees within the specified time frame may result in
+                                        the cancellation of my admission offer.
+                                    </p>
+                                    <p>
+                                        <strong>7. Communication:</strong><br>
+                                        I agree to receive communication from the university regarding my application,
+                                        admission status, and other related matters through the contact details provided
+                                        in this application.
+                                    </p>
+                                    <p>
+                                        <strong>8. Withdrawal and Refund Policy:</strong><br>
+                                        I understand that if I decide to withdraw my application or admission, I must
+                                        follow the university's withdrawal and refund policy as outlined on the
+                                        university website.
+                                    </p>
+                                    <p>
+                                        <strong>9. Medical and Health Information:</strong><br>
+                                        I agree to provide accurate and complete medical and health information as part
+                                        of my application, including submitting a medical report if required. I
+                                        understand that the university may use this information to ensure my health and
+                                        safety on campus.
+                                    </p>
+                                    <p>
+                                        By submitting this application, I confirm that I have read, understood, and
+                                        agreed to the above terms and conditions.
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
+
     @endif
+
     {{-- step five ends --}}
 
 
