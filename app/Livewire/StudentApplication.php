@@ -61,7 +61,22 @@ class StudentApplication extends Component
 
     public $examSubjects;
     public $countries = [];
-
+    public $religions = [
+        'Christianity',
+        'Islam',
+        'Hinduism',
+        'Buddhism',
+        'Judaism',
+        'Sikhism',
+        'baha\'i',
+        'Jainism',
+        'Shinto',
+        'Taoism',
+        'Zoroastrianism',
+        'Atheism',
+        'Agnosticism',
+        'Other',
+    ];
 
     public $country;
     public $state;
@@ -79,6 +94,8 @@ class StudentApplication extends Component
     public $showSecondSitting = false;
 
     public $academic_session_id;
+    public $marital_status;
+    public $jamb_selection;
 
 
     public function mount()
@@ -160,15 +177,21 @@ class StudentApplication extends Component
         $this->document_secondary_school_certificate_type = old('document_secondary_school_certificate_type') ?? ($user->student ? $user->student->document_secondary_school_certificate_type : null);
 
 
-        if (old('gender')) {
-            $this->gender = old('gender');
-        } elseif ($user->student) {
-            $this->gender = $user->student->gender;
-        }
+        // if (old('gender')) {
+        //     $this->gender = old('gender');
+        // } elseif ($user->student) {
+        //     $this->gender = $user->student->gender;
+        // }
+
+        $this->gender = old('gender') ?? ($user->student ? $user->student->gender : null);
 
         $this->religion =   old('religion') ?? ($user->student ? $user->student->religion : null);
         $this->blood_group =   old('blood_group') ?? ($user->student ? $user->student->blood_group : null);
         $this->genotype =   old('genotype') ?? ($user->student ? $user->student->genotype : null);
+
+        $this->marital_status = old('marital_status') ?? ($user->student ? $user->student->marital_status : null);
+        $this->jamb_selection = old('jamb_selection') ?? ($user->student ? $user->student->jamb_selection : null);
+
 
 
         $this->currentStep = 1;
@@ -214,6 +237,7 @@ class StudentApplication extends Component
                 'country' => 'required',
                 'state' => 'required_if:country,Nigeria',
                 'localGovernment' => 'required_if:country,Nigeria',
+                'marital_status' => 'required|string',
             ]);
         } elseif ($this->currentStep == 2) {
             $this->validate([
@@ -222,6 +246,7 @@ class StudentApplication extends Component
                 'secondary_school_certificate_type' => 'required|string',
                 'jamb_reg_no' => 'required|string',
                 'jamb_score' => 'required|numeric',
+                'jamb_selection' => 'required|string',
             ]);
         } elseif ($this->currentStep == 3) {
             $this->validate([
@@ -238,6 +263,8 @@ class StudentApplication extends Component
                 'sittings' => 'required|integer|in:1,2',
                 'examBoard1' => 'required_if:sittings,1|in:waec,neco,gce',
                 'examBoard2' => 'required_if:sittings,2|in:waec,neco,gce',
+                'examYear1' => 'required_if:sittings,1|digits:4',
+                'examYear2' => 'required_if:sittings,2|digits:4',
                 'subjects1' => 'required|array|min:4',
                 'subjects1.*' => 'required',
                 'subjects1.*.subject' => 'required_with:subjects1|distinct|min:4',
@@ -258,6 +285,10 @@ class StudentApplication extends Component
                 'subjects2.*.score.required' => 'The score is required.',
                 'subjects2.*.score.regex' => 'The score must be in the format A1, B2, C3, ..., F9.',
                 'subjects2.*.subject.min' => 'The subjects2 field must have at least 4 items.',
+                'examYear1.required_if' => 'The exam year is required for Sitting 1.',
+                'examYear2.required_if' => 'The exam year is required for Sitting 2.',
+                'examYear1.digits' => 'The exam year must be a 4-digit number.',
+                'examYear2.digits' => 'The exam year must be a 4-digit number.',
             ];
 
             $validationAttributes = [
@@ -518,7 +549,7 @@ class StudentApplication extends Component
 
 
     // format our subject for oleve exam sitting
-    protected function formatSubjects($subjects)
+    protected function formatSubjects($subjects, $examYear)
     {
         $formattedSubjects = [];
 
@@ -526,6 +557,7 @@ class StudentApplication extends Component
             $formattedSubjects[] = [
                 'subject' => $subject['subject'],
                 'score' => $subject['score'],
+                'year' => $examYear,
             ];
         }
 
@@ -578,6 +610,18 @@ class StudentApplication extends Component
         ];
 
         // In the register method
+        // $olevelExams = [
+        //     'sittings' => $this->sittings,
+        //     'exam_boards' => [
+        //         'exam_board_1' => $this->examBoard1,
+        //         'exam_board_2' => $this->examBoard2,
+        //     ],
+        //     'subjects' => [
+        //         'sitting_1' => $this->formatSubjects($this->subjects1),
+        //         'sitting_2' => $this->formatSubjects($this->subjects2),
+        //     ],
+        // ];
+        // In the register method
         $olevelExams = [
             'sittings' => $this->sittings,
             'exam_boards' => [
@@ -585,10 +629,14 @@ class StudentApplication extends Component
                 'exam_board_2' => $this->examBoard2,
             ],
             'subjects' => [
-                'sitting_1' => $this->formatSubjects($this->subjects1),
-                'sitting_2' => $this->formatSubjects($this->subjects2),
+                'sitting_1' => $this->formatSubjects($this->subjects1, $this->examYear1),
+                'sitting_2' => $this->formatSubjects($this->subjects2, $this->examYear2),
             ],
         ];
+
+        // Convert to JSON and save to database
+        $olevelExamsJson = json_encode($olevelExams);
+
 
         // Convert to JSON and save to database
         $olevelExamsJson = json_encode($olevelExams);
@@ -614,6 +662,8 @@ class StudentApplication extends Component
                 'passport_photo' => $passportPhotoPath,
                 'phone' => $this->phone,
                 'gender' => $this->gender,
+                'marital_status' => $this->marital_status,
+                'jamb_selection' => $this->jamb_selection,
                 'dob' => $this->dob,
                 'religion' => $this->religion,
                 'nin' => $this->nin,

@@ -9,7 +9,8 @@
 <section class="content">
     <div class="container-fluid">
         <div>
-            <p class="text-muted">All fields marked with <q><span class="text-danger">*</span></q>, are required.</p>
+            <li class="text-danger">All fields marked with <q><span class="text-danger">*</span></q>, are required.</li>
+            <li class="text-danger">Ensure you write your names correctly as you have it on <b>JAMB</b></li>
         </div>
         @livewire('student-application')
 
