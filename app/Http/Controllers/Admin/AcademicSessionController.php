@@ -30,7 +30,6 @@ class AcademicSessionController extends Controller
         return redirect()->route('admin.academicSession.view')->with($notification);
     }
 
-    
 
     public function edit(AcademicSession $academicSession)
     {
