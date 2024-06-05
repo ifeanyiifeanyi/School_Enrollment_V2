@@ -29,6 +29,8 @@
 
         /* Add any additional CSS styles here */
     </style>
+<link rel="shortcut icon" href="{{ asset('logo.png') }}" type="image/x-icon">
+<meta name="theme-color" content="#9B1B30" />
 
 </head>
 

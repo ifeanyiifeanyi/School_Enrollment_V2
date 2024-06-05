@@ -75,7 +75,7 @@
                   <td>{{ $index + 1 }}</td>
                   <td>{{ $ap->user->full_name }}</td>
                   <td>{{ $ap->user->student->application_unique_number }}</td>
-                  <td>{{ $ap->department->name }}</td>
+                  <td>{{ Str::title($ap->department->name) }}</td>
                   <td>{{ $ap->user->student->exam_score ?? 'Loading ...' }}</td>
                   <td>
                     @if ($ap->admission_status == "pending")
@@ -105,7 +105,7 @@
                   <th>Application No.</th>
                   <th>Department</th>
                   <th>Exam Score</th>
-                  <th>Admission Status</th>
+                  <th>Admission</th>
                   <th>Payment Status</th>
                 </tr>
               </tfoot>

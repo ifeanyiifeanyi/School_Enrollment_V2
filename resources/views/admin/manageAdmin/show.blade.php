@@ -17,12 +17,12 @@
             <div class="section-body">
                 <div class="row">
                     <div class="col-md-7">
-                        <div class="card text-left shadow">
+                        <div class="text-left shadow card">
                             <div class="card-body">
-                                <a href="{{ route('admin.manage.admin') }}" class="btn btn-outline-primary mb-2">Back</a>
+                                <a href="{{ route('admin.manage.admin') }}" class="mb-2 btn btn-outline-primary">Back</a>
                                 <div class="table-responsive">
                                     <p>
-                                        <img src="{{ empty($user->admin->photo) ? 'null' : asset($user->admin->photo) }}"
+                                        <img src="{{ empty($user->admin->photo) ? asset('student.png') : asset($user->admin->photo) }}"
                                             alt="" class="img-thumbnail" width="200px" height="200px">
                                     </p>
                                     <table class="table table-striped">
@@ -52,14 +52,14 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                        <div class="card shadow p-3">
+                        <div class="p-3 shadow card">
                             <p>Current Roles</p>
                             <ul class="list-item">
                                 @foreach ($user->roles as $role)
                                     @if ($role->name == 'admin')
                                     <li class="list-item badge badge-success">All Access</li>
                                     @else
-                                    <li class="list-item badge badge-primary mb-3 mr-3">{{ ucfirst(str_replace('-', ' ', $role->name)) }}</li>
+                                    <li class="mb-3 mr-3 list-item badge badge-primary">{{ ucfirst(str_replace('-', ' ', $role->name)) }}</li>
                                     @endif
                                 @endforeach
                             </ul>

@@ -1,7 +1,7 @@
 @php
     $userHasApplication = DB::table('applications')
         ->where('user_id', auth()->user()->id)
-        ->first();
+        ->exists();
 @endphp
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -40,7 +40,7 @@
                     </a>
                 </li>
 
-                @if ($userHasApplication->admission_status == 'approved')
+                @if ($userHasApplication)
                     <li class="nav-item">
                         <a wire:navigate href="{{ route('student.scholarship.view') }}" class="nav-link">
                             <i class="nav-icon fas fa-graduation-cap" aria-hidden="true"></i>
@@ -55,7 +55,7 @@
                     </li>
                 @endif
 
-                
+
                 <li class="nav-item menu-close">
                     <a href="{{ route('student.profile') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
