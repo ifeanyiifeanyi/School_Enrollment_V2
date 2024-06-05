@@ -144,6 +144,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
             Route::patch('academic-sessions/update/{academicSession}', 'update')->name('admin.academicSession.update');
             Route::get('delete-session/{academicSession}', 'destroy')->name('admin.academicSession.destroy');
 
+            Route::get('/admin/academic-sessions/{academicSession}/applications', 'viewSessionApplications')->name('admin.academicSession.applications');
+
         });
     });
 

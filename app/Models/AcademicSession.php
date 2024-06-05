@@ -9,8 +9,9 @@ class AcademicSession extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
     public function applications()
     {
-        return $this->hasMany(Application::class);
+        return $this->hasMany(Application::class, 'academic_session_id');
     }
 }

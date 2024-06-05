@@ -93,13 +93,13 @@ class StudentManagementController extends Controller
         $departmentId = $request->input('department_id');
 
         if ($departmentId) {
-            $applications = Application::with(['user.student', 'department'])
+            $applications = Application::with(['user.student', 'department', 'academicSession'])
                 ->where('department_id', $departmentId)
                 ->whereNotNull('payment_id') // Ensure payment_id is not null
                 ->where('payment_id', '!=', '') // Ensure payment_id is not empty
                 ->simplePaginate(100);
         } else {
-            $applications = Application::with(['user.student', 'department'])
+            $applications = Application::with(['user.student', 'department', 'academicSession'])
                 ->whereNotNull('payment_id') // Ensure payment_id is not null
                 ->where('payment_id', '!=', '') // Ensure payment_id is not empty
                 ->simplePaginate(100);
@@ -107,6 +107,7 @@ class StudentManagementController extends Controller
 
         return view('admin.studentManagement.application', compact('applications', 'departments'));
     }
+
 
 
 
@@ -120,7 +121,7 @@ class StudentManagementController extends Controller
                 ->where('department_id', $departmentId)
                 ->simplePaginate(50);
         } else {
-            $applications = Application::with(['user.student', 'department'])->simplePaginate(50);
+            $applications = Application::with(['user.student', 'department', 'academicSession'])->simplePaginate(50);
         }
 
         return view('admin.studentManagement.applicationRef', compact('applications', 'departments'));

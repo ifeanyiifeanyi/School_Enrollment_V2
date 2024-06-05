@@ -12,9 +12,9 @@ class Application extends Model
     protected $guarded = [];
 
     public function academicSession()
-{
-    return $this->belongsTo(AcademicSession::class);
-}
+    {
+        return $this->belongsTo(AcademicSession::class, 'academic_session_id');
+    }
 
 
     protected $table = 'applications';

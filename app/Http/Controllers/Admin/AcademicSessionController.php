@@ -58,4 +58,10 @@ class AcademicSessionController extends Controller
         ];
         return redirect()->route('admin.academicSession.view')->with($notification);
     }
+
+    public function viewSessionApplications(AcademicSession $academicSession){
+        $applications = $academicSession->applications()->with('user', 'department')->get();
+        return view('admin.academic_sessions.applications', compact('applications', 'academicSession'));
+
+    }
 }

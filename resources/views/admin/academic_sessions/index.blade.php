@@ -60,7 +60,7 @@
                                                                     class="fas fa-edit"></i>
                                                             </a>
 
-                                                            <a href="{{ route('admin.academicSession.edit', $ads) }}"
+                                                            <a href="{{ route('admin.academicSession.applications', $ads) }}"
                                                             class="btn btn-primary btn-sm"><i
                                                                 class="fas fa-user-tag"></i>
                                                         </a>
