@@ -12,8 +12,9 @@ use App\Models\PaymentMethod;
 use Yabacon\Paystack\Paystack;
 
 use App\Mail\ApplicationStatusMail;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Yabacon\Paystack\PaystackClient;
 use Illuminate\Support\Facades\Storage;
@@ -146,20 +147,22 @@ class ApplicationProcessController extends Controller
             }
         } else if ($paymentMethod->name == "Paystack") {
             try {
-
                 $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
+                // Define subaccount details
+                $subAccountCode = 'ACCT_h4y2wag4i4e8jfl'; // Replace with your actual sub-account code
 
                 $transaction = $paystack->transaction->initialize([
                     'email' => $user->email,
                     'amount' => $paymentAmount * 100, // Convert amount to kobo
                     'reference' => $this->generateUniqueReference(),
                     'callback_url' => route('student.payment.callbackPaystack'),
+                    'subaccount' => $subAccountCode,
+                    'bearer' => 'subaccount' // Ensures the fee is borne by the sub-account
                 ]);
 
                 return redirect($transaction->data->authorization_url);
             } catch (\Exception $e) {
-                // dd($e->getMessage());
                 return redirect()->back()->withErrors('An error occurred: ' . $e->getMessage());
             }
         } else {
@@ -167,11 +170,12 @@ class ApplicationProcessController extends Controller
         }
     }
 
+
+    // PAY-STACK CALLBACK
     public function handlePaymentCallBackPayStack(Request $request)
     {
         $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
-        // dd($paystack);
         try {
             $transaction = $paystack->transaction->verify([
                 'reference' => $request->reference,
@@ -201,7 +205,6 @@ class ApplicationProcessController extends Controller
                     Mail::to($user->email)->send(new ApplicationStatusMail($user, $application, $payment));
                     $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
 
-
                     return view('student.payment.success', [
                         'user' => $user,
                         'application' => $application,
@@ -214,13 +217,19 @@ class ApplicationProcessController extends Controller
                         ->withErrors('Payment was not successful. Please try again.');
                 }
             } else {
+                // Handle declined transaction
                 $userSlug = optional(auth()->user())->nameSlug;
+                Log::info('Transaction declined', [
+                    'reference' => $request->reference,
+                    'status' => $transaction->data->status,
+                    'message' => $transaction->data->gateway_response
+                ]);
                 return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-                    ->withErrors('Payment was not successful. Please try again.');
+                    ->withErrors('Payment was declined: ' . $transaction->data->gateway_response);
             }
         } catch (\Exception $e) {
-            dd($e->getMessage());
             $userSlug = optional(auth()->user())->nameSlug;
+            Log::error('Error processing payment', ['message' => $e->getMessage()]);
             return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
                 ->withErrors('An error occurred while processing the payment. Please try again.');
         }
@@ -228,7 +237,10 @@ class ApplicationProcessController extends Controller
 
 
 
-    // handle flutterwave payment callback
+
+
+
+    // handle FLUTTER-WAVE payment callback
     public function handlePaymentCallBack(Request $request)
     {
         try {

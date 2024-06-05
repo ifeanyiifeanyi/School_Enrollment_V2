@@ -11,6 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ApplicationsExport;
+
 use App\Imports\ApplicationsImport;
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
@@ -28,6 +29,16 @@ class StudentManagementController extends Controller
         }])
             ->where('role', 'student')
             ->simplePaginate(100);
+
+        // $students = User::with(['applications' => function ($query) {
+        //     $query->select('applications.*', 'departments.name as department_name')
+        //         ->join('departments', 'applications.department_id', '=', 'departments.id')
+        //         ->whereNotNull('applications.payment_id') // Filter out applications with null or empty payment_id
+        //         ->where('applications.payment_id', '!=', '');
+        // }])
+        //     ->where('role', 'student')
+        //     ->simplePaginate(100);
+
         // $students = User::where('role', 'student')->simplePaginate('100');
         // dd($students);
         return view('admin.studentManagement.index', compact('students'));
@@ -75,6 +86,7 @@ class StudentManagementController extends Controller
     }
 
 
+    // HANDLE STUDENTS THAT HAS APPLIED FOR ADMISSION
     public function application(Request $request)
     {
         $departments = Department::latest()->get();
@@ -83,13 +95,19 @@ class StudentManagementController extends Controller
         if ($departmentId) {
             $applications = Application::with(['user.student', 'department'])
                 ->where('department_id', $departmentId)
-                ->simplePaginate(50);
+                ->whereNotNull('payment_id') // Ensure payment_id is not null
+                ->where('payment_id', '!=', '') // Ensure payment_id is not empty
+                ->simplePaginate(100);
         } else {
-            $applications = Application::with(['user.student', 'department'])->simplePaginate(50);
+            $applications = Application::with(['user.student', 'department'])
+                ->whereNotNull('payment_id') // Ensure payment_id is not null
+                ->where('payment_id', '!=', '') // Ensure payment_id is not empty
+                ->simplePaginate(100);
         }
 
         return view('admin.studentManagement.application', compact('applications', 'departments'));
     }
+
 
 
     public function applicationRef(Request $request)

@@ -31,7 +31,7 @@
                 </div>
                 <div class="custom-file">
                   <input type="file" name="file" class="form-control w-100" id="exampleInputFile">
-                  <button type="submit" class="btn btn-primary w-100 mt-2">Import</button>
+                  <button type="submit" class="mt-2 btn btn-primary w-100">Import</button>
                 </div>
               </div>
             </form>
@@ -66,6 +66,7 @@
                   <th>Department</th>
                   <th>Exam Score</th>
                   <th>Admission</th>
+                  <th>Payment Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -85,9 +86,16 @@
                     <span class="badge bg-success text-light">Approved <i class="fa fa-check"></i></span>
                     @endif
                   </td>
+                  <td>
+                    @if (!empty($ap->payment_id))
+                    <span class="badge bg-success text-light">Paid <i class="fa fa-check"></i></span>
+                    @else
+                    <span class="badge bg-danger text-light">Not Paid <i class="fa fa-times"></i></span>
+                    @endif
+                  </td>
                 </tr>
                 @empty
-                <div class="alert alert-danger text-center">Not available</div>
+                <div class="text-center alert alert-danger">Not available</div>
                 @endforelse
               </tbody>
               <tfoot>
@@ -98,11 +106,12 @@
                   <th>Department</th>
                   <th>Exam Score</th>
                   <th>Admission Status</th>
+                  <th>Payment Status</th>
                 </tr>
               </tfoot>
             </table>
           </div>
-          <div class="paginate text-center">
+          <div class="text-center paginate">
             {{ $applications->links() }}
           </div>
         </div>

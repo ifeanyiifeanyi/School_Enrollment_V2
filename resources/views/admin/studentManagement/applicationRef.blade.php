@@ -63,25 +63,25 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>
-                                        {{ $ap->user->full_name }} <br>
-                                        <code>{{ $ap->user->student->application_unique_number }}</code>
+                                        {{ Str::title($ap->user->full_name) }} <br>
+                                        <code>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</code>
                                     </td>
                                     <td>
-                                        <img src="{{ Storage::url($ap->user->student->passport_photo) }}" alt=""
-                                            class="img-fluid" width="150px" height="120px">
+                                        <img src="{{ empty($ap->user->student->passport_photo) ? asset('student.png') : Storage::url($ap->user->student->passport_photo) }}" alt=""
+                                            class="img-fluid" width="90">
                                     </td>
                                     <td>
-                                        <small><b>Invoice: </b> {{ $ap->invoice_number }}</small> <br>
-                                        <small><b>Transact: </b> {{ $ap->payment->transaction_id }}</small>
+                                        <small><b>Invoice: </b> {{ $ap->invoice_number ?? 'N/A' }}</small> <br>
+                                        <small><b>Transact: </b> {{ $ap->payment->transaction_id ?? 'N/A' }}</small>
                                     </td>
-                                    <td>{{ $ap->department->name }}</td>
+                                    <td>{{ Str::title($ap->department->name) ?? 'N/A' }}</td>
                                     <td>
-                                        <small><b>Venue: </b>{{ $ap->department->exam_managers->venue ?? 'null' }}</small>
-                                        <p><b>Date: </b>{{ $ap->department->exam_managers->date_time ?? 'null' }}</p>
+                                        <small><b>Venue: </b>{{ $ap->department->exam_managers->venue ?? 'NOT DECIDED' }}</small>
+                                        <p><b>Date: </b>{{ $ap->department->exam_managers->date_time ?? 'NOT DECIDED' }}</p>
                                     </td>
                                 </tr>
                                 @empty
-                                <div class="alert alert-danger text-center">Not available</div>
+                                <div class="text-center alert alert-danger">Not available</div>
                                 @endforelse
                             </tbody>
                             <tfoot>
@@ -96,7 +96,7 @@
                             </tfoot>
                         </table>
                     </div>
-                    <div class="paginate text-center">
+                    <div class="text-center paginate">
                         {{ $applications->links() }}
                     </div>
                 </div>

@@ -4,56 +4,133 @@
 
 @section('css')
 <style>
+  body {
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+  }
+
   .card {
-  margin-bottom: 1.5rem;
-}
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
 
-.card-header {
-  background-color: #f8f9fa;
-}
+  .card-header {
+    background: linear-gradient(to right, #FF512F, #DD2476);
+    color: white;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 20px 20px 0 0;
+  }
 
-.list-group-item {
-  border-left: 0;
-  border-right: 0;
-}
+  .card-body {
+    padding: 30px;
+  }
 
-.list-group-item:first-child {
-  border-top: 0;
-}
+  .img-thumbnail {
+    border-radius: 50%;
+    border: 5px solid #FF512F;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
 
-.list-group-item:last-child {
-  border-bottom: 0;
-}
+  .badge {
+    font-weight: normal;
+    background-color: #FF512F;
+    color: white;
+    border-radius: 20px;
+    padding: 5px 15px;
+  }
 
-.badge {
-  font-weight: normal;
-}
+  h1 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #DD2476;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  h4 {
+    color: #FF512F;
+    font-weight: bold;
+  }
+
+  .list-group-item {
+    border: none;
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+  }
+
+  .list-group-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .list-group-item .badge {
+    font-size: 16px;
+  }
+
+  blockquote {
+    background: linear-gradient(to right, rgba(255, 81, 47, 0.1), rgba(221, 36, 118, 0.1));
+    border-left: 10px solid #FF512F;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+    border-radius: 10px;
+    font-style: italic;
+    color: #666;
+  }
+
+  blockquote p {
+    display: inline;
+  }
+
+  .btn-primary,
+  .btn-success {
+    background: linear-gradient(to right, #FF512F, #DD2476);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 30px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover,
+  .btn-success:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  #imageModal img {
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  }
 </style>
 @endsection
 
 @section('admin')
-
 <div class="main-content">
   <section class="section">
     <div class="section-header">
-      <h1>{{ Str::title($student->full_name) }}</h1> <br>
+      <h1>{{ Str::title($student->full_name) }}</h1>
+      <br>
     </div>
     <div class="container">
-      <h4 class="text-muted">Application No: <code>{{ $student->student->application_unique_number ?? 'Yet To Apply!!' }}</code></h4>
+      <h4>Application No: <code>{{ $student->student->application_unique_number ?? 'Yet To Apply!!' }}</code></h4>
     </div>
     <div class="section-body">
-      {{-- @dd($student) --}}
       <div class="row">
         <div class="col-md-6">
           <div class="table-responsive">
-            <table class="table table-striped table-responsive">
-              <thead class="">
+            <table class="table table-striped">
+              <thead>
                 <tr>
                   <th colspan="2" class="text-center">
-                    <p><img alt="image" src="{{ empty($student->student->passport_photo) ? asset('admin/assets/img/avatar/avatar-5.png') : 
-                      Storage::url($student->student->passport_photo) }}" class="mt-3 img-thumbnail" style="width: 250px !important; height:250px !important" data-toggle="title" title="{{ $student->full_name }}"></p>
+                    <p>
+                      <img alt="image" src="{{ empty($student->student->passport_photo) ? asset('admin/assets/img/avatar/avatar-5.png') : Storage::url($student->student->passport_photo) }}" class="mt-3 img-thumbnail" style="width: 250px; height:250px;" data-toggle="title" title="{{ $student->full_name }}">
+                    </p>
                     <div class="d-inline-block">
-                      <p>{{ Str::title($student->student->nationality ?? "N/A")  }}</p>
+                      <p class="text-muted">{{ Str::title($student->student->nationality ?? "N/A")  }}</p>
                       <p class="text-muted">
                         @if ($student->student->nationality == "Nigeria")
                           <b>NIN: </b> {{ $student->student->nin  ?? "N/A"}}
@@ -116,25 +193,26 @@
             </table>
           </div>
           <div class="container">
-            <h1 class="text-center mb-4">SSCE Results</h1>
+            <h1 class="mb-4 text-center">SSCE Results</h1>
             @if ($student && $student->student && $student->student->olevel_exams)
               @php
-                $olevel_exams = json_decode($student->student->olevel_exams, true);
+                $olevel_exams = json_decode($student->student->olevel_exams,
+                true);
               @endphp
-          
+
               @if (isset($olevel_exams['sittings']) && $olevel_exams['sittings'] > 0)
                 <div class="row">
                   <div class="col-md-6">
                     @for ($i = 1; $i <= $olevel_exams['sittings']; $i++)
-                      <div class="card mb-4">
+                      <div class="mb-4 card">
                         <div class="card-header">
-                          <h5 class="mb-0">Sitting {{ $i }}</h5>
+                          <h5 class="mb-0">Sitting {{ $i }} <br> Year: {{ $olevel_exams['subjects']['sitting_' . $i][0]['year'] ?? 'N/A' }}</h5>
                         </div>
                         <div class="card-body">
                           <ul class="list-group">
                             @foreach ($olevel_exams['subjects']['sitting_' . $i] as $subject)
                               <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ $subject['subject'] }}
+                                {{ Str::title($subject['subject']) }}
                                 <span class="badge badge-primary badge-pill">{{ $subject['score'] }}</span>
                               </li>
                             @endforeach
@@ -178,7 +256,6 @@
         </div>
         <div class="col-md-6">
           <div class="card">
-            
             <div class="card-body">
               <p><b>Permanent Address: </b> <blockquote>{{ $student->student->permanent_residence_address ?? "N/A"}}</blockquote></p>
               <p><b>Current Address: </b> <blockquote>{{ $student->student->current_residence_address ?? "N/A"}}</blockquote></p>
@@ -194,18 +271,17 @@
             </div>
           </div>
 
-
           <div class="section">
             <div class="container">
-              <h3 class="text-center mb-4">Student Documents</h3>
+              <h3 class="mb-4 text-center">Student Documents</h3>
               @foreach ($documents as $label => $doc)
                 <div class="mb-3 card card-body">
                   <strong>{{ Str::title(str_replace('_', ' ', $label)) }}:</strong>
                   @if ($doc['exists'])
                     @if ($doc['isPdf'])
-                      <a href="{{ $doc['filePath'] }}" class="btn btn-primary mt-2" target="_blank">Open PDF in New Tab</a>
+                      <a href="{{ $doc['filePath'] }}" class="mt-2 btn btn-primary" target="_blank">Open PDF in New Tab</a>
                     @else
-                      <button class="btn btn-success mt-2" onclick="showImage('{{ $doc['filePath'] }}')">View Image</button>
+                      <button class="mt-2 btn btn-success" onclick="showImage('{{ $doc['filePath'] }}')">View Image</button>
                       <!-- Image view modal placeholder -->
                       <div id="imageModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1050;" onclick="this.style.display='none'">
                         <img src="{{ $doc['filePath'] }}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-height:90%;max-width:90%;">
@@ -218,26 +294,13 @@
               @endforeach
             </div>
           </div>
-          
-          {{-- <script>
-          function showImage(src) {
-            const modal = document.getElementById('imageModal');
-            modal.style.display = 'block';
-            modal.querySelector('img').src = src;
-          }
-          </script> --}}
-          
-          
-          
-        </div>
 
+        </div>
       </div>
     </div>
   </section>
 </div>
 @endsection
-
-
 
 @section('js')
 <script>
@@ -246,5 +309,5 @@
     modal.style.display = 'block';
     modal.querySelector('img').src = src;
   }
-  </script>
+</script>
 @endsection
