@@ -29,8 +29,8 @@
 
             </td>
             <td>
-                <small><b>Invoice: </b> {{ $ap->invoice_number }}</small> <br>
-                <small><b>Transact: </b> {{ $ap->payment->transaction_id }}</small>
+                <small><b>Invoice: </b> {{ $ap->invoice_number ?? 'N/A' }}</small> <br>
+                <small><b>Transact: </b> {{ $ap->payment->transaction_id ?? 'N/A' }}</small>
             </td>
             <td>{{ $ap->department->name }}</td>
             <td>
@@ -39,7 +39,7 @@
             </td>
         </tr>
         @empty
-        <div class="alert alert-danger text-center">Not available</div>
+        <div class="text-center alert alert-danger">Not available</div>
         @endforelse
     </tbody>
     <tfoot>

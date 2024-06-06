@@ -31,9 +31,6 @@ class ApplicationsImport implements ToModel, WithHeadingRow
                 $application = Application::where('user_id', $student->user_id)->first();
 
                 if ($application) {
-                    // Get the previous admission status
-                    $previousAdmissionStatus = $application->admission_status;
-
                     // Update the student's exam score and application's admission status
                     $student->exam_score = $row['exam_score'];
                     $student->admission_status = $row['admission_status'];
@@ -42,12 +39,8 @@ class ApplicationsImport implements ToModel, WithHeadingRow
                     $application->admission_status = $row['admission_status'];
                     $application->save();
 
-                    // Check if the admission status has changed
-                    if ($previousAdmissionStatus !== $row['admission_status']) {
-                        // Send email notification
-                        Mail::to($student->user->email)->send(new AdmissionStatusUpdated($student, $application));
-                    }
-
+                    // Send email notification regardless of admission status change
+                    Mail::to($student->user->email)->send(new AdmissionStatusUpdated($student, $application));
                 }
             }
 

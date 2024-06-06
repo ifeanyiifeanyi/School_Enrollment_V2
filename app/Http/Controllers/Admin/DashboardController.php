@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmailSetRequest;
+use App\Models\AcademicSession;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
@@ -22,6 +23,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
+
+        $academicSession = AcademicSession::where('status', 'current')->first();
 
         $studentCount = Student::count();
         $departmentCount = Department::count();
@@ -75,7 +78,8 @@ class DashboardController extends Controller
             'departmentData',
             'facultyData',
             'paymentData',
-            'totalPayments'
+            'totalPayments',
+            'academicSession'
         ));
     }
 

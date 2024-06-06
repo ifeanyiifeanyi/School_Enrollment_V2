@@ -54,6 +54,14 @@
                             <h4>@yield('title')</h4>
                         </div>
                         <div class="card-body">
+                            <p class="text-muted">ALLOW SCHOLARSHP APPLICATION STATUS</p>
+                            <ul>
+                                <li>Pending</li>
+                                <li>Approved</li>
+                                <li>denied</li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
                             <div class="mb-3 d-flex justify-content-between">
                                 {{-- Export Button --}}
                                 <div>

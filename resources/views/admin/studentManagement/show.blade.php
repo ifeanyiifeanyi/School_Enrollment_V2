@@ -131,6 +131,7 @@
                     </p>
                     <div class="d-inline-block">
                       <p class="text-muted">{{ Str::title($student->student->nationality ?? "N/A")  }}</p>
+
                       <p class="text-muted">
                         @if ($student->student->nationality == "Nigeria")
                           <b>NIN: </b> {{ $student->student->nin  ?? "N/A"}}
@@ -141,6 +142,10 @@
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                    <th>Jamb Selection Choice</th>
+                    <td>{{ Str::lower($student->student->jamb_selection ?? "N/A") }}</td>
+                  </tr>
                 <tr>
                   <th>Email Address</th>
                   <td>{{ Str::lower($student->email ?? "N/A") }}</td>
@@ -153,6 +158,10 @@
                   <th>Gender</th>
                   <td>{{ Str::upper($student->student->gender ?? "N/A") }}</td>
                 </tr>
+                <tr>
+                    <th>Martial Status</th>
+                    <td>{{ Str::upper($student->student->marital_status ?? "N/A") }}</td>
+                  </tr>
                 <tr>
                   <th>Religion</th>
                   <td>{{ $student->student->religion ?? "N/A"}}</td>

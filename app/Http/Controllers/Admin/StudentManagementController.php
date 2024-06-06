@@ -44,9 +44,18 @@ class StudentManagementController extends Controller
         return view('admin.studentManagement.index', compact('students'));
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param [type] $slug
+     * @return void
+     *
+     * SHOW STUDENT DETAILS, AFTER SUBMITTING APPLICATION,
+     * student application data
+     */
+
     public function show($slug)
     {
-
         $student = User::with(['applications' => function ($query) {
             $query->select('applications.*', 'departments.name as department_name')
                 ->join('departments', 'applications.department_id', '=', 'departments.id');
@@ -127,21 +136,7 @@ class StudentManagementController extends Controller
         return view('admin.studentManagement.applicationRef', compact('applications', 'departments'));
     }
 
-    // public function exportPdf(Request $request)
-    // {
-    //     $departments = Department::latest()->get();
-    //     $departmentId = $request->input('department_id');
-    //     $query = Application::with(['user.student', 'department']);
 
-    //     if ($departmentId) {
-    //         $query->where('department_id', $departmentId);
-    //     }
-
-    //     $applications = $query->simplePaginate(50); // Use get() to retrieve all applications for PDF export
-
-    //     $pdf = FacadePdf::loadView('admin.studentManagement.applicationRef', compact('applications', 'departments'));
-    //     return $pdf->download('applications.pdf');
-    // }
 
     public function exportPdf(Request $request)
     {

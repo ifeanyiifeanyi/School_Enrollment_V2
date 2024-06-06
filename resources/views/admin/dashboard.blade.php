@@ -68,9 +68,12 @@
 
         <div class="section-body">
             <div class="text-center">
-                <a href="" class="btn btn-primary btn-lg view-applications-btn mb-3">
+                <a href="{{  route('admin.student.application') }}" class="mb-3 btn btn-primary btn-lg view-applications-btn">
                     <i class="fas fa-hourglass fa-spin"></i> View Active Applications
                 </a>
+                <p class="text-muted">
+                    Academic Session : {{ $academicSession->session }}
+                </p>
             </div>
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
@@ -143,8 +146,8 @@
                         <div class="card-body">
                             @forelse($departmentData as $data)
                             <div class="mb-4">
-                                <div class="text-small float-right font-weight-bold text-muted">{{ $data->total }}</div>
-                                <div class="font-weight-bold mb-1">{{ Str::title($data->department->name) }}</div>
+                                <div class="float-right text-small font-weight-bold text-muted">{{ $data->total }}</div>
+                                <div class="mb-1 font-weight-bold">{{ Str::title($data->department->name) }}</div>
                                 <div class="progress" data-height="3">
                                     <div class="progress-bar" role="progressbar" data-width="{{ $data->percentage }}%"
                                         aria-valuenow="{{ $data->percentage }}" aria-valuemin="0" aria-valuemax="100">
@@ -166,8 +169,8 @@
                         <div class="card-body">
                             @foreach($facultyData as $data)
                             <div class="mb-4">
-                                <div class="text-small float-right font-weight-bold text-muted">{{ $data->total }}</div>
-                                <div class="font-weight-bold mb-1">{{ $data->faculty_name }}</div>
+                                <div class="float-right text-small font-weight-bold text-muted">{{ $data->total }}</div>
+                                <div class="mb-1 font-weight-bold">{{ $data->faculty_name }}</div>
                                 <div class="progress" data-height="3">
                                     <div class="progress-bar bg-warning" role="progressbar" data-width="{{ $data->percentage }}%"
                                         aria-valuenow="{{ $data->percentage }}" aria-valuemin="0" aria-valuemax="100">
@@ -188,8 +191,8 @@
                         <div class="card-body">
                             @foreach($paymentData as $data)
                             <div class="mb-4">
-                                <div class="text-small float-right font-weight-bold text-muted">{{ $data->total }}</div>
-                                <div class="font-weight-bold mb-1">{{ $data->payment_method }}</div>
+                                <div class="float-right text-small font-weight-bold text-muted">{{ $data->total }}</div>
+                                <div class="mb-1 font-weight-bold">{{ $data->payment_method }}</div>
                                 <div class="progress" data-height="3">
                                     <div class="progress-bar bg-success" role="progressbar" data-width="{{ $data->percentage }}%"
                                         aria-valuenow="{{ $data->percentage }}" aria-valuemin="0" aria-valuemax="100">

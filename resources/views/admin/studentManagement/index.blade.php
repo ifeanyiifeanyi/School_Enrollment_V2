@@ -75,8 +75,8 @@
                                                 </td>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>
-                                                    {{ Str::title($student->full_name) }}
-                                                    <p><code>{{ $student->student->application_unique_number }}</code>
+                                                    {{ Str::title($student->full_name ?? 'N/A' ) }}
+                                                    <p><code>{{ $student->student->application_unique_number ?? 'N/A'  }}</code>
                                                     </p>
                                                     <a title="View Student Details"
                                                         href="{{ route('admin.show.student', $student->nameSlug) }}"><i
@@ -194,7 +194,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         const masterCheckbox = document.getElementById('checkbox-all');
         const checkboxes = document.querySelectorAll('input[name="selected_students[]"]');
-    
+
         masterCheckbox.addEventListener('change', function () {
             checkboxes.forEach(checkbox => {
                 checkbox.checked = this.checked;

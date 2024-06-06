@@ -65,6 +65,7 @@
                                     <td>
                                         {{ Str::title($ap->user->full_name) }} <br>
                                         <code>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</code>
+                                        <p>Jamb Choice : <br>{{ Str::upper($ap->user->student->jamb_selection ?? '') }}</p>
                                     </td>
                                     <td>
                                         <img src="{{ empty($ap->user->student->passport_photo) ? asset('student.png') : Storage::url($ap->user->student->passport_photo) }}" alt=""
@@ -84,16 +85,6 @@
                                 <div class="text-center alert alert-danger">Not available</div>
                                 @endforelse
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>s/n</th>
-                                    <th>Student</th>
-                                    <th>Profile.</th>
-                                    <th>Transactions</th>
-                                    <th>Department</th>
-                                    <th>Exam Venue</th>
-                                </tr>
-                            </tfoot>
                         </table>
                     </div>
                     <div class="text-center paginate">

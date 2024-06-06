@@ -15,7 +15,7 @@
         </div>
 
         <div class="section-body">
-            <div class="card shadow p-3">
+            <div class="p-3 shadow card">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="example1" width="100%" cellspacing="0">
                         <thead>
@@ -33,12 +33,12 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>
-                                    {{ $payment->user->full_name }}
-                                    <p class="text-muted">{{ $payment->user->student->application_unique_number }}</p>
+                                    {{ $payment->user->full_name ?? 'N/A' }}
+                                    <p class="text-muted">{{ $payment->user->student->application_unique_number ?? 'N/A' }}</p>
                                 </td>
-                                <td>{{ $payment->transaction_id }}</td>
-                                <td>{{ $payment->payment_method }}</td>
-                                <td>{{ $payment->application->invoice_number }}</td>
+                                <td>{{ $payment->transaction_id ?? 'N/A' }}</td>
+                                <td>{{ $payment->payment_method ?? 'N/A' }}</td>
+                                <td>{{ $payment->application->invoice_number ?? 'N/A' }}</td>
                                 <td>
                                     @if ($payment->payment_status == 'successful')
                                         <p class="badge badge-success">Successful <i class="fas fa-user-check"></i></p>

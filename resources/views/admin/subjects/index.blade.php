@@ -83,11 +83,6 @@
         </div>
     </section>
 </div>
-@endsection
-
-
-
-@section('js')
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('add-subject').addEventListener('click', function () {
@@ -121,4 +116,10 @@
 
     });
 </script>
+@endsection
+
+
+
+@section('js')
+
 @endsection
