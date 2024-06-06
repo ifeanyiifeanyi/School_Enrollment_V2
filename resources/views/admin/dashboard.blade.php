@@ -3,7 +3,59 @@
 @section('title', 'Admin Dashboard')
 
 @section('css')
+<style>
+    .view-applications-btn {
+    position: relative;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 30px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
+.view-applications-btn:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #007bff, #6610f2);
+    z-index: -1;
+    opacity: 0;
+    transform: scale(0.5, 0.5);
+    transition: all 0.3s ease;
+}
+
+.view-applications-btn:hover:before {
+    opacity: 1;
+    transform: scale(1, 1);
+}
+
+.view-applications-btn:hover {
+    color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.view-applications-btn i {
+    margin-right: 8px;
+    animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+</style>
 @endsection
 
 @section('admin')
@@ -15,6 +67,11 @@
         </div>
 
         <div class="section-body">
+            <div class="text-center">
+                <a href="" class="btn btn-primary btn-lg view-applications-btn mb-3">
+                    <i class="fas fa-hourglass fa-spin"></i> View Active Applications
+                </a>
+            </div>
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
