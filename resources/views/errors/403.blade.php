@@ -1,4 +1,4 @@
-{{-- @extends('errors::minimal')
+@extends('errors::minimal')
 
 @section('title', 'Access Denied')
 
@@ -96,6 +96,6 @@
     </div>
     <h1>Access Denied</h1>
     <p>You don't have permission to access this page.</p>
-    <a href="{{ route('admin.dashboard') }}" class="btn">Dashboard</a>
+    <a href="{{ url('/') }}" class="btn">Home</a>
 </div>
-@endsection --}}
+@endsection
