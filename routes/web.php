@@ -48,55 +48,32 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-// Route::controller(InstallerController::class)->group(function () {
-//     Route::get('install', 'index')->name('install.view');
-//     Route::post('install', 'store')->name('install.store');
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Route::controller(BarcodeViewController::class)->group(function () {
     Route::get('student/details/{nameSlug}', 'showDetails')->name('student.details.show');
 });
+
 Route::get('/payment', function () {
     return view('student.application.index');
 })->name('payment.view');
 
 Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(function () {
 
+
+
+
+
+// Admin Routes
+Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::controller(AdminDashboardController::class)->group(function () {
         Route::get('dashboard', 'index')->name('admin.dashboard');
         Route::get('logout', 'logout')->name('admin.logout');
 
-        Route::middleware([
-            'permission:manage-site-settings',
-        ])->group(function () {
+        Route::middleware(['permission:manage-site-settings'])->group(function () {
             Route::get('site-settings', 'siteSettings')->name('site.settings');
             Route::post('site-settings/store', 'siteSettingStore')->name('site.setting.store');
-
-            // email settings
             Route::post('email-setup', 'emailSetup')->name('admin.email.setup');
-
             Route::post('flutterwave/setup', 'storeFlutterwaveSettings')->name('admin.flutterwave.setup');
             Route::post('paystack/setup', 'storePaystackSettings')->name('admin.paystack.setup');
         });
@@ -108,7 +85,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
         Route::patch('profile/update-password', 'updatePassword')->name('admin.profile.updatePassword');
         Route::post('profile/update', 'update')->name('admin.profile.update');
     });
-
 
     Route::middleware(['permission:manage-faculties'])->group(function () {
         Route::controller(FacultyController::class)->group(function () {
@@ -133,24 +109,20 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
             Route::patch('update-department/{slug}', 'update')->name('admin.update.department');
         });
     });
-    // Route::resource("department",DepartmentController::class);
 
     Route::middleware(['permission:manage-departments', 'permission:manage-faculties'])->group(function () {
-        Route::controller(AcademicSessionController::class)->group(function(){
+        Route::controller(AcademicSessionController::class)->group(function () {
             Route::get('academic-sessions', 'index')->name('admin.academicSession.view');
             Route::get('academic-sessions/create', 'create')->name('admin.academicSession.create');
             Route::post('academic-sessions/store', 'store')->name('admin.academicSession.store');
             Route::get('academic-sessions/{academicSession}', 'edit')->name('admin.academicSession.edit');
             Route::patch('academic-sessions/update/{academicSession}', 'update')->name('admin.academicSession.update');
             Route::get('delete-session/{academicSession}', 'destroy')->name('admin.academicSession.destroy');
-
             Route::get('/admin/academic-sessions/{academicSession}/applications', 'viewSessionApplications')->name('admin.academicSession.applications');
-
         });
     });
 
     Route::middleware(['permission:manage-exams'])->group(function () {
-
         Route::controller(ExamManagerController::class)->group(function () {
             Route::get('exam-management', 'index')->name('admin.exam.manager');
             Route::post('exam-management/store', 'store')->name("admin.exam.store");
@@ -159,7 +131,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
             Route::get('exam-management-details/{id}/edit', "edit")->name('admin.exam.edit');
             Route::patch('exam-management-details/{id}/update', "update")->name('admin.exam.update');
             Route::get('exam-management-details/del/{id}', "destroy")->name('admin.exam.destroy');
-
             Route::get('exam-subject', 'subjects')->name("admin.subject");
             Route::post('exam-subject/store', 'subjectStore')->name("admin.subject.store");
             Route::get('exam-subject/del/{subject}', 'subjectDel')->name("admin.subject.del");
@@ -167,29 +138,20 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
     });
 
     Route::middleware(['permission:manage-students'])->group(function () {
-
         Route::controller(StudentManagementController::class)->group(function () {
             Route::get('student-management', 'index')->name('admin.student.management');
             Route::get('student-applications', 'application')->name('admin.student.application');
             Route::get('student-application-ref', 'applicationRef')->name('admin.student.applicationRef');
             Route::get('student-application-pdf', 'exportPdf')->name('admin.student.applications.exportPDF');
-
-
             Route::post('/import-applications', 'import')->name('admin.student.applications.import');
             Route::get('student-applications/export', 'exportApplications')->name('admin.student.applications.export');
             Route::get('view-student/{slug}', 'show')->name('admin.show.student');
-
             Route::post('/delete-multiple-students', 'deleteMultipleStudents')->name('admin.students.deleteMultiple');
             Route::get('delete-student/{slug}', 'destroy')->name('admin.destroy.student');
-
-
-
-
             Route::get('edit-student/{slug}', 'edit')->name('admin.edit.student');
             Route::patch('update-student/{slug}', 'update')->name('admin.update.student');
         });
     });
-
 
     Route::middleware(['permission:manage-payments', 'permission:manage-payment-methods'])->group(function () {
         Route::controller(PaymentMethodController::class)->group(function () {
@@ -197,8 +159,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
             Route::post('payment-method-manager', 'store')->name('admin.payment.store');
             Route::patch('payment-method-manage/{id}', 'update')->name('admin.payment.update');
             Route::get('payment-method-del/{id}', 'destroy')->name('admin.payment.destroy');
-
-            // manage payments paid by students
             Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
         });
     });
@@ -217,13 +177,9 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
         Route::controller(ManageRolePermissionController::class)->group(function () {
             Route::get('assign-role', 'index')->name('admin.assign.role');
             Route::post('assign-role/store', 'store')->name('admin.attach.roleStore');
-
-            //display and create permission
             Route::get('create-permissions', 'createPermission')->name('admin.create.permission');
             Route::post('create-permissions/store', 'storePermission')->name('admin.permissions.store');
             Route::get('permission', 'viewPermission')->name('admin.permissions.view');
-
-            // display and create roles.. assign permissions to the role
             Route::get('create-roles', 'createRole')->name('admin.create.role');
             Route::post('create-roles/store', 'storeRole')->name('admin.store.role');
             Route::get('roles', 'viewRoles')->name('admin.view.role');
@@ -231,8 +187,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
     });
 
     Route::middleware(['permission:manage-scholarship'])->group(function () {
-
-        // create scholarships
         Route::controller(ScholarshipController::class)->group(function () {
             Route::get('scholarships', 'index')->name('admin.manage.scholarship');
             Route::get('scholarships/view/{slug}', 'show')->name('admin.view.scholarship');
@@ -242,31 +196,20 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
             Route::get('scholarships/delete/{slug}', 'destroy')->name('admin.delete.scholarship');
         });
 
-
-        // create scholarship questions
         Route::controller(ScholarshipQuestionController::class)->group(function () {
             Route::get('scholarship-questions', 'index')->name('admin.scholarship.question.view');
             Route::post('scholarship-questions/store', 'store')->name('admin.scholarship.question.store');
             Route::get('scholarship-questions/show', 'show')->name('admin.scholarship.question.show');
-
             Route::get('edit-scholarship-question/{id}/edit', 'edit')->name('admin.scholarshipQuestion.edit');
             Route::get('delete-scholarship-question/{id}', 'destroy')->name('admin.scholarshipQuestion.destroy');
-
             Route::put('edit-scholarship-question/{question}/update', 'update')->name('admin.scholarshipQuestion.update');
         });
 
-
-        // student scholarship applications manager
         Route::controller(StudentScholarshipApplicationController::class)->group(function () {
             Route::get('scholarship-applications', 'index')->name('admin.scholarship.applicants');
             Route::get('scholarship-applications/{id}/details', 'show')->name('admin.scholarship.applicantShow');
-
-            //import and export of the scholarship applicants
             Route::get('admin/scholarships/applications/export', 'export')->name('admin.scholarship.applications.export');
             Route::post('admin/scholarships/applications/import', 'import')->name('admin.scholarship.applications.import');
-
-
-            // Route::get('scholarship-applications', 'index')->name('admin.scholarship.applicants');
         });
     });
 });
@@ -290,9 +233,12 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(fu
 
 
 
+
 Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->group(function () {
     Route::controller(StudentDashboardController::class)->group(function () {
+
         Route::get('dashboard', 'dashboard')->name('student.dashboard')->middleware('check.payment.status');
+
         Route::get('logout', 'logout')->name('student.logout');
 
         Route::get('faculty-user/{slug}', 'facultyDetail')->name('student.faculty.show');
