@@ -80,83 +80,56 @@
         @include('student.payment.applicationStatus')
     @else
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card card-light">
-                    <div class="card-header">
-                        <h3 class="card-header">Faculties and Associated Department</h3>
-                        <p class="muted">
-                            <big class="text-danger">IMPORTANT!!!</big> Before selecting a department to apply to,
-                            carefully review the list below. It outlines each
-                            faculty's departments and the programs available for application. Take your time to explore
-                            the diverse academic disciplines within each faculty, considering the programs' offerings
-                            and alignment with your career aspirations. This comprehensive guide ensures you're
-                            well-informed when making this crucial decision. Delve into the details, assess your
-                            interests, and make the choice that best suits your academic journey and future goals.
-                        </p>
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title">Faculties and Associated Departments</h3>
                     </div>
-                    <!-- /.card-header -->
                     <div class="card-body">
+                        <div class="alert alert-danger mb-4">
+                            <strong>IMPORTANT!!!</strong> Before selecting a department to apply to, carefully review the list below. It outlines each faculty's departments and the programs available for application. Take your time to explore the diverse academic disciplines within each faculty, considering the programs' offerings and alignment with your career aspirations. This comprehensive guide ensures you're well-informed when making this crucial decision. Delve into the details, assess your interests, and make the choice that best suits your academic journey and future goals.
+                        </div>
                         <div class="row">
                             @forelse ($faculties as $faculty)
-                            <div class="col-sm-4">
-                                <div id="f-card" class="h-auto p-1 position-relative card" >
-                                    <div class="ribbon-wrapper ">
-                                        <div class="text-white ribbon" style="background-color: rgb(99 102 241 / 1);">
-                                            Faculties
-                                        </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-secondary text-white">
+                                        <h5 class="card-title">{{ Str::title($faculty->name) }}</h5>
                                     </div>
                                     <div class="card-body">
-                                        <div class="text-monospace font-weight-bold">
-                                            <p class="underlined" style="color: #6574cd">
-                                                {{ Str::title($faculty->name) }}
-                                            </p>
-                                        </div>
-                                        <div class="mt-2">
-                                            <ul class="list-group" style="list-style-image: url({{ asset('list.png') }})">
-                                                @forelse ($faculty->departments as $department)
-                                                <li>
-                                                    <a data-toggle="modal" data-target="#departmentModal"
-                                                        data-department-id="{{ $department->id }}"
-                                                        title="Click to view details" class="link" href="#!">
-
-                                                        {{Str::title($department->name) }}
-                                                    </a>
-                                                </li>
-                                                @empty
-                                                <li style="list-style-image: url({{ asset('error.png') }})"
-                                                    class="text-danger">
-                                                    Coming soon <i class="fas fa-spinner fa-spin"></i></li>
-                                                    
-
-                                                @endforelse
-                                                <hr>
-                                            </ul>
-                                        </div>
-
+                                        <ul class="list-group list-group-flush">
+                                            @forelse ($faculty->departments as $department)
+                                            <li class="list-group-item">
+                                                <a data-toggle="modal" data-target="#departmentModal" data-department-id="{{ $department->id }}" title="Click to view details" class="text-primary" href="#!">
+                                                    {{ Str::title($department->name) }}
+                                                </a>
+                                            </li>
+                                            @empty
+                                            <li class="list-group-item text-danger">
+                                                Coming soon <i class="fas fa-spinner fa-spin"></i>
+                                            </li>
+                                            @endforelse
+                                        </ul>
                                     </div>
-
-
                                 </div>
                             </div>
                             @empty
-                            <div class="alert alert-danger">Try again later</div>
+                            <div class="col-md-12">
+                                <div class="alert alert-danger">Try again later</div>
+                            </div>
                             @endforelse
                         </div>
-                        <div class=" d-flex justify-content-center">
-                        {{$faculties->links()}}
+                        <div class="d-flex justify-content-center mt-4">
+                            {{ $faculties->links() }}
                         </div>
                     </div>
-                    <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
             </div>
-            <!-- /.col -->
         </div>
-        <!-- /.row -->
     </div>
     @endif
-    
+
 
     <!-- /.container-fluid -->
     <div class="modal fade" id="departmentModal" tabindex="-1" role="dialog" aria-labelledby="departmentModalLabel"

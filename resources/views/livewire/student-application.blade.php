@@ -752,7 +752,7 @@
                                         <label for="passport_photo">Passport Photo <span
                                                 class="text-danger">*</span></label>
                                         <input type="file" wire:model="passport_photo" id="passport_photo"
-                                            class="form-control" capture accept="image/*">
+                                            class="form-control" accept="image/*">
                                         @error('passport_photo')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
