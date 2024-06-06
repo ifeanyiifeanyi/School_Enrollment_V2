@@ -579,11 +579,11 @@ class StudentApplication extends Component
 
         if ($this->currentStep == 5) {
             $this->validate([
-                'document_medical_report' => 'file|mimes:pdf,jpg,jpeg,png|max:2048', // Max 2MB
-                'document_birth_certificate' => 'file|mimes:pdf,jpg,jpeg,png|max:2048', // Max 2MB
-                'document_local_government_identification' => 'file|mimes:pdf,jpg,jpeg,png|max:2048', // Max 2MB
-                'document_secondary_school_certificate_type' => 'file|mimes:pdf,jpg,jpeg,png|max:2048', // Max 2MB
-                'passport_photo' => 'image|mimes:jpeg,jpg,png|max:2048', // Max 2MB, only image files
+                'document_medical_report' => 'image|mimes:jpeg,jpg,png|max:2048',
+                'document_birth_certificate' => 'image|mimes:jpeg,jpg,png|max:2048',
+                'document_local_government_identification' => 'image|mimes:jpeg,jpg,png|max:2048',
+                'document_secondary_school_certificate_type' => 'image|mimes:jpeg,jpg,png|max:2048',
+                'passport_photo' => 'image|mimes:jpeg,jpg,png|max:2048',
                 'terms' => 'accepted'
             ]);
         }
