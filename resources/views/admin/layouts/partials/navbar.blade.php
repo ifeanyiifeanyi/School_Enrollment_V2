@@ -28,9 +28,6 @@
                 <a wire:navigate href="{{ route('admin.profile.setPassword') }}" class="dropdown-item has-icon">
                     <i class="fas fa-user-lock"></i> Manage Password
                 </a>
-                <a wire:navigate href="{{ route('admin.dashboard') }}" class="dropdown-item has-icon">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
                 <div class="dropdown-divider"></div>
                 <a href="{{ route('admin.logout') }}" class="dropdown-item has-icon text-danger">
                     <i class="fas fa-sign-out-alt"></i> Logout

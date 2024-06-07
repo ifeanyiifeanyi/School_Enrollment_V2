@@ -9,7 +9,7 @@ use App\Models\Department;
 use App\Models\Application;
 use App\Models\ExamSubject;
 use Illuminate\Support\Str;
-use GuzzleHttp\Psr7\Request;
+// use GuzzleHttp\Psr7\Request;
 use Livewire\WithFileUploads;
 use App\Models\AcademicSession;
 use Illuminate\Validation\Rule;
@@ -17,7 +17,11 @@ use App\Jobs\ProcessRegistration;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
+use Intervention\Image\ImageManager;
 use App\Mail\RegistrationConfirmationMail;
+use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\Drivers\Gd\Driver;
+
 
 class StudentApplication extends Component
 {
@@ -560,12 +564,35 @@ class StudentApplication extends Component
     }
 
     // prepare for media file submittion
+    // protected function storeFile($file, $directory)
+    // {
+    //     if ($file) {
+    //         $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
+    //         $path = $file->storeAs($directory, $filename);
+    //         return $path;
+    //     }
+
+    //     return null;
+
+    // }
     protected function storeFile($file, $directory)
     {
         if ($file) {
             $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs($directory, $filename);
-            return $path;
+
+            // Create the directory if it doesn't exist
+            if (!file_exists(storage_path('app/' . $directory))) {
+                mkdir(storage_path('app/' . $directory), 0755, true);
+            }
+
+            // Crop and save the image with reduced quality
+            $manager = new ImageManager(Driver::class);
+            $image = $manager->read($file->getRealPath());
+
+            $image->cover(300, 300);
+            $image->save(storage_path('app/' . $directory . '/' . $filename), 75); // Adjust the quality here
+
+            return $directory . '/' . $filename;
         }
 
         return null;
@@ -578,13 +605,14 @@ class StudentApplication extends Component
         $this->resetErrorBag();
 
         if ($this->currentStep == 5) {
+
             $this->validate([
-                'document_medical_report' => 'image|mimes:jpeg,jpg,png|max:2048',
-                'document_birth_certificate' => 'image|mimes:jpeg,jpg,png|max:2048',
-                'document_local_government_identification' => 'image|mimes:jpeg,jpg,png|max:2048',
-                'document_secondary_school_certificate_type' => 'image|mimes:jpeg,jpg,png|max:2048',
-                'passport_photo' => 'image|mimes:jpeg,jpg,png|max:2048',
-                'terms' => 'accepted'
+                'document_medical_report'                       => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+                'document_birth_certificate'                    => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+                'document_local_government_identification'      => 'required|image|mimes:jpeg,jpg,png|max:2048',
+                'document_secondary_school_certificate_type'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
+                'passport_photo'                                => 'required|image|mimes:jpeg,jpg,png|max:2048',
+                'terms'                                         => 'accepted'
             ]);
         }
 
@@ -597,25 +625,13 @@ class StudentApplication extends Component
 
         // Create a new array with the file paths
         $files = [
-            'document_medical_report' => $documentMedicalReportPath,
-            'document_birth_certificate' => $documentBirthCertificatePath,
-            'document_local_government_identification' => $documentLocalGovIdPath,
-            'document_secondary_school_certificate_type' => $documentSecondarySchoolCertPath,
-            'passport_photo' => $passportPhotoPath,
+            'document_medical_report'                       => $documentMedicalReportPath,
+            'document_birth_certificate'                    => $documentBirthCertificatePath,
+            'document_local_government_identification'      => $documentLocalGovIdPath,
+            'document_secondary_school_certificate_type'    => $documentSecondarySchoolCertPath,
+            'passport_photo'                                => $passportPhotoPath,
         ];
 
-        // In the register method
-        // $olevelExams = [
-        //     'sittings' => $this->sittings,
-        //     'exam_boards' => [
-        //         'exam_board_1' => $this->examBoard1,
-        //         'exam_board_2' => $this->examBoard2,
-        //     ],
-        //     'subjects' => [
-        //         'sitting_1' => $this->formatSubjects($this->subjects1),
-        //         'sitting_2' => $this->formatSubjects($this->subjects2),
-        //     ],
-        // ];
         // In the register method
         $olevelExams = [
             'sittings' => $this->sittings,

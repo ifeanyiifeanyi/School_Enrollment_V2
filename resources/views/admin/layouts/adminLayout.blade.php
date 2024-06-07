@@ -6,6 +6,8 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>{{ $siteSetting->site_title ??config('app.name') }} | @yield('title')</title>
 
+  <meta http-equiv="refresh" content="{{ config('session.lifetime') * 60 }}">
+
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
 

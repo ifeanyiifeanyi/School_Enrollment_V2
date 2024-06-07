@@ -95,7 +95,7 @@
         <img src="{{ asset('restriction.png') }}" alt="Access Denied Icon">
     </div>
     <h1>Access Denied</h1>
-    <p>You don't have permission to access this page.</p>
-    <a href="{{ url('/') }}" class="btn">Home</a>
+    <p>{{ $exception->getMessage() ?: 'You don\'t have permission to access this page.' }}</p>
+    <a href="{{ url()->previous() ?: url('/') }}" class="btn">Go Back</a>
 </div>
 @endsection

@@ -1,4 +1,4 @@
-<form wire:submit.prevent='register'>
+<form wire:submit.prevent='register' enctype="multipart/form-data">
     {{-- step on starts --}}
     @if ($currentStep == 1)
         <div class="step-one">

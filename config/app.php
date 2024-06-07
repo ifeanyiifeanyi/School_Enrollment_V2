@@ -169,7 +169,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\SiteSettingServiceProvider::class,
         // \Yabacon\Paystack\PaystackServiceProvider::class,
-        
+
 
 
     ])->toArray(),
@@ -187,6 +187,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        
     ])->toArray(),
 
 ];
