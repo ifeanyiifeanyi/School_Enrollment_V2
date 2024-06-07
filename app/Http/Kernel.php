@@ -21,7 +21,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        
+        \App\Http\Middleware\CorsMiddleware::class,
+
     ];
 
     /**
@@ -75,6 +76,7 @@ class Kernel extends HttpKernel
         // this line is used to make student most pay after filling the application form
         'check.payment.status' => \App\Http\Middleware\CheckPaymentStatusRole::class,
         'check.application.status' => \App\Http\Middleware\CheckApplicationStatus::class,
+        'cors' => \App\Http\Middleware\CorsMiddleware::class,
 
     ];
 }

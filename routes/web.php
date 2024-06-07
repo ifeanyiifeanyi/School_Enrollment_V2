@@ -43,239 +43,226 @@ Route::get('/run-migrations', function () {
 
     return "migration was successful";
 });
+Route::middleware(['cors'])->group(function () {
 
-Route::get('/', function () {
-    return view('auth.login');
-});
+    Route::get('/', function () {
+        return view('auth.login');
+    });
 
-//barcode student route
-Route::controller(BarcodeViewController::class)->group(function () {
-    Route::get('student/details/{nameSlug}', 'showDetails')->name('student.details.show');
-});
+    //barcode student route
+    Route::controller(BarcodeViewController::class)->group(function () {
+        Route::get('student/details/{nameSlug}', 'showDetails')->name('student.details.show');
+    });
 
-// confirm student application registration mail route
-Route::get('/payment', function () {
-    return view('student.application.index');
-})->name('payment.view');
+    // confirm student application registration mail route
+    Route::get('/payment', function () {
+        return view('student.application.index');
+    })->name('payment.view');
 
-Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
-
-
-
+    Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 
 
-// Admin Routes
-Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(function () {
-    Route::controller(AdminDashboardController::class)->group(function () {
-        Route::get('dashboard', 'index')->name('admin.dashboard');
-        Route::get('logout', 'logout')->name('admin.logout');
 
-        Route::middleware(['permission:manage-site-settings'])->group(function () {
-            Route::get('site-settings', 'siteSettings')->name('site.settings');
-            Route::post('site-settings/store', 'siteSettingStore')->name('site.setting.store');
-            Route::post('email-setup', 'emailSetup')->name('admin.email.setup');
-            Route::post('flutterwave/setup', 'storeFlutterwaveSettings')->name('admin.flutterwave.setup');
-            Route::post('paystack/setup', 'storePaystackSettings')->name('admin.paystack.setup');
+
+
+    // Admin Routes
+    Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(function () {
+        Route::controller(AdminDashboardController::class)->group(function () {
+            Route::get('dashboard', 'index')->name('admin.dashboard');
+            Route::get('logout', 'logout')->name('admin.logout');
+
+            Route::middleware(['permission:manage-site-settings'])->group(function () {
+                Route::get('site-settings', 'siteSettings')->name('site.settings');
+                Route::post('site-settings/store', 'siteSettingStore')->name('site.setting.store');
+                Route::post('email-setup', 'emailSetup')->name('admin.email.setup');
+                Route::post('flutterwave/setup', 'storeFlutterwaveSettings')->name('admin.flutterwave.setup');
+                Route::post('paystack/setup', 'storePaystackSettings')->name('admin.paystack.setup');
+            });
+        });
+
+        Route::controller(AdminProfileController::class)->group(function () {
+            Route::get('profile', 'show')->name('admin.profile');
+            Route::get('profile/set-password', 'setPassword')->name('admin.profile.setPassword');
+            Route::patch('profile/update-password', 'updatePassword')->name('admin.profile.updatePassword');
+            Route::post('profile/update', 'update')->name('admin.profile.update');
+        });
+
+        Route::middleware(['permission:manage-faculties'])->group(function () {
+            Route::controller(FacultyController::class)->group(function () {
+                Route::get('faculty-management', 'index')->name('admin.manage.faculty');
+                Route::get('create-faculty', 'create')->name('admin.create.faculty');
+                Route::post('store-faculty', 'store')->name('admin.store.faculty');
+                Route::get('delete-faculty/{slug}', 'destroy')->name('admin.destroy.faculty');
+                Route::get('edit-faculty/{slug}', 'edit')->name('admin.edit.faculty');
+                Route::get('view-faculty/{slug}', 'show')->name('admin.show.faculty');
+                Route::patch('update-faculty/{slug}', 'update')->name('admin.update.faculty');
+            });
+        });
+
+        Route::middleware(['permission:manage-departments'])->group(function () {
+            Route::controller(DepartmentController::class)->group(function () {
+                Route::get('department-management', 'index')->name('admin.manage.department');
+                Route::get('create-department', 'create')->name('admin.create.department');
+                Route::post('store-department', 'store')->name('admin.store.department');
+                Route::get('delete-department/{slug}', 'destroy')->name('admin.destroy.department');
+                Route::get('edit-department/{slug}', 'edit')->name('admin.edit.department');
+                Route::get('view-department/{slug}', 'show')->name('admin.show.department');
+                Route::patch('update-department/{slug}', 'update')->name('admin.update.department');
+            });
+        });
+
+        Route::middleware(['permission:manage-departments', 'permission:manage-faculties'])->group(function () {
+            Route::controller(AcademicSessionController::class)->group(function () {
+                Route::get('academic-sessions', 'index')->name('admin.academicSession.view');
+                Route::get('academic-sessions/create', 'create')->name('admin.academicSession.create');
+                Route::post('academic-sessions/store', 'store')->name('admin.academicSession.store');
+                Route::get('academic-sessions/{academicSession}', 'edit')->name('admin.academicSession.edit');
+                Route::patch('academic-sessions/update/{academicSession}', 'update')->name('admin.academicSession.update');
+                Route::get('delete-session/{academicSession}', 'destroy')->name('admin.academicSession.destroy');
+                Route::get('/admin/academic-sessions/{academicSession}/applications', 'viewSessionApplications')->name('admin.academicSession.applications');
+            });
+        });
+
+        Route::middleware(['permission:manage-exams'])->group(function () {
+            Route::controller(ExamManagerController::class)->group(function () {
+                Route::get('exam-management', 'index')->name('admin.exam.manager');
+                Route::post('exam-management/store', 'store')->name("admin.exam.store");
+                Route::get('exam-management-details', "examDetails")->name('admin.exam.details');
+                Route::get('exam-management-details/{id}', "examInformation")->name('admin.exam.information');
+                Route::get('exam-management-details/{id}/edit', "edit")->name('admin.exam.edit');
+                Route::patch('exam-management-details/{id}/update', "update")->name('admin.exam.update');
+                Route::get('exam-management-details/del/{id}', "destroy")->name('admin.exam.destroy');
+                Route::get('exam-subject', 'subjects')->name("admin.subject");
+                Route::post('exam-subject/store', 'subjectStore')->name("admin.subject.store");
+                Route::get('exam-subject/del/{subject}', 'subjectDel')->name("admin.subject.del");
+            });
+        });
+
+        Route::middleware(['permission:manage-students'])->group(function () {
+            Route::controller(StudentManagementController::class)->group(function () {
+                Route::get('student-management', 'index')->name('admin.student.management');
+                Route::get('student-applications', 'application')->name('admin.student.application');
+                Route::get('student-application-ref', 'applicationRef')->name('admin.student.applicationRef');
+                Route::get('student-application-pdf', 'exportPdf')->name('admin.student.applications.exportPDF');
+                Route::post('/import-applications', 'import')->name('admin.student.applications.import');
+                Route::get('student-applications/export', 'exportApplications')->name('admin.student.applications.export');
+                Route::get('view-student/{slug}', 'show')->name('admin.show.student');
+                Route::post('/delete-multiple-students', 'deleteMultipleStudents')->name('admin.students.deleteMultiple');
+                Route::get('delete-student/{slug}', 'destroy')->name('admin.destroy.student');
+                Route::get('edit-student/{slug}', 'edit')->name('admin.edit.student');
+                Route::patch('update-student/{slug}', 'update')->name('admin.update.student');
+            });
+        });
+
+        Route::middleware(['permission:manage-payments', 'permission:manage-payment-methods'])->group(function () {
+            Route::controller(PaymentMethodController::class)->group(function () {
+                Route::get('payment-method-management/{id?}', 'index')->name('admin.payment.manage');
+                Route::post('payment-method-manager', 'store')->name('admin.payment.store');
+                Route::patch('payment-method-manage/{id}', 'update')->name('admin.payment.update');
+                Route::get('payment-method-del/{id}', 'destroy')->name('admin.payment.destroy');
+                Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
+            });
+        });
+
+        Route::middleware(['permission:manage-admins'])->group(function () {
+            Route::controller(ManageAdminController::class)->group(function () {
+                Route::get('manage-admin', 'index')->name('admin.manage.admin');
+                Route::get('manage-admin/create', 'create')->name('admin.manage.create');
+                Route::post('manage-admin/store', 'store')->name('admin.manage.store');
+                Route::get('manage-admin/edit/{slug}', 'edit')->name('admin.manage.edit');
+                Route::patch('manage-admin/update/{slug}', 'update')->name('admin.manage.update');
+                Route::get('manage-admin/details/{user:nameSlug}', 'show')->name('admin.manage.show');
+                Route::get('delete-user/{user:nameSlug}', 'delete')->name('admin.manage.delete');
+            });
+
+            Route::controller(ManageRolePermissionController::class)->group(function () {
+                Route::get('assign-role', 'index')->name('admin.assign.role');
+                Route::post('assign-role/store', 'store')->name('admin.attach.roleStore');
+                Route::get('create-permissions', 'createPermission')->name('admin.create.permission');
+                Route::post('create-permissions/store', 'storePermission')->name('admin.permissions.store');
+                Route::get('permission', 'viewPermission')->name('admin.permissions.view');
+                Route::get('create-roles', 'createRole')->name('admin.create.role');
+                Route::post('create-roles/store', 'storeRole')->name('admin.store.role');
+                Route::get('roles', 'viewRoles')->name('admin.view.role');
+            });
+        });
+
+        Route::middleware(['permission:manage-scholarship'])->group(function () {
+            Route::controller(ScholarshipController::class)->group(function () {
+                Route::get('scholarships', 'index')->name('admin.manage.scholarship');
+                Route::get('scholarships/view/{slug}', 'show')->name('admin.view.scholarship');
+                Route::post('scholarships/store', 'store')->name('admin.store.scholarship');
+                Route::get('scholarships/edit/{slug}', 'edit')->name('admin.edit.scholarship');
+                Route::put('scholarships/update/{slug}', 'update')->name('admin.update.scholarship');
+                Route::get('scholarships/delete/{slug}', 'destroy')->name('admin.delete.scholarship');
+            });
+
+            Route::controller(ScholarshipQuestionController::class)->group(function () {
+                Route::get('scholarship-questions', 'index')->name('admin.scholarship.question.view');
+                Route::post('scholarship-questions/store', 'store')->name('admin.scholarship.question.store');
+                Route::get('scholarship-questions/show', 'show')->name('admin.scholarship.question.show');
+                Route::get('edit-scholarship-question/{id}/edit', 'edit')->name('admin.scholarshipQuestion.edit');
+                Route::get('delete-scholarship-question/{id}', 'destroy')->name('admin.scholarshipQuestion.destroy');
+                Route::put('edit-scholarship-question/{question}/update', 'update')->name('admin.scholarshipQuestion.update');
+            });
+
+            Route::controller(StudentScholarshipApplicationController::class)->group(function () {
+                Route::get('scholarship-applications', 'index')->name('admin.scholarship.applicants');
+                Route::get('scholarship-applications/{id}/details', 'show')->name('admin.scholarship.applicantShow');
+                Route::get('admin/scholarships/applications/export', 'export')->name('admin.scholarship.applications.export');
+                Route::post('admin/scholarships/applications/import', 'import')->name('admin.scholarship.applications.import');
+            });
         });
     });
 
-    Route::controller(AdminProfileController::class)->group(function () {
-        Route::get('profile', 'show')->name('admin.profile');
-        Route::get('profile/set-password', 'setPassword')->name('admin.profile.setPassword');
-        Route::patch('profile/update-password', 'updatePassword')->name('admin.profile.updatePassword');
-        Route::post('profile/update', 'update')->name('admin.profile.update');
-    });
 
-    Route::middleware(['permission:manage-faculties'])->group(function () {
-        Route::controller(FacultyController::class)->group(function () {
-            Route::get('faculty-management', 'index')->name('admin.manage.faculty');
-            Route::get('create-faculty', 'create')->name('admin.create.faculty');
-            Route::post('store-faculty', 'store')->name('admin.store.faculty');
-            Route::get('delete-faculty/{slug}', 'destroy')->name('admin.destroy.faculty');
-            Route::get('edit-faculty/{slug}', 'edit')->name('admin.edit.faculty');
-            Route::get('view-faculty/{slug}', 'show')->name('admin.show.faculty');
-            Route::patch('update-faculty/{slug}', 'update')->name('admin.update.faculty');
-        });
-    });
 
-    Route::middleware(['permission:manage-departments'])->group(function () {
-        Route::controller(DepartmentController::class)->group(function () {
-            Route::get('department-management', 'index')->name('admin.manage.department');
-            Route::get('create-department', 'create')->name('admin.create.department');
-            Route::post('store-department', 'store')->name('admin.store.department');
-            Route::get('delete-department/{slug}', 'destroy')->name('admin.destroy.department');
-            Route::get('edit-department/{slug}', 'edit')->name('admin.edit.department');
-            Route::get('view-department/{slug}', 'show')->name('admin.show.department');
-            Route::patch('update-department/{slug}', 'update')->name('admin.update.department');
-        });
-    });
 
-    Route::middleware(['permission:manage-departments', 'permission:manage-faculties'])->group(function () {
-        Route::controller(AcademicSessionController::class)->group(function () {
-            Route::get('academic-sessions', 'index')->name('admin.academicSession.view');
-            Route::get('academic-sessions/create', 'create')->name('admin.academicSession.create');
-            Route::post('academic-sessions/store', 'store')->name('admin.academicSession.store');
-            Route::get('academic-sessions/{academicSession}', 'edit')->name('admin.academicSession.edit');
-            Route::patch('academic-sessions/update/{academicSession}', 'update')->name('admin.academicSession.update');
-            Route::get('delete-session/{academicSession}', 'destroy')->name('admin.academicSession.destroy');
-            Route::get('/admin/academic-sessions/{academicSession}/applications', 'viewSessionApplications')->name('admin.academicSession.applications');
-        });
-    });
 
-    Route::middleware(['permission:manage-exams'])->group(function () {
-        Route::controller(ExamManagerController::class)->group(function () {
-            Route::get('exam-management', 'index')->name('admin.exam.manager');
-            Route::post('exam-management/store', 'store')->name("admin.exam.store");
-            Route::get('exam-management-details', "examDetails")->name('admin.exam.details');
-            Route::get('exam-management-details/{id}', "examInformation")->name('admin.exam.information');
-            Route::get('exam-management-details/{id}/edit', "edit")->name('admin.exam.edit');
-            Route::patch('exam-management-details/{id}/update', "update")->name('admin.exam.update');
-            Route::get('exam-management-details/del/{id}', "destroy")->name('admin.exam.destroy');
-            Route::get('exam-subject', 'subjects')->name("admin.subject");
-            Route::post('exam-subject/store', 'subjectStore')->name("admin.subject.store");
-            Route::get('exam-subject/del/{subject}', 'subjectDel')->name("admin.subject.del");
-        });
-    });
 
-    Route::middleware(['permission:manage-students'])->group(function () {
-        Route::controller(StudentManagementController::class)->group(function () {
-            Route::get('student-management', 'index')->name('admin.student.management');
-            Route::get('student-applications', 'application')->name('admin.student.application');
-            Route::get('student-application-ref', 'applicationRef')->name('admin.student.applicationRef');
-            Route::get('student-application-pdf', 'exportPdf')->name('admin.student.applications.exportPDF');
-            Route::post('/import-applications', 'import')->name('admin.student.applications.import');
-            Route::get('student-applications/export', 'exportApplications')->name('admin.student.applications.export');
-            Route::get('view-student/{slug}', 'show')->name('admin.show.student');
-            Route::post('/delete-multiple-students', 'deleteMultipleStudents')->name('admin.students.deleteMultiple');
-            Route::get('delete-student/{slug}', 'destroy')->name('admin.destroy.student');
-            Route::get('edit-student/{slug}', 'edit')->name('admin.edit.student');
-            Route::patch('update-student/{slug}', 'update')->name('admin.update.student');
-        });
-    });
+    Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->group(function () {
+        Route::controller(StudentDashboardController::class)->group(function () {
 
-    Route::middleware(['permission:manage-payments', 'permission:manage-payment-methods'])->group(function () {
-        Route::controller(PaymentMethodController::class)->group(function () {
-            Route::get('payment-method-management/{id?}', 'index')->name('admin.payment.manage');
-            Route::post('payment-method-manager', 'store')->name('admin.payment.store');
-            Route::patch('payment-method-manage/{id}', 'update')->name('admin.payment.update');
-            Route::get('payment-method-del/{id}', 'destroy')->name('admin.payment.destroy');
-            Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
-        });
-    });
+            Route::get('dashboard', 'dashboard')->name('student.dashboard')->middleware('check.payment.status');
 
-    Route::middleware(['permission:manage-admins'])->group(function () {
-        Route::controller(ManageAdminController::class)->group(function () {
-            Route::get('manage-admin', 'index')->name('admin.manage.admin');
-            Route::get('manage-admin/create', 'create')->name('admin.manage.create');
-            Route::post('manage-admin/store', 'store')->name('admin.manage.store');
-            Route::get('manage-admin/edit/{slug}', 'edit')->name('admin.manage.edit');
-            Route::patch('manage-admin/update/{slug}', 'update')->name('admin.manage.update');
-            Route::get('manage-admin/details/{user:nameSlug}', 'show')->name('admin.manage.show');
-            Route::get('delete-user/{user:nameSlug}', 'delete')->name('admin.manage.delete');
+            Route::get('logout', 'logout')->name('student.logout');
+
+            Route::get('faculty-user/{slug}', 'facultyDetail')->name('student.faculty.show');
+            Route::get('department-user/{id}', 'departmentDetail')->name('student.department.show');
         });
 
-        Route::controller(ManageRolePermissionController::class)->group(function () {
-            Route::get('assign-role', 'index')->name('admin.assign.role');
-            Route::post('assign-role/store', 'store')->name('admin.attach.roleStore');
-            Route::get('create-permissions', 'createPermission')->name('admin.create.permission');
-            Route::post('create-permissions/store', 'storePermission')->name('admin.permissions.store');
-            Route::get('permission', 'viewPermission')->name('admin.permissions.view');
-            Route::get('create-roles', 'createRole')->name('admin.create.role');
-            Route::post('create-roles/store', 'storeRole')->name('admin.store.role');
-            Route::get('roles', 'viewRoles')->name('admin.view.role');
-        });
-    });
-
-    Route::middleware(['permission:manage-scholarship'])->group(function () {
-        Route::controller(ScholarshipController::class)->group(function () {
-            Route::get('scholarships', 'index')->name('admin.manage.scholarship');
-            Route::get('scholarships/view/{slug}', 'show')->name('admin.view.scholarship');
-            Route::post('scholarships/store', 'store')->name('admin.store.scholarship');
-            Route::get('scholarships/edit/{slug}', 'edit')->name('admin.edit.scholarship');
-            Route::put('scholarships/update/{slug}', 'update')->name('admin.update.scholarship');
-            Route::get('scholarships/delete/{slug}', 'destroy')->name('admin.delete.scholarship');
+        Route::controller(StudentProfileController::class)->middleware('check.payment.status')->group(function () {
+            Route::get('profile', 'profile')->name('student.profile');
+            Route::get('profile/set-password', 'setPassword')->name('student.profile.setPassword');
+            Route::patch('profile/update-password', 'updatePassword')->name('student.profile.updatePassword');
+            Route::patch('profile/update', 'update')->name('student.profile.update');
         });
 
-        Route::controller(ScholarshipQuestionController::class)->group(function () {
-            Route::get('scholarship-questions', 'index')->name('admin.scholarship.question.view');
-            Route::post('scholarship-questions/store', 'store')->name('admin.scholarship.question.store');
-            Route::get('scholarship-questions/show', 'show')->name('admin.scholarship.question.show');
-            Route::get('edit-scholarship-question/{id}/edit', 'edit')->name('admin.scholarshipQuestion.edit');
-            Route::get('delete-scholarship-question/{id}', 'destroy')->name('admin.scholarshipQuestion.destroy');
-            Route::put('edit-scholarship-question/{question}/update', 'update')->name('admin.scholarshipQuestion.update');
+        //NOTE: remember there is a task to delete application not paid after 20days(DeleteUnpaidApplications)
+        Route::controller(ApplicationProcessController::class)->group(function () {
+            Route::get('application-process', 'index')->name('student.application.process')->middleware('check.application.status');
+            Route::get('/payment/{userSlug}', 'finalApplicationStep')->name('payment.view.finalStep');
+
+            Route::post('application-process/store', 'processPayment')->name('student.payment.process');
+            Route::get('handle/flutter-payment-call', 'handlePaymentCallBack')->name('student.payment.callbackFlutter');
+            Route::get('handle/paystack-payment-call', 'handlePaymentCallBackPayStack')->name('student.payment.callbackPaystack');
+
+
+            Route::get('/payment/success', 'showSuccess')->name('student.payment.success');
         });
 
-        Route::controller(StudentScholarshipApplicationController::class)->group(function () {
-            Route::get('scholarship-applications', 'index')->name('admin.scholarship.applicants');
-            Route::get('scholarship-applications/{id}/details', 'show')->name('admin.scholarship.applicantShow');
-            Route::get('admin/scholarships/applications/export', 'export')->name('admin.scholarship.applications.export');
-            Route::post('admin/scholarships/applications/import', 'import')->name('admin.scholarship.applications.import');
+
+        // student will apply for scholarship section
+        Route::controller(ScholarshipApplicationController::class)->group(function () {
+            Route::get('scholarship', 'index')->name('student.scholarship.view');
+            Route::post('scholarship/apply', 'apply')->name('student.scholarship.apply');
+            Route::get('/scholarships/{id}', 'showDetail')->name('scholarships.show.detail');
+            Route::get('scholarships/{id}/questions', 'getQuestions')->name('student.getQuestions');
+
+            // application success route
+            Route::get('scholarship-status', 'scholarshipStatus')->name('student.scholarships.status')->middleware('scholarship.submitted');
         });
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->group(function () {
-    Route::controller(StudentDashboardController::class)->group(function () {
-
-        Route::get('dashboard', 'dashboard')->name('student.dashboard')->middleware('check.payment.status');
-
-        Route::get('logout', 'logout')->name('student.logout');
-
-        Route::get('faculty-user/{slug}', 'facultyDetail')->name('student.faculty.show');
-        Route::get('department-user/{id}', 'departmentDetail')->name('student.department.show');
-    });
-
-    Route::controller(StudentProfileController::class)->middleware('check.payment.status')->group(function () {
-        Route::get('profile', 'profile')->name('student.profile');
-        Route::get('profile/set-password', 'setPassword')->name('student.profile.setPassword');
-        Route::patch('profile/update-password', 'updatePassword')->name('student.profile.updatePassword');
-        Route::patch('profile/update', 'update')->name('student.profile.update');
-    });
-
-    //NOTE: remember there is a task to delete application not paid after 20days(DeleteUnpaidApplications)
-    Route::controller(ApplicationProcessController::class)->group(function () {
-        Route::get('application-process', 'index')->name('student.application.process')->middleware('check.application.status');
-        Route::get('/payment/{userSlug}', 'finalApplicationStep')->name('payment.view.finalStep');
-
-        Route::post('application-process/store', 'processPayment')->name('student.payment.process');
-        Route::get('handle/flutter-payment-call', 'handlePaymentCallBack')->name('student.payment.callbackFlutter');
-        Route::get('handle/paystack-payment-call', 'handlePaymentCallBackPayStack')->name('student.payment.callbackPaystack');
-
-
-        Route::get('/payment/success', 'showSuccess')->name('student.payment.success');
-    });
-
-
-    // student will apply for scholarship section
-    Route::controller(ScholarshipApplicationController::class)->group(function () {
-        Route::get('scholarship', 'index')->name('student.scholarship.view');
-        Route::post('scholarship/apply', 'apply')->name('student.scholarship.apply');
-        Route::get('/scholarships/{id}', 'showDetail')->name('scholarships.show.detail');
-        Route::get('scholarships/{id}/questions', 'getQuestions')->name('student.getQuestions');
-
-        // application success route
-        Route::get('scholarship-status', 'scholarshipStatus')->name('student.scholarships.status')->middleware('scholarship.submitted');
     });
 });
 require __DIR__ . '/auth.php';
