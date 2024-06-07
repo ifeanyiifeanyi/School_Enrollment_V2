@@ -1,17 +1,14 @@
 @extends('errors::minimal')
-
-
 @section('title', 'Unauthorized')
-
 @section('content')
     <style>
         body {
-            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            background: linear-gradient(135deg, #e53935, #c62828);
             font-family: 'Roboto', sans-serif;
             color: #fff;
         }
 
-        .unauthorized-container {
+        .error-container {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -20,7 +17,7 @@
             text-align: center;
         }
 
-        .unauthorized-icon {
+        .error-icon {
             width: 150px;
             height: 150px;
             background-color: rgba(255, 255, 255, 0.2);
@@ -32,7 +29,7 @@
             animation: pulse 2s infinite;
         }
 
-        .unauthorized-icon img {
+        .error-icon img {
             max-width: 80px;
             max-height: 80px;
         }
@@ -52,7 +49,7 @@
         .btn {
             display: inline-block;
             background-color: #fff;
-            color: #2E7D32;
+            color: #c62828;
             text-decoration: none;
             padding: 12px 24px;
             border-radius: 4px;
@@ -62,7 +59,7 @@
         }
 
         .btn:hover {
-            background-color: #2E7D32;
+            background-color: #c62828;
             color: #fff;
         }
 
@@ -94,9 +91,9 @@
             }
         }
     </style>
-    <div class="unauthorized-container">
-        <div class="unauthorized-icon">
-            <img src="{{ asset('lock.png') }}" alt="Unauthorized Icon">
+    <div class="error-container">
+        <div class="error-icon">
+            <img src="{{ asset('lighting.png') }}" alt="Unauthorized Icon">
         </div>
         <h1>Unauthorized</h1>
         <p>You don't have permission to access this page.</p>
