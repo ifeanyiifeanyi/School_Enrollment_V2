@@ -20,7 +20,7 @@
                     href="{{ route('admin.student.application') }}"><i class="fas fa-graduation-cap"></i>
                     <span>Active Applications
                         <span style="border-radius: 50px !important;color: white !important"
-                            class="p-1 bg-danger text-light shadow">{{ $countapp ?? '0' }}</span>
+                            class="p-1 shadow bg-danger text-light">{{ $countapp ?? '0' }}</span>
                     </span>
                 </a>
             </li>
