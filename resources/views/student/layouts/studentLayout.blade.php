@@ -65,17 +65,7 @@
                 </div><!-- /.container-fluid -->
             </div>
             <!-- /.content-header -->
-            @if ($errors->any())
-                <div class="m-4 alert alert-danger alert-dismissible fade show w-50" role="alert">
-                    <strong>Error!</strong>
-                    @foreach ($errors->all() as $error)
-                        <p>{{ $error }}</p>
-                    @endforeach
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            @endif
+            
             <!-- Main content -->
             @yield('student')
             <!-- /.content -->

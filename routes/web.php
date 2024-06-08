@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\StudentScholarshipApplicationController;
 use App\Http\Controllers\Installer\InstallerController;
 use App\Http\Controllers\Student\ApplicationProcessController;
 use App\Http\Controllers\Student\ScholarshipApplicationController;
+use App\Http\Controllers\Student\StudentAdmissionApplicationController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentProfileController;
 use Illuminate\Support\Facades\Artisan;
@@ -238,6 +239,26 @@ Route::middleware(['cors'])->group(function () {
             Route::patch('profile/update-password', 'updatePassword')->name('student.profile.updatePassword');
             Route::patch('profile/update', 'update')->name('student.profile.update');
         });
+
+
+        Route::controller(StudentAdmissionApplicationController::class)->group(function(){
+            Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.application.status');
+            Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply');
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         //NOTE: remember there is a task to delete application not paid after 20days(DeleteUnpaidApplications)
         Route::controller(ApplicationProcessController::class)->group(function () {

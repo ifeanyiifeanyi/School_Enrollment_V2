@@ -32,12 +32,12 @@
                         $application->invoice_number }} has been processed successfully.</p>
 
                     <div class="row">
-                        <div class="col-md-4 text-center mb-4">
-                            <p><img width="200" src="{{ Storage::url($user->student->passport_photo) }}"
+                        <div class="mb-4 text-center col-md-4">
+                            <p><img width="200" src="{{ asset($user->student->passport_photo) }}"
                                     class="img-fluid" alt="Passport Photo"></p>
                             
                                 <!-- Barcode Image -->
-                                <div class="text-center mb-4">
+                                <div class="mb-4 text-center">
                                     <img src="data:image/png;base64,{{ \DNS2D::getBarcodePNG($barcodeUrl, 'QRCODE',6,6) }}" alt="barcode" />
                                 </div>
 

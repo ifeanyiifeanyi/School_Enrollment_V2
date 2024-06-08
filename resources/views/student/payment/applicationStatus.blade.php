@@ -26,13 +26,13 @@
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="col-md-4 text-center mb-4">
+                        <div class="mb-4 text-center col-md-4">
                             <div class="mb-3">
-                                <img width="200" src="{{ Storage::url($user->student->passport_photo) }}"
+                                <img width="200" src="{{ asset($user->student->passport_photo) }}"
                                     class="img-fluid" alt="Passport Photo">
                             </div>
                             <!-- Barcode Image -->
-                            <div class="text-center mb-4">
+                            <div class="mb-4 text-center">
                                 <img src="data:image/png;base64,{{ \DNS2D::getBarcodePNG($barcodeUrl, 'QRCODE',6,6) }}"
                                     alt="barcode" />
                             </div>

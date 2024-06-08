@@ -92,6 +92,13 @@
                         <p>Logout</p>
                     </a>
                 </li>
+
+                <li class="nav-item bg-info">
+                    <a href="{{ route('student.admission.application') }}" class="nav-link">
+                        <i class="nav-icon fas fa-user-lock"></i>
+                        <p>Start Application</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
