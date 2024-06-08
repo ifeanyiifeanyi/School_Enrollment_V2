@@ -121,6 +121,12 @@
     <button type="button" class="m-3 btn btn-primary animate-btn" data-toggle="modal" data-target="#instructionsModal">
         View Application Instructions
     </button>
+    @if ($errors->has('error'))
+        <div class="alert alert-danger">
+            {{ $errors->first('error') }}
+        </div>
+    @endif
+
     <section class="mx-auto content">
         <form method="POST" action="{{ route('student.admission.application.apply') }}" enctype="multipart/form-data"
             id="multiStepForm">
@@ -143,7 +149,7 @@
                                     <input name="first_name" type="text"
                                         class="form-control @error('first_name') border-banger @enderror" id="first_name"
                                         placeholder="Enter First Name"
-                                        value="{{ old('first_name', auth()->user()->first_name ?? '') }}"  >
+                                        value="{{ old('first_name', auth()->user()->first_name ?? '') }}">
                                     @error('first_name')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -155,7 +161,7 @@
                                     <input name="last_name" type="text"
                                         class="form-control @error('last_name') border-danger @enderror" id="last_name"
                                         placeholder="Enter Last Name"
-                                        value="{{ old('last_name', auth()->user()->last_name ?? '') }}"  >
+                                        value="{{ old('last_name', auth()->user()->last_name ?? '') }}">
                                     @error('last_name')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -167,7 +173,7 @@
                                     <input name="other_names" type="text"
                                         class="form-control @error('other_names') border-danger @enderror" id="other_names"
                                         placeholder="Other Names .."
-                                        value="{{ old('other_names', auth()->user()->other_names ?? '') }}"  >
+                                        value="{{ old('other_names', auth()->user()->other_names ?? '') }}">
                                     @error('other_names')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -181,7 +187,7 @@
                                     <input name="email" type="email"
                                         class="form-control @error('email') border-danger @enderror" id="email"
                                         placeholder="Enter Email Address"
-                                        value="{{ old('email', auth()->user()->email ?? '') }}"  >
+                                        value="{{ old('email', auth()->user()->email ?? '') }}">
                                     @error('email')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -193,7 +199,7 @@
                                     <input name="phone" type="tel"
                                         class="form-control @error('phone') border-danger @enderror" id="phone"
                                         placeholder="Enter Phone Number"
-                                        value="{{ old('phone', auth()->user()->student->phone ?? '') }}"  >
+                                        value="{{ old('phone', auth()->user()->student->phone ?? '') }}">
                                     @error('phone')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -223,7 +229,7 @@
                                 <div class="form-group">
                                     <label for="religion">Religion <span class="text-danger">*</span></label>
                                     <select name="religion" class="form-control @error('religion') border-danger @enderror"
-                                        id="religion"  >
+                                        id="religion">
                                         <option value="" disabled selected>Select Religion</option>
                                         @foreach ($religions as $religion)
                                             <option value="{{ $religion }}"
@@ -241,7 +247,7 @@
                                     <label for="dob">Date of Birth <span class="text-danger">*</span></label>
                                     <input name="dob" type="date"
                                         class="form-control @error('dob') border-danger @enderror" id="dob"
-                                        value="{{ old('dob', auth()->user()->student->dob ?? '') }}"  >
+                                        value="{{ old('dob', auth()->user()->student->dob ?? '') }}">
                                     @error('dob')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -253,7 +259,7 @@
                                     <input name="nin" type="number"
                                         class="form-control @error('nin') border-danger @enderror" id="nin"
                                         placeholder="National Identification Number"
-                                        value="{{ old('nin', auth()->user()->student->nin ?? '') }}"  >
+                                        value="{{ old('nin', auth()->user()->student->nin ?? '') }}">
                                     @error('nin')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -266,7 +272,7 @@
                                     <label for="country">Country of Origin <span class="text-danger">*</span></label>
                                     <select name="country" id="country"
                                         class="form-control @error('country') border-danger @enderror"
-                                        onchange="handleCountryChange(this.value)"  >
+                                        onchange="handleCountryChange(this.value)">
                                         <option value="">Select Country</option>
                                         @foreach ($countries as $countryName)
                                             <option value="{{ $countryName }}"
@@ -284,7 +290,7 @@
                                     <label for="state">State <span class="text-danger">*</span></label> <br>
                                     <select style="width: 100% !important" name="state" id="state"
                                         class="form-control @error('state') border-danger @enderror"
-                                        onchange="handleStateChange(this.value)"  >
+                                        onchange="handleStateChange(this.value)">
                                         <option value="" disabled selected>Select State</option>
                                         @foreach ($nigerianStates as $state)
                                             <option value="{{ $state }}"
@@ -302,8 +308,7 @@
                                     <label for="localGovernment">Local Government <span
                                             class="text-danger">*</span></label> <br>
                                     <select style="width: 100% !important" name="localGovernment" id="localGovernment"
-                                        class="form-control custom-select @error('localGovernment') border-danger @enderror"
-                                         >
+                                        class="form-control custom-select @error('localGovernment') border-danger @enderror">
                                         <option value="" disabled selected>Select Local Government</option>
                                         <!-- Local governments will be populated based on the selected state -->
                                     </select>
@@ -346,8 +351,7 @@
                                     <input name="current_residence_address" type="text"
                                         class="form-control @error('current_residence_address') border-danger @enderror"
                                         id="current_residence_address" placeholder="Enter current residence address"
-                                        value="{{ old('current_residence_address', auth()->user()->student->current_residence_address ?? '') }}"
-                                         >
+                                        value="{{ old('current_residence_address', auth()->user()->student->current_residence_address ?? '') }}">
                                     @error('current_residence_address')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -360,8 +364,7 @@
                                     <input name="permanent_residence_address" type="text"
                                         class="form-control @error('permanent_residence_address') border-danger @enderror"
                                         id="permanent_residence_address" placeholder="Enter permanent residence address"
-                                        value="{{ old('permanent_residence_address', auth()->user()->student->permanent_residence_address ?? '') }}"
-                                         >
+                                        value="{{ old('permanent_residence_address', auth()->user()->student->permanent_residence_address ?? '') }}">
                                     @error('permanent_residence_address')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -376,8 +379,7 @@
                                     <input name="guardian_name" type="text"
                                         class="form-control @error('guardian_name') border-danger @enderror"
                                         id="guardian_name" placeholder="Guardian / Parent Name"
-                                        value="{{ old('guardian_name', auth()->user()->student->guardian_name ?? '') }}"
-                                         >
+                                        value="{{ old('guardian_name', auth()->user()->student->guardian_name ?? '') }}">
                                     @error('guardian_name')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -390,8 +392,7 @@
                                     <input name="guardian_phone_number" type="text"
                                         class="form-control @error('guardian_phone_number') border-danger @enderror"
                                         id="guardian_phone_number" placeholder="Parent or Guardian Phone Number"
-                                        value="{{ old('guardian_phone_number', auth()->user()->student->guardian_phone_number ?? '') }}"
-                                         >
+                                        value="{{ old('guardian_phone_number', auth()->user()->student->guardian_phone_number ?? '') }}">
                                     @error('guardian_phone_number')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -404,8 +405,7 @@
                                     <input name="guardian_address" type="text"
                                         class="form-control @error('guardian_address') border-danger @enderror"
                                         id="guardian_address" placeholder="Parent or Guardian Home Address"
-                                        value="{{ old('guardian_address', auth()->user()->student->guardian_address ?? '') }}"
-                                         >
+                                        value="{{ old('guardian_address', auth()->user()->student->guardian_address ?? '') }}">
                                     @error('guardian_address')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -417,8 +417,7 @@
                                 <div class="form-group">
                                     <label for="blood_group">Blood Group <span class="text-danger">*</span></label>
                                     <select name="blood_group" id="blood_group"
-                                        class="form-control custom-select @error('blood_group') border-danger @enderror"
-                                         >
+                                        class="form-control custom-select @error('blood_group') border-danger @enderror">
                                         <option value="" disabled selected>Select Blood Group</option>
                                         <option value="A+"
                                             {{ old('blood_group', auth()->user()->student->blood_group) == 'A+' ? 'selected' : '' }}>
@@ -454,8 +453,7 @@
                                 <div class="form-group">
                                     <label for="genotype">Genotype <span class="text-danger">*</span></label>
                                     <select name="genotype" id="genotype"
-                                        class="form-control custom-select @error('genotype') border-danger @enderror"
-                                         >
+                                        class="form-control custom-select @error('genotype') border-danger @enderror">
                                         <option value="" disabled selected>Select Genotype</option>
                                         <option value="AA"
                                             {{ old('genotype', auth()->user()->student->genotype) == 'AA' ? 'selected' : '' }}>
@@ -482,8 +480,7 @@
                                 <div class="form-group">
                                     <label for="marital_status">Marital Status <span class="text-danger">*</span></label>
                                     <select name="marital_status" id="marital_status"
-                                        class="form-control custom-select @error('marital_status') border-danger @enderror"
-                                         >
+                                        class="form-control custom-select @error('marital_status') border-danger @enderror">
                                         <option value="" disabled selected>Select Marital Status</option>
                                         <option value="single"
                                             {{ old('marital_status', auth()->user()->student->marital_status) == 'single' ? 'selected' : '' }}>
@@ -530,8 +527,7 @@
                                     <input name="secondary_school_attended" type="text"
                                         class="form-control @error('secondary_school_attended') border-danger @enderror"
                                         id="secondary_school_attended" placeholder="Secondary School Attended"
-                                        value="{{ old('secondary_school_attended', auth()->user()->student->secondary_school_attended ?? '') }}"
-                                         >
+                                        value="{{ old('secondary_school_attended', auth()->user()->student->secondary_school_attended ?? '') }}">
                                     @error('secondary_school_attended')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -545,8 +541,7 @@
                                         class="form-control @error('secondary_school_graduation_year') border-danger @enderror"
                                         id="secondary_school_graduation_year"
                                         placeholder="Secondary School Graduation Year"
-                                        value="{{ old('secondary_school_graduation_year', auth()->user()->student->secondary_school_graduation_year ?? '') }}"
-                                         >
+                                        value="{{ old('secondary_school_graduation_year', auth()->user()->student->secondary_school_graduation_year ?? '') }}">
                                     @error('secondary_school_graduation_year')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -559,8 +554,7 @@
                                         class="form-control @error('secondary_school_certificate_type') border-danger @enderror"
                                         id="secondary_school_certificate_type"
                                         placeholder="Secondary School Certificate obtained"
-                                        value="{{ old('secondary_school_certificate_type', auth()->user()->student->secondary_school_certificate_type ?? '') }}"
-                                         >
+                                        value="{{ old('secondary_school_certificate_type', auth()->user()->student->secondary_school_certificate_type ?? '') }}">
                                     @error('secondary_school_certificate_type')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -575,8 +569,7 @@
                                     <input name="jamb_reg_no" type="text"
                                         class="form-control @error('jamb_reg_no') border-danger @enderror"
                                         id="jamb_reg_no" placeholder="Jamb registration Number"
-                                        value="{{ old('jamb_reg_no', auth()->user()->student->jamb_reg_no ?? '') }}"
-                                         >
+                                        value="{{ old('jamb_reg_no', auth()->user()->student->jamb_reg_no ?? '') }}">
                                     @error('jamb_reg_no')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -588,8 +581,7 @@
                                     <input name="jamb_score" type="number"
                                         class="form-control @error('jamb_score') border-danger @enderror" id="jamb_score"
                                         placeholder="Jamb Score"
-                                        value="{{ old('jamb_score', auth()->user()->student->jamb_score ?? '') }}"
-                                         >
+                                        value="{{ old('jamb_score', auth()->user()->student->jamb_score ?? '') }}">
                                     @error('jamb_score')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -642,7 +634,9 @@
                                             {{ $academicSession->session ?? '' }}</option>
                                     </select>
                                 </div>
-                                @error('academic_session_id') <span class="text-danger">{{$message}}</span> @enderror
+                                @error('academic_session_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         <div class="row">
@@ -691,7 +685,7 @@
                                 <div class="form-group">
                                     <label for="passport_photo">Passport Photo <span class="text-danger">*</span></label>
                                     <input type="file" name="passport_photo" id="passport_photo" class="form-control"
-                                        accept="image/*"   onchange="previewImage(event)">
+                                        accept="image/*" onchange="previewImage(event)">
                                     <img id="imagePreview" src="#" alt="Passport Photo"
                                         style="display:none; margin-top: 10px; max-width: 100px; max-height: 100px;">
                                     @error('passport_photo')
@@ -703,7 +697,7 @@
                                 <div class="form-group">
                                     <label for="document_ssce">SSCE Document <span class="text-danger">*</span></label>
                                     <input type="file" name="document_ssce" id="document_ssce" class="form-control"
-                                        accept="image/*"  >
+                                        accept="image/*">
                                     @error('document_ssce')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -713,7 +707,7 @@
                                 <div class="form-group">
                                     <label for="document_jamb">JAMB Document <span class="text-danger">*</span></label>
                                     <input type="file" name="document_jamb" id="document_jamb" class="form-control"
-                                        accept="image/*"  >
+                                        accept="image/*">
                                     @error('document_jamb')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -721,7 +715,7 @@
                             </div>
                         </div>
                         <div class="mt-3 form-group form-check">
-                            <input type="checkbox" name="terms" class="form-check-input" id="agreement"  >
+                            <input type="checkbox" name="terms" class="form-check-input" id="agreement">
                             <label class="form-check-label" for="agreement">I have read and agree to the <a
                                     href="#" data-toggle="modal" data-target="#termsModal">terms and
                                     conditions</a>.</label>
@@ -759,9 +753,9 @@
                         </p>
                         <p>
                             <strong>2. Document Submission:</strong><br>
-                            I agree to submit all   documents in the specified format (PDF or image
+                            I agree to submit all documents in the specified format (PDF or image
                             format, max 2MB each) as part of my application. I understand that failure to
-                            submit the   documents may result in delays or rejection of my
+                            submit the documents may result in delays or rejection of my
                             application.
                         </p>
                         <p>
@@ -787,9 +781,9 @@
                         </p>
                         <p>
                             <strong>6. Fee Payment:</strong><br>
-                            I acknowledge that if offered admission, I will be   to pay the necessary
+                            I acknowledge that if offered admission, I will be to pay the necessary
                             tuition and fees as per the university's fee structure. I understand that
-                            failure to pay the   fees within the specified time frame may result in
+                            failure to pay the fees within the specified time frame may result in
                             the cancellation of my admission offer.
                         </p>
                         <p>
@@ -807,7 +801,7 @@
                         <p>
                             <strong>9. Medical and Health Information:</strong><br>
                             I agree to provide accurate and complete medical and health information as part
-                            of my application, including submitting a medical report if  . I
+                            of my application, including submitting a medical report if . I
                             understand that the university may use this information to ensure my health and
                             safety on campus.
                         </p>
@@ -837,7 +831,7 @@
                     <div class="modal-body">
                         <ul>
                             <li class="text-danger">All fields marked with <q><span class="text-danger">*</span></q> are
-                                 .</li>
+                                .</li>
                             <li class="text-danger">Ensure you write your names correctly as you have it on <b>JAMB</b>.
                             </li>
                             <li>Please provide accurate and up-to-date information to avoid delays or rejection of your
