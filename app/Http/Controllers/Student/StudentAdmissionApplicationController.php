@@ -261,10 +261,10 @@ class StudentAdmissionApplicationController extends Controller
                 'request' => $request->all(),
             ]);
 
-            
+
 
             // Redirect back with an error message
-            return redirect()->back()->withInput()->withErrors(['error' => 'There was an error processing your application. Please try again.']);
+            return redirect()->back()->withInput()->withErrors(['error' =>  $e->getMessage()]);
         }
     }
 
