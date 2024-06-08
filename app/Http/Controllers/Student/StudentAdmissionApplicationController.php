@@ -260,6 +260,7 @@ class StudentAdmissionApplicationController extends Controller
                 'exception' => $e,
                 'request' => $request->all(),
             ]);
+
             
 
             // Redirect back with an error message
