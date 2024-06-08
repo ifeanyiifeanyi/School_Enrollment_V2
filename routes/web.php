@@ -156,6 +156,7 @@ Route::middleware(['cors'])->group(function () {
             });
         });
 
+
         Route::middleware(['permission:manage-payments', 'permission:manage-payment-methods'])->group(function () {
             Route::controller(PaymentMethodController::class)->group(function () {
                 Route::get('payment-method-management/{id?}', 'index')->name('admin.payment.manage');
