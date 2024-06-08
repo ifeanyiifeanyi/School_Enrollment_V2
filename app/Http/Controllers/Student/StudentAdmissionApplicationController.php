@@ -234,8 +234,8 @@ class StudentAdmissionApplicationController extends Controller
 
             // File upload handling
             $studentData['passport_photo'] = $this->storeFile($request->file('passport_photo'), 'uploads/passport_photos');
-            $studentData['document_secondary_school_certificate_type'] = $this->storeFile($request->file('document_ssce'), 'uploads/ssce_documents');
-            $studentData['document_local_government_identification'] = $this->storeFile($request->file('document_jamb'), 'uploads/jamb_documents');
+            $studentData['document_secondary_school_certificate_type'] = $this->storeFile($request->file('uploads/document_ssce'), 'uploads/ssce_documents');
+            $studentData['document_local_government_identification'] = $this->storeFile($request->file('uploads/document_jamb'), 'uploads/jamb_documents');
             $studentData['application_unique_number'] = $this->generateUniqueNumber();
             $studentData['nationality'] = $request->country;
             $studentData['country_of_origin'] = $request->country;
