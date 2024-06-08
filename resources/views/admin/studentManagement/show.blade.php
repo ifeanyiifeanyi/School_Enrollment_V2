@@ -127,7 +127,7 @@
                 <tr>
                   <th colspan="2" class="text-center">
                     <p>
-                      <img alt="image" src="{{ empty($student->student->passport_photo) ? asset('admin/assets/img/avatar/avatar-5.png') : Storage::url($student->student->passport_photo) }}" class="mt-3 img-thumbnail" style="width: 250px; height:250px;" data-toggle="title" title="{{ $student->full_name }}">
+                      <img alt="image" src="{{ empty($student->student->passport_photo) ? asset('admin/assets/img/avatar/avatar-5.png') : asset($student->student->passport_photo) }}" class="mt-3 img-thumbnail" style="width: 250px; height:250px;" data-toggle="title" title="{{ $student->full_name }}">
                     </p>
                     <div class="d-inline-block">
                       <p class="text-muted">{{ Str::title($student->student->nationality ?? "N/A")  }}</p>
@@ -201,7 +201,9 @@
               </tbody>
             </table>
           </div>
-          <div class="container">
+
+
+          {{-- <div class="container">
             <h1 class="mb-4 text-center">SSCE Results</h1>
             @if ($student && $student->student && $student->student->olevel_exams)
               @php
@@ -261,7 +263,9 @@
             @else
               <p>No SSCE results found for this student.</p>
             @endif
-          </div>
+          </div> --}}
+
+
         </div>
         <div class="col-md-6">
           <div class="card">
@@ -283,9 +287,14 @@
           <div class="section">
             <div class="container">
               <h3 class="mb-4 text-center">Student Documents</h3>
+              {{-- @dd($documents) --}}
               @foreach ($documents as $label => $doc)
                 <div class="mb-3 card card-body">
-                  <strong>{{ Str::title(str_replace('_', ' ', $label)) }}:</strong>
+                    @if (Str::title(str_replace('_', ' ', $label)) == "Local Government Identification")
+                        <strong>Jamb Result</strong>
+                    @else
+                    {{ Str::title(str_replace('_', ' ', $label)) }}:
+                    @endif
                   @if ($doc['exists'])
                     @if ($doc['isPdf'])
                       <a href="{{ $doc['filePath'] }}" class="mt-2 btn btn-primary" target="_blank">Open PDF in New Tab</a>

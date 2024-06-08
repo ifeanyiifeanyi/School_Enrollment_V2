@@ -25,7 +25,7 @@
                 <code>{{ $ap->user->student->application_unique_number }}</code>
             </td>
             <td>
-                <img src="data:image/png;base64,{{ base64_encode(Storage::get($ap->user->student->passport_photo)) }}" alt="" class="img-fluid" width="150px" height="120px">
+                <img src="data:image/png;base64,{{ base64_encode(asset($ap->user->student->passport_photo)) }}" alt="" class="img-fluid" width="150px" height="120px">
 
             </td>
             <td>

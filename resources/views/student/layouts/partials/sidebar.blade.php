@@ -37,6 +37,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a  href="{{ route('student.admission.application') }}" class="nav-link text-info">
+                        <i class="nav-icon fab fa-app-store text-light"></i>
+                        <p>Start Application</p>
+                    </a>
+                </li>
+
                 @if ($userHasApplication)
                     <li class="nav-item">
                         <a wire:navigate href="{{ route('student.scholarship.view') }}" class="nav-link">
@@ -68,18 +75,6 @@
                                 <p>Profile</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a wire:navigate href="{{ route('student.application.process') }}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Application</p>
-                            </a>
-                        </li>
-                        {{-- <li class="nav-item">
-                            <a href="./index3.html" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Account Setting</p>
-                            </a>
-                        </li> --}}
                     </ul>
                 </li>
 
@@ -90,12 +85,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item bg-info">
-                    <a href="{{ route('student.admission.application') }}" class="nav-link">
-                        <i class="nav-icon fas fa-user-lock"></i>
-                        <p>Start Application</p>
-                    </a>
-                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

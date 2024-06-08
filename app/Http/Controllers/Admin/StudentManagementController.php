@@ -75,7 +75,7 @@ class StudentManagementController extends Controller
         foreach ($documentKeys as $label => $key) {
             $filename = $student->student->$key;
             if ($filename) { // Corrected path check
-                $filePath = Storage::url($filename); // Corrected URL generation
+                $filePath = asset($filename); // Corrected URL generation
                 $isPdf = Str::endsWith($filename, '.pdf');
                 $documents[$label] = [
                     'filePath' => $filePath,
@@ -284,26 +284,24 @@ class StudentManagementController extends Controller
 
         DB::transaction(function () use ($userIds) {
             $students = Student::whereIn('user_id', $userIds)->get();
-            // dd($students);
 
             foreach ($students as $student) {
                 // List of document columns to check and potentially delete
                 $documentFields = [
-                    'document_birth_certificate',
                     'document_local_government_identification',
                     'document_medical_report',
                     'document_secondary_school_certificate'
                 ];
-                // dd($student->passport_photo);
+
                 // Delete passport photo if it exists
-                if ($student->passport_photo && Storage::disk('public')->exists($student->passport_photo)) {
-                    Storage::disk('public')->delete($student->passport_photo);
+                if ($student->passport_photo && file_exists(public_path($student->passport_photo))) {
+                    unlink(public_path($student->passport_photo));
                 }
 
                 // Check and delete each document if it exists
                 foreach ($documentFields as $field) {
-                    if ($student->$field && Storage::disk('public')->exists($student->$field)) {
-                        Storage::disk('public')->delete($student->$field);
+                    if ($student->$field && file_exists(public_path($student->$field))) {
+                        unlink(public_path($student->$field));
                     }
                 }
 
@@ -314,37 +312,33 @@ class StudentManagementController extends Controller
             // Delete users associated with these student records
             User::whereIn('id', $userIds)->delete();
         });
+
         $notification = [
             'message' => 'Students deleted successfully!!',
             'alert-type' => 'success'
         ];
 
-
         return redirect()->back()->with($notification);
     }
+
 
     public function destroy($slug)
     {
         DB::transaction(function () use ($slug) {
             $user = User::where('nameSlug', $slug)->firstOrFail(); // Find the user by slug
-            // dd($user);
 
             $student = $user->student; // Assuming there is a 'student' relationship defined in the User model
-            // dd($student);
-
 
             // Check and delete files associated with the student
             $filesToDelete = [
                 $student->passport_photo,
-                $student->document_birth_certificate,
                 $student->document_local_government_identification,
-                $student->document_medical_report,
                 $student->document_secondary_school_certificate
             ];
 
             foreach ($filesToDelete as $filePath) {
-                if ($filePath && Storage::disk('public')->exists($filePath)) {
-                    Storage::disk('public')->delete($filePath);
+                if ($filePath && file_exists(public_path($filePath))) {
+                    unlink(public_path($filePath));
                 }
             }
 
@@ -360,9 +354,9 @@ class StudentManagementController extends Controller
             'alert-type' => 'success'
         ];
 
-
         return redirect()->back()->with($notification);
     }
+
 
     protected function storeFile($file, $directory)
     {

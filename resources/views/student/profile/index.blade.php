@@ -21,17 +21,17 @@
                     <div class="card-body box-profile">
                         <div class="text-center">
                             <img src="{{ empty($user->student->passport_photo) ? " https://placehold.it/150x100" :
-                                Storage::url($user->student->passport_photo) }}" class="profile-user-img img-fluid w-50"
+                                asset($user->student->passport_photo) }}" class="profile-user-img img-fluid w-50"
                             alt="User profile picture">
                         </div>
 
-                        <h3 class="profile-username text-center">{{ Str::title($user->first_name) }} {{
+                        <h3 class="text-center profile-username">{{ Str::title($user->first_name) }} {{
                             Str::title($user->last_name) }}, <small class="text-muted">{{ Str::lower($user->nameSlug)
                                 }}</small></h3>
 
-                        <p class="text-muted text-center">{{ Str::title($user->other_names) }}</p>
+                        <p class="text-center text-muted">{{ Str::title($user->other_names) }}</p>
 
-                        <ul class="list-group list-group-unbordered mb-3">
+                        <ul class="mb-3 list-group list-group-unbordered">
                             <li class="list-group-item">
                                 <b>Phone Number</b> <a class="float-right text-muted">{{ $user->student->phone }}</a>
                             </li>
@@ -58,7 +58,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <strong><i class="fas fa-book mr-1"></i> Education</strong>
+                        <strong><i class="mr-1 fas fa-book"></i> Education</strong>
 
                         <p class="text-muted">
                             {{ Str::title($user->student->secondary_school_attended) ?? 'N/A' }} <br>
@@ -67,7 +67,7 @@
 
                         <hr>
 
-                        <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+                        <strong><i class="mr-1 fas fa-map-marker-alt"></i> Location</strong>
 
                         <p class="text-muted">
                             {{ Str::title($user->student->current_residence_address) ?? 'N/A' }}
@@ -78,17 +78,17 @@
 
                         <hr>
 
-                        <strong><i class="far fa-calendar-alt mr-1"></i> Date of Birth</strong>
+                        <strong><i class="mr-1 far fa-calendar-alt"></i> Date of Birth</strong>
 
                         <p class="text-muted">
                             {{ $user->student->dob ? \Carbon\Carbon::parse($user->student->dob)->isoFormat('Do MMM YYYY') . ', ' . \Carbon\Carbon::parse($user->student->dob)->age . ' years old' : 'N/A' }}
-                        
+
 
                         </p>
 
                         <hr>
 
-                        <strong><i class="fas fa-university mr-1"></i> Religion</strong>
+                        <strong><i class="mr-1 fas fa-university"></i> Religion</strong>
 
                         <p class="text-muted">
                             {{ Str::title($user->student->religion) ?? 'N/A' }}
@@ -101,16 +101,16 @@
             <!-- /.col -->
             <div class="col-md-7">
                 <div class="card">
-                    <div class="card-header p-2">
+                    <div class="p-2 card-header">
                         <ul class="nav nav-pills">
-                            
+
                             <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a>
                             </li>
                         </ul>
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-                            
+
 
                             <div class="active tab-pane" id="settings">
                                 <!-- general form elements -->
@@ -288,9 +288,9 @@
                                         @else
                                         <div class="card-footer">
                                             <button type="submit" class="btn btn-primary">Submit</button>
-                                        </div>                                         
+                                        </div>
                                         @endif
-   
+
                                     </form>
                                 </div>
                                 <!-- /.card -->

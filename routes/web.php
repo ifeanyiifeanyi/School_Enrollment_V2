@@ -240,7 +240,7 @@ Route::middleware(['cors'])->group(function () {
             Route::patch('profile/update', 'update')->name('student.profile.update');
         });
 
-
+        // NEW ADMISSION APPLICATION ROUTE ********
         Route::controller(StudentAdmissionApplicationController::class)->group(function(){
             Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.application.status');
             Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply');
@@ -262,7 +262,7 @@ Route::middleware(['cors'])->group(function () {
 
         //NOTE: remember there is a task to delete application not paid after 20days(DeleteUnpaidApplications)
         Route::controller(ApplicationProcessController::class)->group(function () {
-            Route::get('application-process', 'index')->name('student.application.process')->middleware('check.application.status');
+            // Route::get('application-process', 'index')->name('student.application.process')->middleware('check.application.status');
             Route::get('/payment/{userSlug}', 'finalApplicationStep')->name('payment.view.finalStep');
 
             Route::post('application-process/store', 'processPayment')->name('student.payment.process');

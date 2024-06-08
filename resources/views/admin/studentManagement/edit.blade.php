@@ -27,7 +27,7 @@
                                 <p><b class="text-danger">NOTE!!</b> The purpose of this page is to update student's
                                     details that might affect their access to entrance exam</p>
                             </div>
-                            <div class="section ml-2 mr-2 mt-3">
+                            <div class="mt-3 ml-2 mr-2 section">
                                 <div class="row">
                                     @if($user->applications->first())
                                     {{-- @dd($user->applications->first()->admission_status) --}}
@@ -291,7 +291,7 @@
                                         <option value="" selected disabled>Select country of origin</option>
                                        @foreach ($countries as $country)
                                        <option {{ $user->student->country_of_origin == $country['name'] ? 'selected' : '' }}
-                                        value="{{ $country['name'] }}">{{ $country['name'] }}</option>                                           
+                                        value="{{ $country['name'] }}">{{ $country['name'] }}</option>
                                        @endforeach
 
                                     </select>
@@ -318,12 +318,12 @@
                                     </div>
                                     <div class="col-md-4">
                                         <img id="previewImage" src="{{ empty($user->student->passport_photo) ? "
-                                            https://placehold.it/150x100" : Storage::url($user->student->passport_photo)
+                                            https://placehold.it/150x100" : asset($user->student->passport_photo)
                                         }}" class="elevation-2" width="120px" alt="User Image">
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-footer text-right">
+                            <div class="text-right card-footer">
                                 <button class="btn btn-primary">Submit</button>
                             </div>
                         </div>

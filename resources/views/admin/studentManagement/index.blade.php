@@ -103,7 +103,8 @@
                                                 </td>
                                                 <td>
                                                     <img alt="image"
-                                                        src="{{ empty($student->student->passport_photo) ? asset('admin/assets/img/avatar/avatar-5.png') : Storage::url($student->student->passport_photo) }}"
+                                                        src="{{ empty($student->student->passport_photo) ? asset('admin/assets/img/avatar/avatar-5.png') :
+                                                        asset($student->student->passport_photo) }}"
                                                         class="img-responsive -img-thumbnail" width="90"
                                                         data-toggle="title" title="{{ $student->last_name }}">
                                                 </td>
