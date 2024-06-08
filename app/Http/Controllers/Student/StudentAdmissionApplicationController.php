@@ -268,26 +268,30 @@ class StudentAdmissionApplicationController extends Controller
 
 
     protected function storeFile($file, $directory)
-    {
-        if ($file) {
-            $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
+{
+    if ($file) {
+        $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
 
-            // Create the directory if it doesn't exist
-            $path = public_path($directory);
-            if (!File::exists($path)) {
-                File::makeDirectory($path, 0755, true);
-            }
+        // Get the path
+        $path = public_path($directory);
 
-            // Save the image
-            $manager = new ImageManager(Driver::class);
-            $image = $manager->read($file->getRealPath());
-            $image->save($path . '/' . $filename);
+        // // Check if the directory exists, and if not, return null or handle accordingly
+        // if (!File::exists($path)) {
+        //     // Handle the case where the directory does not exist (return null or log the error)
+        //     return null;
+        // }
 
-            return $directory . '/' . $filename;
-        }
+        // Save the image
+        $manager = new ImageManager(Driver::class);
+        $image = $manager->read($file->getRealPath());
+        $image->save($path . '/' . $filename);
 
-        return null;
+        return $directory . '/' . $filename;
     }
+
+    return null;
+}
+
 
     protected function generateUniqueNumber()
     {
