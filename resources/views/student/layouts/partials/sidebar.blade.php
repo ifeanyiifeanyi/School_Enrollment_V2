@@ -17,10 +17,7 @@
         <!-- Sidebar user panel (optional) -->
         <div class="pb-3 mt-3 mb-3 user-panel d-flex">
             <div class="image">
-                <img src="{{ empty(auth()->user()->student->passport_photo)
-                    ? 'https://placehold.it/150x100'
-                    : Storage::url(auth()->user()->student->passport_photo) }}"
-                    class="elevation-2" alt="User Image">
+<img src="{{ empty(auth()->user()->student->passport_photo) ? 'https://placehold.it/150x100' : asset(auth()->user()->student->passport_photo) }} "class="elevation-2" alt="User Image">
             </div>
             <div class="info">
                 <a wire:navigate href="{{ route('student.profile') }}"
