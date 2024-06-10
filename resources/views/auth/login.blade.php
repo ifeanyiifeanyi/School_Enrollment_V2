@@ -106,7 +106,7 @@
                         </div>
                     </div>
                     <div class="mt-5 text-center text-muted">
-                        Don't have an account? <a href="{{ route('register') }}">Create One</a>
+                        Don't have an account? <a href="{{ route('register') }}">Register Now</a>
                     </div>
                     @include('layouts.footer')
                 </div>
