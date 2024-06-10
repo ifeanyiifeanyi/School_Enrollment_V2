@@ -15,9 +15,8 @@ class ScholarshipQuestionController extends Controller
      */
     public function index()
     {
-        $scholarships = Scholarship::with('questions')
-        ->whereHas('questions')
-        ->latest()->get();
+        $scholarships = Scholarship::all();
+
 
         return view('admin.scholarshipQuestions.index', compact('scholarships'));
     }
