@@ -22,7 +22,7 @@
         This page is optimized for printing. Please use the print button located at the bottom of the invoice to
         obtain a hard copy for your records and future reference.
     </div>
-    <div class="alert alert-info">
+    <div class="alert alert-info m-3">
        <p> Applicants to <b>Shanahan University</b> will receive updates regarding their application via email. It is crucial to regularly check your inbox and login to the application portal to monitor the status of your submission. Important notifications, requests for additional information, and the final decision will be communicated through these channels.</p>
     </div>
     <div class="row justify-content-center">
