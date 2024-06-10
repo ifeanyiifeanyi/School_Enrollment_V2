@@ -216,9 +216,9 @@ class StudentAdmissionApplicationController extends Controller
             'jamb_selection' => 'required|string',
             'department_id' => 'required|exists:departments,id',
             'academic_session_id' => 'required|exists:academic_sessions,id',
-            'passport_photo' => 'required|image|mimes:jpeg,jpg,png|max:2048',
-            'document_ssce' => 'required|image|mimes:jpeg,jpg,png|max:2048',
-            'document_jamb' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'passport_photo' => 'required|image|mimes:jpeg,jpg,png|max:10048',
+            'document_ssce' => 'required|image|mimes:jpeg,jpg,png|max:10048',
+            'document_jamb' => 'required|image|mimes:jpeg,jpg,png|max:10048',
             'terms' => 'accepted',
         ]);
 
