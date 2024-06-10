@@ -4,31 +4,21 @@
 
 @section('student')
     <style>
-        /* loader   */
+        /* Loader styles */
         .loader-overlay {
             display: none;
-            /* Hidden by default */
             position: fixed;
-            /* Stay in place */
             z-index: 9999;
-            /* Sit on top */
             left: 0;
             top: 0;
             width: 100%;
-            /* Full width */
             height: 100%;
-            /* Full height */
-            overflow: hidden;
-            /* Disable scroll */
             background-color: rgba(255, 255, 255, 0.8);
-            /* White background with opacity */
         }
 
         .loader {
             border: 16px solid #f3f3f3;
-            /* Light grey */
             border-top: 16px solid #3498db;
-            /* Blue */
             border-radius: 50%;
             width: 120px;
             height: 120px;
@@ -49,7 +39,7 @@
             }
         }
 
-        /* loader ends  */
+        /* Page styles */
         body {
             font-family: 'Montserrat', sans-serif;
             background: linear-gradient(135deg, #667eea, #764ba2);
@@ -116,13 +106,13 @@
         <div class="loader"></div>
     </div>
 
-
     <!-- Button to open the modal with animation class -->
     <button type="button" class="m-3 btn btn-primary animate-btn" data-toggle="modal" data-target="#instructionsModal">
         View Application Instructions
     </button>
+
     @if ($errors->has('error'))
-        <div class="alert alert-danger">
+        <div class="alert alert-danger m-3">
             {{ $errors->first('error') }}
         </div>
     @endif
@@ -131,6 +121,7 @@
         <form method="POST" action="{{ route('student.admission.application.apply') }}" enctype="multipart/form-data"
             id="multiStepForm">
             @csrf
+
             {{-- Step 1: Personal Details --}}
             <div id="step1" class="form-step">
                 <div class="">
@@ -141,13 +132,12 @@
                             application.</div>
                     </div>
                     <div class="card-body">
-
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="first_name">First Name <span class="text-danger">*</span></label>
                                     <input name="first_name" type="text"
-                                        class="form-control @error('first_name') border-banger @enderror" id="first_name"
+                                        class="form-control @error('first_name') border-danger @enderror" id="first_name"
                                         placeholder="Enter First Name"
                                         value="{{ old('first_name', auth()->user()->first_name ?? '') }}">
                                     @error('first_name')
@@ -172,7 +162,7 @@
                                     <label for="other_names">Other Names <span class="text-danger">*</span></label>
                                     <input name="other_names" type="text"
                                         class="form-control @error('other_names') border-danger @enderror" id="other_names"
-                                        placeholder="Other Names .."
+                                        placeholder="Enter Other Names"
                                         value="{{ old('other_names', auth()->user()->other_names ?? '') }}">
                                     @error('other_names')
                                         <span class="text-danger">{{ $message }}</span>
@@ -273,7 +263,7 @@
                                     <select name="country" id="country"
                                         class="form-control @error('country') border-danger @enderror"
                                         onchange="handleCountryChange(this.value)">
-                                        <option value="">Select Country</option>
+                                        <option value="" selected>Select Country</option>
                                         @foreach ($countries as $countryName)
                                             <option value="{{ $countryName }}"
                                                 {{ old('country', auth()->user()->student->country) == $countryName ? 'selected' : '' }}>
@@ -285,25 +275,27 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4" id="nigeriaStateField" style="display:none;">
+                            <div class="col-md-4" id="nigeriaStateField" style="display: none;">
                                 <div class="form-group">
-                                    <label for="state">State <span class="text-danger">*</span></label> <br>
-                                    <select style="width: 100% !important" name="state" id="state"
-                                        class="form-control @error('state') border-danger @enderror"
+                                    <label for="state_of_origin">State <span class="text-danger">*</span></label> <br>
+                                    <select style="width: 100% !important" name="state_of_origin_nigeria"
+                                        id="state_of_origin_nigeria"
+                                        class="form-control @error('state_of_origin') border-danger @enderror"
                                         onchange="handleStateChange(this.value)">
                                         <option value="" disabled selected>Select State</option>
+
                                         @foreach ($nigerianStates as $state)
                                             <option value="{{ $state }}"
-                                                {{ old('state', auth()->user()->student->state) == $state ? 'selected' : '' }}>
+                                                {{ old('state_of_origin', auth()->user()->student->state_of_origin) == $state ? 'selected' : '' }}>
                                                 {{ $state }}</option>
                                         @endforeach
                                     </select>
-                                    @error('state')
+                                    @error('state_of_origin')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4" id="nigeriaLgaField" style="display:none;">
+                            <div class="col-md-4" id="nigeriaLgaField" style="display: none;">
                                 <div class="form-group">
                                     <label for="localGovernment">Local Government <span
                                             class="text-danger">*</span></label> <br>
@@ -312,32 +304,32 @@
                                         <option value="" disabled selected>Select Local Government</option>
                                         <!-- Local governments will be populated based on the selected state -->
                                     </select>
-                                    @error('localGovernment')
+                                    @error('lga_origin')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4" id="otherCountryStateField" style="display:none;">
+                            <div class="col-md-4" id="otherCountryStateField" style="display: none;">
                                 <div class="form-group">
-                                    <label for="state_province">State/Province <span class="text-danger">*</span></label>
-                                    <input type="text" name="state_province" id="state_province"
-                                        class="form-control @error('state_province') border-danger @enderror"
+                                    <label for="state_of_origin">State/Province <span class="text-danger">*</span></label>
+                                    <input type="text" name="state_of_origin" id="state_of_origin"
+                                        class="form-control @error('state_of_origin') border-danger @enderror"
                                         placeholder="State/Province"
-                                        value="{{ old('state_province', auth()->user()->student->state_province ?? '') }}">
-                                    @error('state_province')
+                                        value="{{ old('state_of_origin', auth()->user()->student->state_of_origin ?? '') }}">
+                                    @error('state_of_origin')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4" id="otherCountryCityField" style="display:none;">
+                            <div class="col-md-4" id="otherCountryCityField" style="display: none;">
                                 <div class="form-group">
-                                    <label for="city_local_government">City/Local Government <span
+                                    <label for="lga_origin">City/Local Government <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" name="city_local_government" id="city_local_government"
-                                        class="form-control @error('city_local_government') border-danger @enderror"
+                                    <input type="text" name="lga_origin" id="lga_origin"
+                                        class="form-control @error('lga_origin') border-danger @enderror"
                                         placeholder="City/Local Government"
-                                        value="{{ old('city_local_government', auth()->user()->student->city_local_government ?? '') }}">
-                                    @error('city_local_government')
+                                        value="{{ old('lga_origin', auth()->user()->student->lga_origin ?? '') }}">
+                                    @error('lga_origin')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -419,30 +411,11 @@
                                     <select name="blood_group" id="blood_group"
                                         class="form-control custom-select @error('blood_group') border-danger @enderror">
                                         <option value="" disabled selected>Select Blood Group</option>
-                                        <option value="A+"
-                                            {{ old('blood_group', auth()->user()->student->blood_group) == 'A+' ? 'selected' : '' }}>
-                                            A+</option>
-                                        <option value="A-"
-                                            {{ old('blood_group', auth()->user()->student->blood_group) == 'A-' ? 'selected' : '' }}>
-                                            A-</option>
-                                        <option value="B+"
-                                            {{ old('blood_group', auth()->user()->student->blood_group) == 'B+' ? 'selected' : '' }}>
-                                            B+</option>
-                                        <option value="B-"
-                                            {{ old('blood_group', auth()->user()->student->blood_group) == 'B-' ? 'selected' : '' }}>
-                                            B-</option>
-                                        <option value="O+"
-                                            {{ old('blood_group', auth()->user()->student->blood_group) == 'O+' ? 'selected' : '' }}>
-                                            O+</option>
-                                        <option value="O-"
-                                            {{ old('blood_group', auth()->user()->student->blood_group) == 'O-' ? 'selected' : '' }}>
-                                            O-</option>
-                                        <option value="AB+"
-                                            {{ old('blood_group', auth()->user()->student->blood_group) == 'AB+' ? 'selected' : '' }}>
-                                            AB+</option>
-                                        <option value="AB-"
-                                            {{ old('blood_group', auth()->user()->student->blood_group) == 'AB-' ? 'selected' : '' }}>
-                                            AB-</option>
+                                        @foreach (['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'] as $bloodGroup)
+                                            <option value="{{ $bloodGroup }}"
+                                                {{ old('blood_group', auth()->user()->student->blood_group) == $bloodGroup ? 'selected' : '' }}>
+                                                {{ $bloodGroup }}</option>
+                                        @endforeach
                                     </select>
                                     @error('blood_group')
                                         <span class="text-danger">{{ $message }}</span>
@@ -455,21 +428,11 @@
                                     <select name="genotype" id="genotype"
                                         class="form-control custom-select @error('genotype') border-danger @enderror">
                                         <option value="" disabled selected>Select Genotype</option>
-                                        <option value="AA"
-                                            {{ old('genotype', auth()->user()->student->genotype) == 'AA' ? 'selected' : '' }}>
-                                            AA</option>
-                                        <option value="AS"
-                                            {{ old('genotype', auth()->user()->student->genotype) == 'AS' ? 'selected' : '' }}>
-                                            AS</option>
-                                        <option value="SS"
-                                            {{ old('genotype', auth()->user()->student->genotype) == 'SS' ? 'selected' : '' }}>
-                                            SS</option>
-                                        <option value="AC"
-                                            {{ old('genotype', auth()->user()->student->genotype) == 'AC' ? 'selected' : '' }}>
-                                            AC</option>
-                                        <option value="SC"
-                                            {{ old('genotype', auth()->user()->student->genotype) == 'SC' ? 'selected' : '' }}>
-                                            SC</option>
+                                        @foreach (['AA', 'AS', 'SS', 'AC', 'SC'] as $genotype)
+                                            <option value="{{ $genotype }}"
+                                                {{ old('genotype', auth()->user()->student->genotype) == $genotype ? 'selected' : '' }}>
+                                                {{ $genotype }}</option>
+                                        @endforeach
                                     </select>
                                     @error('genotype')
                                         <span class="text-danger">{{ $message }}</span>
@@ -482,18 +445,11 @@
                                     <select name="marital_status" id="marital_status"
                                         class="form-control custom-select @error('marital_status') border-danger @enderror">
                                         <option value="" disabled selected>Select Marital Status</option>
-                                        <option value="single"
-                                            {{ old('marital_status', auth()->user()->student->marital_status) == 'single' ? 'selected' : '' }}>
-                                            Single</option>
-                                        <option value="married"
-                                            {{ old('marital_status', auth()->user()->student->marital_status) == 'married' ? 'selected' : '' }}>
-                                            Married</option>
-                                        <option value="divorced"
-                                            {{ old('marital_status', auth()->user()->student->marital_status) == 'divorced' ? 'selected' : '' }}>
-                                            Divorced</option>
-                                        <option value="widowed"
-                                            {{ old('marital_status', auth()->user()->student->marital_status) == 'widowed' ? 'selected' : '' }}>
-                                            Widowed</option>
+                                        @foreach (['single', 'married', 'divorced', 'widowed'] as $status)
+                                            <option value="{{ $status }}"
+                                                {{ old('marital_status', auth()->user()->student->marital_status) == $status ? 'selected' : '' }}>
+                                                {{ ucfirst($status) }}</option>
+                                        @endforeach
                                     </select>
                                     @error('marital_status')
                                         <span class="text-danger">{{ $message }}</span>
@@ -540,7 +496,6 @@
                                     <input name="secondary_school_graduation_year" type="date"
                                         class="form-control @error('secondary_school_graduation_year') border-danger @enderror"
                                         id="secondary_school_graduation_year"
-                                        placeholder="Secondary School Graduation Year"
                                         value="{{ old('secondary_school_graduation_year', auth()->user()->student->secondary_school_graduation_year ?? '') }}">
                                     @error('secondary_school_graduation_year')
                                         <span class="text-danger">{{ $message }}</span>
@@ -549,11 +504,11 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="secondary_school_certificate_type">Certificate Obtained</label>
+                                    <label for="secondary_school_certificate_type">Certificate Obtained <span
+                                            class="text-danger">*</span></label>
                                     <input name="secondary_school_certificate_type" type="text"
                                         class="form-control @error('secondary_school_certificate_type') border-danger @enderror"
-                                        id="secondary_school_certificate_type"
-                                        placeholder="Secondary School Certificate obtained"
+                                        id="secondary_school_certificate_type" placeholder="Certificate Obtained"
                                         value="{{ old('secondary_school_certificate_type', auth()->user()->student->secondary_school_certificate_type ?? '') }}">
                                     @error('secondary_school_certificate_type')
                                         <span class="text-danger">{{ $message }}</span>
@@ -564,11 +519,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="jamb_reg_no">Jamb Registration Number <span
+                                    <label for="jamb_reg_no">JAMB Registration Number <span
                                             class="text-danger">*</span></label>
                                     <input name="jamb_reg_no" type="text"
                                         class="form-control @error('jamb_reg_no') border-danger @enderror"
-                                        id="jamb_reg_no" placeholder="Jamb registration Number"
+                                        id="jamb_reg_no" placeholder="JAMB Registration Number"
                                         value="{{ old('jamb_reg_no', auth()->user()->student->jamb_reg_no ?? '') }}">
                                     @error('jamb_reg_no')
                                         <span class="text-danger">{{ $message }}</span>
@@ -577,10 +532,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="jamb_score">Jamb Score <span class="text-danger">*</span></label>
+                                    <label for="jamb_score">JAMB Score <span class="text-danger">*</span></label>
                                     <input name="jamb_score" type="number"
                                         class="form-control @error('jamb_score') border-danger @enderror" id="jamb_score"
-                                        placeholder="Jamb Score"
+                                        placeholder="JAMB Score"
                                         value="{{ old('jamb_score', auth()->user()->student->jamb_score ?? '') }}">
                                     @error('jamb_score')
                                         <span class="text-danger">{{ $message }}</span>
@@ -615,9 +570,15 @@
                                     <select name="jamb_selection" id="jamb_selection"
                                         class="form-control @error('jamb_selection') border-danger @enderror">
                                         <option value="" disabled selected>Select an option</option>
-                                        <option value="selected_in_jamb">Selected in JAMB</option>
-                                        <option value="change_of_school">Change of School</option>
-                                        <option value="direct_entry">Direct Entry</option>
+                                        <option value="selected_in_jamb"
+                                            {{ old('jamb_selection', auth()->user()->student->jamb_selection) == 'selected_in_jamb' ? 'selected' : '' }}>
+                                            Selected in JAMB</option>
+                                        <option value="change_of_school"
+                                            {{ old('jamb_selection', auth()->user()->student->jamb_selection) == 'change_of_school' ? 'selected' : '' }}>
+                                            Change of School</option>
+                                        <option value="direct_entry"
+                                            {{ old('jamb_selection', auth()->user()->student->jamb_selection) == 'direct_entry' ? 'selected' : '' }}>
+                                            Direct Entry</option>
                                     </select>
                                     @error('jamb_selection')
                                         <div class="text-danger">
@@ -644,12 +605,14 @@
                                 <div class="form-group">
                                     <label for="department_id">Select Department <span
                                             class="text-danger">*</span></label><br>
-                                    <select style="width: 100% !impportant" name="department_id" id="department_id"
+                                    <select style="width: 100% !important" name="department_id" id="department_id"
                                         class="form-control @error('department_id') border-danger @enderror"
                                         onchange="updateDepartmentDescription()">
                                         <option value="" disabled selected>Select Department</option>
                                         @foreach ($departments as $department)
-                                            <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                            <option value="{{ $department->id }}"
+                                                {{ old('department_id', auth()->user()->student->department_id) == $department->id ? 'selected' : '' }}>
+                                                {{ $department->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('department_id')
@@ -663,7 +626,6 @@
                                     <p id="department_description"></p>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                     <div class="card-footer">
@@ -687,7 +649,7 @@
                                     <input type="file" name="passport_photo" id="passport_photo" class="form-control"
                                         accept="image/*" onchange="previewImage(event)">
                                     <img id="imagePreview" src="#" alt="Passport Photo"
-                                        style="display:none; margin-top: 10px; max-width: 100px; max-height: 100px;">
+                                        style="display: none; margin-top: 10px; max-width: 100px; max-height: 100px;">
                                     @error('passport_photo')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
@@ -857,7 +819,15 @@
             const formSteps = document.getElementsByClassName('form-step');
             const departmentDescriptions = @json($departmentDescriptions);
 
-            showStep(currentStep);
+            document.addEventListener('DOMContentLoaded', function() {
+                showStep(currentStep);
+
+                const country = document.getElementById('country').value;
+                handleCountryChange(country);
+
+                const state = document.getElementById('state').value;
+                handleStateChange(state);
+            });
 
             function showStep(step) {
                 for (let i = 0; i < formSteps.length; i++) {
@@ -908,6 +878,9 @@
                         option.textContent = lga;
                         localGovernmentSelect.appendChild(option);
                     });
+
+                    localGovernmentSelect.value =
+                        "{{ old('localGovernment', auth()->user()->student->localGovernment ?? '') }}";
                 }
             }
 
@@ -926,9 +899,7 @@
                 const description = departmentDescriptions[departmentId] || 'No description available.';
                 document.getElementById('department_description').innerHTML = description;
             }
-        </script>
 
-        <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const importForm = document.getElementById('multiStepForm');
                 const loaderOverlay = document.getElementById('loader-overlay');
@@ -938,6 +909,5 @@
                 });
             });
         </script>
-
     </section>
 @endsection

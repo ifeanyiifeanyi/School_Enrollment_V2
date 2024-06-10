@@ -186,56 +186,67 @@ class StudentAdmissionApplicationController extends Controller
     public function submitAdmissionApplication(Request $request)
     {
         try {
-            $request->validate([
-                'first_name' => 'required|string',
-                'blood_group' => 'required|string',
-                'genotype' => 'required|string',
-                'last_name' => 'required|string',
-                'other_names' => 'required|string',
-                'email' => 'required|email',
-                'phone' => 'required|string',
-                'gender' => 'required|string',
-                'religion' => 'required|string',
-                'dob' => 'required|date',
-                'nin' => 'required|string',
-                'current_residence_address' => 'required|string',
-                'permanent_residence_address' => 'required|string',
-                'guardian_name' => 'required|string',
-                'guardian_phone_number' => 'required|string',
-                'guardian_address' => 'required|string',
-                'country' => 'required|string',
-                'state' => 'required_if:country,Nigeria|string',
-                'localGovernment' => 'required_if:country,Nigeria|string',
-                'marital_status' => 'required|string',
-                'secondary_school_attended' => 'required|string',
-                'secondary_school_graduation_year' => 'required|date',
-                'secondary_school_certificate_type' => 'required|string',
-                'jamb_reg_no' => 'required|string',
-                'jamb_score' => 'required|numeric',
-                'jamb_selection' => 'required|string',
-                'department_id' => 'required|exists:departments,id',
-                'academic_session_id' => 'required|exists:academic_sessions,id',
-                'passport_photo' => 'required|image|mimes:jpeg,jpg,png|max:2048',
-                'document_ssce' => 'required|image|mimes:jpeg,jpg,png|max:2048',
-                'document_jamb' => 'required|image|mimes:jpeg,jpg,png|max:2048',
-                'terms' => 'accepted',
-            ]);
+
+        $request->validate([
+            'first_name' => 'required|string',
+            'blood_group' => 'required|string',
+            'genotype' => 'required|string',
+            'last_name' => 'required|string',
+            'other_names' => 'required|string',
+            'email' => 'required|email',
+            'phone' => 'required|string',
+            'gender' => 'required|string',
+            'religion' => 'required|string',
+            'dob' => 'required|date',
+            'nin' => 'required|string',
+            'current_residence_address' => 'required|string',
+            'permanent_residence_address' => 'required|string',
+            'guardian_name' => 'required|string',
+            'guardian_phone_number' => 'required|string',
+            'guardian_address' => 'required|string',
+            'country' => 'required|string',
+            'state_of_origin' => 'nullable|string',
+            'lga_origin' => 'nullable|string',
+            'marital_status' => 'required|string',
+            'secondary_school_attended' => 'required|string',
+            'secondary_school_graduation_year' => 'required|date',
+            'secondary_school_certificate_type' => 'required|string',
+            'jamb_reg_no' => 'required|string',
+            'jamb_score' => 'required|numeric',
+            'jamb_selection' => 'required|string',
+            'department_id' => 'required|exists:departments,id',
+            'academic_session_id' => 'required|exists:academic_sessions,id',
+            'passport_photo' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'document_ssce' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'document_jamb' => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'terms' => 'accepted',
+        ]);
+
+        $studentData = $request->only([
+            'phone', 'gender', 'marital_status', 'jamb_selection', 'dob', 'religion', 'nin', 'state_of_origin', 'lga_origin', 'current_residence_address', 'permanent_residence_address',
+            'guardian_name', 'guardian_phone_number', 'guardian_address', 'secondary_school_attended',
+            'secondary_school_graduation_year', 'secondary_school_certificate_type', 'jamb_reg_no',
+            'jamb_score', 'blood_group', 'genotype'
+        ]);
+
+        if($request->country){
+            $studentData['state_of_origin'] = $request->state_of_origin_nigeria;
+            $studentData['lga_origin'] = $request->localGovernment;
+        }
+        dd($request);
+
 
             $user = User::where('id', auth()->user()->id)->firstOrFail();
 
             $user->update($request->only('first_name', 'last_name', 'other_names', 'email'));
 
-            $studentData = $request->only([
-                'phone', 'gender', 'marital_status', 'jamb_selection', 'dob', 'religion', 'nin', 'state', 'localGovernment', 'current_residence_address', 'permanent_residence_address',
-                'guardian_name', 'guardian_phone_number', 'guardian_address', 'secondary_school_attended',
-                'secondary_school_graduation_year', 'secondary_school_certificate_type', 'jamb_reg_no',
-                'jamb_score', 'blood_group', 'genotype'
-            ]);
+
 
             // File upload handling
             $studentData['passport_photo'] = $this->storeFile($request->file('passport_photo'), 'uploads/passport_photos');
             $studentData['document_secondary_school_certificate_type'] = $this->storeFile($request->file('uploads/document_ssce'), 'uploads/ssce_documents');
             $studentData['document_local_government_identification'] = $this->storeFile($request->file('uploads/document_jamb'), 'uploads/jamb_documents');
+
             $studentData['application_unique_number'] = $this->generateUniqueNumber();
             $studentData['nationality'] = $request->country;
             $studentData['country_of_origin'] = $request->country;

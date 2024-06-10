@@ -12,19 +12,20 @@ use Illuminate\Support\Facades\Storage;
 
 class StudentDashboardController extends Controller
 {
-    public function dashboard(){
+    public function dashboard()
+    {
         $user = auth()->user();
         $application = $user->applications->first();
 
-       // Generate URL to the student details page
+        // Generate URL to the student details page
         $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
         // dd($user->nameSlug);
 
-    
+
 
         $faculties = Faculty::has('departments')
-        ->with('departments')
-        ->simplePaginate(15);
+            ->with('departments')
+            ->simplePaginate(15);
 
         return view('student.dashboard', compact('faculties', 'application', 'user', 'barcodeUrl'));
     }
@@ -38,7 +39,7 @@ class StudentDashboardController extends Controller
 
         // Format the date_time using Carbon
         $formattedDateTime = $examManager ? Carbon::parse($examManager->date_time)->format('jS, F Y g:i A') : null;
-    
+
         $departmentData = [
             'name' => $department->name,
             'description' => $department->description,
@@ -49,8 +50,8 @@ class StudentDashboardController extends Controller
             ] : null,
             // Add other department details you want to return
         ];
-    
-    
+
+
         return response()->json($departmentData);
     }
 
@@ -101,9 +102,7 @@ class StudentDashboardController extends Controller
     {
         Auth::guard('web')->logout();
 
-        $request->session()->invalidate();
 
-        $request->session()->regenerateToken();
 
         return redirect('/');
     }
