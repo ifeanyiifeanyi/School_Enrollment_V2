@@ -228,6 +228,7 @@ class StudentAdmissionApplicationController extends Controller
             'secondary_school_graduation_year', 'secondary_school_certificate_type', 'jamb_reg_no',
             'jamb_score', 'blood_group', 'genotype'
         ]);
+        
 
         if($request->country){
             $studentData['state_of_origin'] = $request->state_of_origin_nigeria;
