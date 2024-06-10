@@ -150,7 +150,7 @@ class ApplicationProcessController extends Controller
                 $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
                 // Define subaccount details
-                $subAccountCode = 'ACCT_h4y2wag4i4e8jfl'; // Replace with your actual sub-account code
+                $subAccountCode = 'ACCT_hwx8xizmhczqwnf'; // Replace with your actual sub-account code
 
                 $transaction = $paystack->transaction->initialize([
                     'email' => $user->email,
