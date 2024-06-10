@@ -185,7 +185,7 @@ class StudentAdmissionApplicationController extends Controller
 
     public function submitAdmissionApplication(Request $request)
     {
-        try {
+
 
         $request->validate([
             'first_name' => 'required|string',
@@ -222,19 +222,21 @@ class StudentAdmissionApplicationController extends Controller
             'terms' => 'accepted',
         ]);
 
-        $studentData = $request->only([
-            'phone', 'gender', 'marital_status', 'jamb_selection', 'dob', 'religion', 'nin', 'state_of_origin', 'lga_origin', 'current_residence_address', 'permanent_residence_address',
-            'guardian_name', 'guardian_phone_number', 'guardian_address', 'secondary_school_attended',
-            'secondary_school_graduation_year', 'secondary_school_certificate_type', 'jamb_reg_no',
-            'jamb_score', 'blood_group', 'genotype'
-        ]);
-        
+        try {
 
-        if($request->country){
-            $studentData['state_of_origin'] = $request->state_of_origin_nigeria;
-            $studentData['lga_origin'] = $request->localGovernment;
-        }
-        // dd($request);
+            $studentData = $request->only([
+                'phone', 'gender', 'marital_status', 'jamb_selection', 'dob', 'religion', 'nin', 'state_of_origin', 'lga_origin', 'current_residence_address', 'permanent_residence_address',
+                'guardian_name', 'guardian_phone_number', 'guardian_address', 'secondary_school_attended',
+                'secondary_school_graduation_year', 'secondary_school_certificate_type', 'jamb_reg_no',
+                'jamb_score', 'blood_group', 'genotype'
+            ]);
+
+
+            if ($request->country) {
+                $studentData['state_of_origin'] = $request->state_of_origin_nigeria;
+                $studentData['lga_origin'] = $request->localGovernment;
+            }
+            // dd($request);
 
 
             $user = User::where('id', auth()->user()->id)->firstOrFail();
@@ -244,9 +246,9 @@ class StudentAdmissionApplicationController extends Controller
 
 
             // File upload handling
-    $studentData['passport_photo'] = $this->storeFile($request->file('passport_photo'), 'uploads/passport_photos');
-$studentData['document_secondary_school_certificate_type'] = $this->storeFile($request->file('document_ssce'), 'uploads/ssce_documents');
-$studentData['document_local_government_identification'] = $this->storeFile($request->file('document_jamb'), 'uploads/jamb_documents');
+            $studentData['passport_photo'] = $this->storeFile($request->file('passport_photo'), 'uploads/passport_photos');
+            $studentData['document_secondary_school_certificate_type'] = $this->storeFile($request->file('document_ssce'), 'uploads/ssce_documents');
+            $studentData['document_local_government_identification'] = $this->storeFile($request->file('document_jamb'), 'uploads/jamb_documents');
 
             $studentData['application_unique_number'] = $this->generateUniqueNumber();
             $studentData['nationality'] = $request->country;
@@ -282,29 +284,29 @@ $studentData['document_local_government_identification'] = $this->storeFile($req
 
 
     protected function storeFile($file, $directory)
-{
-    if ($file) {
-        $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
+    {
+        if ($file) {
+            $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
 
-        // Get the path
-        $path = public_path($directory);
+            // Get the path
+            $path = public_path($directory);
 
-        // // Check if the directory exists, and if not, return null or handle accordingly
-        // if (!File::exists($path)) {
-        //     // Handle the case where the directory does not exist (return null or log the error)
-        //     return null;
-        // }
+            // // Check if the directory exists, and if not, return null or handle accordingly
+            // if (!File::exists($path)) {
+            //     // Handle the case where the directory does not exist (return null or log the error)
+            //     return null;
+            // }
 
-        // Save the image
-        $manager = new ImageManager(Driver::class);
-        $image = $manager->read($file->getRealPath());
-        $image->save($path . '/' . $filename);
+            // Save the image
+            $manager = new ImageManager(Driver::class);
+            $image = $manager->read($file->getRealPath());
+            $image->save($path . '/' . $filename);
 
-        return $directory . '/' . $filename;
+            return $directory . '/' . $filename;
+        }
+
+        return null;
     }
-
-    return null;
-}
 
 
     protected function generateUniqueNumber()
