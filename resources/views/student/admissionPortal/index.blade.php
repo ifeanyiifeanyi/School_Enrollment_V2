@@ -642,6 +642,9 @@
                         <p>STEP 4 OF 4, DOCUMENT UPLOADS</p>
                     </div>
                     <div class="card-body">
+                        <p>
+                            For admission form submission at Shanahan University, please note that the upload file size should not exceed 2MB. This applies to all required documents, ensure your files are properly compressed to meet the size limit. Adhering to this guideline will enable smooth processing of your application.
+                        </p>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
