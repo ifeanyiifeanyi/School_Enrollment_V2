@@ -4,6 +4,53 @@
 
 @section('css')
     <style>
+        /* Default styles */
+/* table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
+    display: none !important;
+} */
+
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before,
+    table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
+        display: inline-block !important;
+        content: "+" !important`;
+        width: 20px !important`;
+        height: 20px !important`;
+        line-height: 20px !important`;
+        text-align: center !important`;
+        border-radius: 50% !important`;
+        background-color: #007bff !important`;
+        color: #fff !important`;
+        font-weight: bold !important`;
+        margin-right: 10px !important`;
+    }
+
+        card {
+    width: 100%;
+}
+
+.list-group-item {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.badge {
+    margin-bottom: 0.5rem;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 576px) {
+    .list-group-item {
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .badge {
+        margin-bottom: 0;
+        margin-right: 0.5rem;
+    }
+}
         .loader-overlay {
             display: none;
             /* Hidden by default */
@@ -224,30 +271,28 @@
                         </div>
                     </div>
 
-                    <div class="mt-5 shadow-sm card">
-                        <div class="text-white card-header bg-primary">
-                            <h4 class="mb-0 card-title">Available Options for Students</h4>
-                        </div>
-                        <div class="card-body">
-                            <p class="text-danger font-weight-bold">JAMB STATUS:</p>
-                            <ul class="mb-4 list-group">
-                                <li class="list-group-item d-flex align-items-center">
-                                    <span class="mr-2 badge badge-info badge-pill">CHANGE_OF_SCHOOL</span>
-                                    Students who changed to our school from JAMB after they had already applied to other
-                                    universities but later made the switch to us.
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <span class="mr-2 badge badge-info badge-pill">SELECTED_IN_JAMB</span>
-                                    Students who selected our university as their choice when writing JAMB.
-                                </li>
-                                <li class="list-group-item d-flex align-items-center">
-                                    <span class="mr-2 badge badge-info badge-pill">DIRECT_ENTRY</span>
-                                    Students who came to the school to purchase admission but did not add us in JAMB or
-                                    change their institution.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+<div class="mt-5 shadow-sm card">
+    <div class="text-white card-header bg-primary">
+        <h4 class="mb-0 card-title">Available Options for Students</h4>
+    </div>
+    <div class="card-body">
+        <p class="text-danger font-weight-bold">JAMB STATUS:</p>
+        <ul class="mb-4 list-group">
+            <li class="list-group-item d-flex align-items-center flex-wrap">
+                <span class="mr-2 badge badge-info badge-pill">CHANGE_OF_SCHOOL</span>
+                Students who changed to our school from JAMB after they had already applied to other universities but later made the switch to us.
+            </li>
+            <li class="list-group-item d-flex align-items-center flex-wrap">
+                <span class="mr-2 badge badge-info badge-pill">SELECTED_IN_JAMB</span>
+                Students who selected our university as their choice when writing JAMB.
+            </li>
+            <li class="list-group-item d-flex align-items-center flex-wrap">
+                <span class="mr-2 badge badge-info badge-pill">DIRECT_ENTRY</span>
+                Students who came to the school to purchase admission but did not add us in JAMB or change their institution.
+            </li>
+        </ul>
+    </div>
+</div>
                     <!-- /.card-body -->
                 </div>
 
