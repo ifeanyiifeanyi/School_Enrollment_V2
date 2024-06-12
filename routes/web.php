@@ -25,6 +25,7 @@ use App\Http\Controllers\Student\ScholarshipApplicationController;
 use App\Http\Controllers\Student\StudentAdmissionApplicationController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentProfileController;
+use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -153,6 +154,9 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('delete-student/{slug}', 'destroy')->name('admin.destroy.student');
                 Route::get('edit-student/{slug}', 'edit')->name('admin.edit.student');
                 Route::patch('update-student/{slug}', 'update')->name('admin.update.student');
+
+                // export all student data
+                Route::get('export-all-students', 'exportAllStudents')->name('admin.export.allStudent');
             });
         });
 

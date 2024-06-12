@@ -26,6 +26,10 @@
                             <h4>@yield('title')</h4>
                         </div>
                         <div class="card-body">
+                            <div class="float-left pb-1">
+                                <a href="{{ route('admin.export.allStudent') }}" class="btn btn-primary shadow" id="exportButton">Export to Excel</a>
+                            </div>
+
                             <form id="bulk-action-form" method="POST"
                                 action="{{ route('admin.students.deleteMultiple') }}">
                                 @csrf
@@ -52,8 +56,8 @@
                                                 </th>
                                                 <th>sn</th>
                                                 <th>Student Name</th>
+                                                <th>Phone</th>
                                                 <th>Department</th>
-                                                <th>photo</th>
                                                 <th>Application Date</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
@@ -92,6 +96,9 @@
                                                         class="text-danger"><i class="fas fa-trash"></i></a>
 
                                                 </td>
+                                                <td>
+                                                    {{ $student->student->phone }}
+                                                </td>
                                                 <td class="align-middle">
                                                     @if ($student->applications->isNotEmpty())
                                                     @foreach ($student->applications as $application)
@@ -101,13 +108,7 @@
                                                     <p>N/A</p>
                                                     @endif
                                                 </td>
-                                                <td>
-                                                    <img alt="image"
-                                                        src="{{ empty($student->student->passport_photo) ? asset('admin/assets/img/avatar/avatar-5.png') :
-                                                        asset($student->student->passport_photo) }}"
-                                                        class="img-responsive -img-thumbnail" width="90"
-                                                        data-toggle="title" title="{{ $student->last_name }}">
-                                                </td>
+
                                                 <td>
                                                     @if ($student->applications->isNotEmpty())
                                                     @foreach ($student->applications as $application)
@@ -133,9 +134,19 @@
                                                     <span class="badge bg-danger text-light">Not Applied</span>
                                                     @endif
                                                 </td>
-                                                <td><a href="#" data-toggle="modal" data-target="#exampleModal"
+                                                <td>
+                                                    <a href="#" data-toggle="modal" data-target="#exampleModal"
                                                         data-student-slug="{{ $student->nameSlug }}"
-                                                        class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
+                                                        class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
+                                                    </a>
+                                                    <a href="{{ route('admin.show.student', $student->nameSlug) }}" class="btn btn-sm btn-info">
+                                                        <i class="fas fa-user"></i>
+                                                    </a>
+                                                    <a href="{{ route('admin.edit.student', $student->nameSlug) }}" class="btn btn-sm btn-secondary">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+
+                                                </td>
                                             </tr>
                                             @empty
 

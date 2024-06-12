@@ -4,10 +4,7 @@
 
 @section('css')
     <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Poppins', sans-serif;
-        }
+       
 
         .card {
             border-radius: 10px;

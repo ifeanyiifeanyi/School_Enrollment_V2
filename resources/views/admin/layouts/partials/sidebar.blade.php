@@ -1,5 +1,5 @@
 @php
-    $countapp = \App\Models\Application::count();
+    $countapp = \App\Models\Application::whereNotNull('payment_id')->count();
 @endphp
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper">

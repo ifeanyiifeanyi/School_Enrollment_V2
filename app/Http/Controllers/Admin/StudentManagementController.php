@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ApplicationsExport;
-
+use App\Exports\ExportAllStudents;
 use App\Imports\ApplicationsImport;
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
@@ -42,6 +42,12 @@ class StudentManagementController extends Controller
         // $students = User::where('role', 'student')->simplePaginate('100');
         // dd($students);
         return view('admin.studentManagement.index', compact('students'));
+    }
+
+    // export all students to excel
+    public function exportAllStudents(){
+        return Excel::download(new ExportAllStudents(), 'all_students.xlsx');
+
     }
 
     /**
