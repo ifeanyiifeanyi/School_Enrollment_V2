@@ -11,7 +11,7 @@
             <td style="padding: 10px 20px;">
                 <h1 style="color: #1c0202; text-align: center;">Admission Application Update</h1>
                 <p style="text-align: center">
-                    <img src="{{ asset('logo.png') }}" width="150" height="150" alt="">
+                    <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="">
                 </p>
             </td>
         </tr>

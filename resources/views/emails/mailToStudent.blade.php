@@ -44,7 +44,7 @@
 <body>
     <div class="container">
         <p style="text-align: center">
-            <img src="{{ asset('logo.png') }}" width="150" height="150" alt="">
+            <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="">
         </p>
         <hr>
         <h4>{{ $subject }}</h4>

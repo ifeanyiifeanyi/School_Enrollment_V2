@@ -20,6 +20,10 @@
 </head>
 <body>
     <div class="container">
+        <p style="text-align: center">
+            <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="">
+        </p>
+        <hr>
         <h1 class="text-center mb-4">Scholarship Application Status Updated</h1>
         <p>Dear {{ Str::title($application->user->full_name) }},</p>
         <p>The status of your application for the <strong>{{ Str::title($application->scholarship->name) }}</strong> scholarship has been updated to <strong>{{ Str::upper($application->status) }}</strong>.</p>

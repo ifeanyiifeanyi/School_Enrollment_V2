@@ -33,7 +33,7 @@
 <body>
     <div class="container">
         <p style="text-align: center">
-            <img src="{{ asset('logo.png') }}" width="150" height="150" alt="">
+            <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="">
         </p>
         <h1>Registration Confirmation</h1>
         <p>Hello, {{ $user->first_name }} {{ $user->last_name }},</p>

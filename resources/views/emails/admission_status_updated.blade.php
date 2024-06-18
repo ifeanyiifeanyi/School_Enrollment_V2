@@ -23,7 +23,7 @@
 <body>
     <div class="container">
         <div class="text-center mb-4">
-            <img src="{{ asset('images/university_logo.png') }}" alt="University Logo" class="img-fluid" style="max-height: 80px;">
+            <img src="{{ asset('logo1.png') }}" alt="University Logo" class="img-fluid" style="max-height: 80px;">
         </div>
         <h1 class="text-center mb-4">Admission Status Updated</h1>
         <p>Dear {{ $student->user->first_name ?? '' }} {{ $student->user->last_name ?? ''}},</p>
