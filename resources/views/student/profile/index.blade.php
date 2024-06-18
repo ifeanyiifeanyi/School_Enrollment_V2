@@ -110,8 +110,6 @@
                     </div><!-- /.card-header -->
                     <div class="card-body">
                         <div class="tab-content">
-
-
                             <div class="active tab-pane" id="settings">
                                 <!-- general form elements -->
                                 <div class="card card-primary">
