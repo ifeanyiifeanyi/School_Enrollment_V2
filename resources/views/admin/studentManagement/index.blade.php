@@ -3,216 +3,355 @@
 @section('title', 'Student Management')
 
 @section('css')
-<style>
-    table tr {
-        border-bottom: 2px solid #ccc
-    }
-</style>
+    <style>
+        table tr {
+            border-bottom: 2px solid #ccc
+        }
+    </style>
+    <style>
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 4px;
+            z-index: 9999;
+        }
+
+        .notification.success {
+            background-color: #28a745;
+        }
+
+        .notification.error {
+            background-color: #dc3545;
+        }
+    </style>
+
 @endsection
 
 @section('admin')
 
-<div class="main-content">
-    <section class="section">
-        <div class="section-header">
-            <h1>@yield('title')</h1>
-        </div>
+    <div class="main-content">
+        <section class="section">
+            <div class="section-header">
+                <h1>@yield('title')</h1>
+            </div>
 
-        <div class="section-body">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>@yield('title')</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="float-left pb-1">
-                                <a href="{{ route('admin.export.allStudent') }}" class="btn btn-primary shadow" id="exportButton">Export to Excel</a>
+            <div class="section-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>@yield('title')</h4>
                             </div>
-
-                            <form id="bulk-action-form" method="POST"
-                                action="{{ route('admin.students.deleteMultiple') }}">
-                                @csrf
-                                <div class="float-right mb-3">
-                                    <select class="form-control selectric"
-                                        onchange="if (this.value) { this.form.submit(); }">
-                                        <option value="">Action For Selected</option>
-                                        <option value="delete">Delete Permanently</option>
-                                    </select>
+                            <div class="card-body">
+                                <div class="float-left pb-1">
+                                    <a href="{{ route('admin.export.allStudent') }}" class="btn btn-primary shadow"
+                                        id="exportButton">Export to Excel</a>
                                 </div>
 
-                                <div class="table-responsive">
-                                    <table class="table table-striped" id="table-1">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center" style="width: 15px !important">
-                                                    <div class="custom-checkbox custom-control">
-                                                        <input type="checkbox" data-checkboxes="mygroup"
-                                                            data-checkbox-role="dad" class="custom-control-input"
-                                                            id="checkbox-all">
-                                                        <label for="checkbox-all"
-                                                            class="custom-control-label">&nbsp;</label>
-                                                    </div>
-                                                </th>
-                                                <th>sn</th>
-                                                <th>Student Name</th>
-                                                <th>Phone</th>
-                                                <th>Department</th>
-                                                <th>Application Date</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse ($students as $student)
-                                            {{-- @dd($student->id) --}}
-                                            <tr>
-                                                <td>
-                                                    <div class="custom-checkbox custom-control">
-                                                        <input type="checkbox" name="selected_students[]"
-                                                            value="{{ $student->id }}" data-checkboxes="mygroup"
-                                                            class="custom-control-input"
-                                                            id="checkbox-{{ $student->id }}">
-                                                        <label for="checkbox-{{ $student->id }}"
-                                                            class="custom-control-label">&nbsp;</label>
-                                                    </div>
-                                                </td>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>
-                                                    {{ Str::title($student->full_name ?? 'N/A' ) }}
-                                                    <p><code>{{ $student->student->application_unique_number ?? 'N/A'  }}</code>
-                                                    </p>
-                                                    <a title="View Student Details"
-                                                        href="{{ route('admin.show.student', $student->nameSlug) }}"><i
-                                                            class="fas fa-binoculars"></i>
-                                                    </a>
-                                                    <div class="bullet"></div>
-                                                    <a title="Edit Student Basic Details" href="{{ route('admin.edit.student', $student->nameSlug) }}">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <div class="bullet"></div>
-                                                    <a title="Delete Student Account" data-toggle="modal" data-target="#exampleModal"
-                                                        data-student-slug="{{ $student->nameSlug }}" href="#"
-                                                        class="text-danger"><i class="fas fa-trash"></i></a>
+                                <form id="bulk-action-form" method="POST"
+                                    action="{{ route('admin.students.deleteMultiple') }}">
+                                    @csrf
+                                    <div class="float-right mb-3">
+                                        <select class="form-control selectric"
+                                            onchange="if (this.value) { this.form.submit(); }">
+                                            <option value="">Action For Selected</option>
+                                            <option value="delete">Delete Permanently</option>
+                                        </select>
+                                    </div>
 
-                                                </td>
-                                                <td>
-                                                    {{ $student->student->phone }}
-                                                </td>
-                                                <td class="align-middle">
-                                                    @if ($student->applications->isNotEmpty())
-                                                    @foreach ($student->applications as $application)
-                                                    <p>{{ $application->department_name ?? 'N/A' }}</p>
-                                                    @endforeach
-                                                    @else
-                                                    <p>N/A</p>
-                                                    @endif
-                                                </td>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped" id="table-1">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center" style="width: 10px !important">
+                                                        <div class="custom-checkbox custom-control">
+                                                            <input type="checkbox" data-checkboxes="mygroup"
+                                                                data-checkbox-role="dad" class="custom-control-input"
+                                                                id="checkbox-all">
+                                                            <label for="checkbox-all"
+                                                                class="custom-control-label">&nbsp;</label>
+                                                        </div>
+                                                    </th>
+                                                    <th style="width: 10px !important">sn</th>
+                                                    <th>Student Name</th>
+                                                    <th>Phone</th>
+                                                    <th>Department</th>
+                                                    <th>Application Date</th>
+                                                    <th>Status</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse ($students as $student)
+                                                    {{-- @dd($student->id) --}}
+                                                    <tr>
+                                                        <td>
+                                                            <div class="custom-checkbox custom-control">
+                                                                <input type="checkbox" name="selected_students[]"
+                                                                    value="{{ $student->id }}" data-checkboxes="mygroup"
+                                                                    class="custom-control-input"
+                                                                    id="checkbox-{{ $student->id }}">
+                                                                <label for="checkbox-{{ $student->id }}"
+                                                                    class="custom-control-label">&nbsp;</label>
+                                                            </div>
+                                                        </td>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td class="align-middle">
+                                                            <a href="#" style="text-decoration:none;color:#444"
+                                                                data-toggle="modal" data-target="#mailModal"
+                                                                data-student-email="{{ $student->email }}">
+                                                                {{ Str::title($student->full_name ?? 'N/A') }}
 
-                                                <td>
-                                                    @if ($student->applications->isNotEmpty())
-                                                    @foreach ($student->applications as $application)
-                                                    <p>
-                                                        {{ \Carbon\Carbon::parse($application->created_at)->format('jS F
-                                                        Y') }}
-                                                    </p>
-                                                    @endforeach
+                                                                <br><code
+                                                                    style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;color:goldenrod">{{ $student->student->application_unique_number ?? 'N/A' }}</code>
 
-                                                    @else
+                                                            </a>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            {{ $student->student->phone }}
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            @if ($student->applications->isNotEmpty())
+                                                                @foreach ($student->applications as $application)
+                                                                    <p>{{ $application->department_name ?? 'N/A' }}</p>
+                                                                @endforeach
+                                                            @else
+                                                                <p>N/A</p>
+                                                            @endif
+                                                        </td>
 
-                                                    null
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($student->applications->isNotEmpty())
-                                                    @if ($student->applications->contains('payment_id', '!=', null))
-                                                    <span class="badge bg-success text-light">Applied</span>
-                                                    @else
-                                                    <span class="badge bg-secondary text-light">Unknown</span>
-                                                    @endif
-                                                    @else
-                                                    <span class="badge bg-danger text-light">Not Applied</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <a href="#" data-toggle="modal" data-target="#exampleModal"
-                                                        data-student-slug="{{ $student->nameSlug }}"
-                                                        class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
-                                                    </a>
-                                                    <a href="{{ route('admin.show.student', $student->nameSlug) }}" class="btn btn-sm btn-info">
-                                                        <i class="fas fa-user"></i>
-                                                    </a>
-                                                    <a href="{{ route('admin.edit.student', $student->nameSlug) }}" class="btn btn-sm btn-secondary">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
+                                                        <td class="align-middle">
+                                                            @if ($student->applications->isNotEmpty())
+                                                                @foreach ($student->applications as $application)
+                                                                    <p>
+                                                                        {{ \Carbon\Carbon::parse($application->created_at)->format('jS F Y') }}
+                                                                    </p>
+                                                                @endforeach
+                                                            @else
+                                                                null
+                                                            @endif
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            @if ($student->applications->isNotEmpty())
+                                                                @if ($student->applications->contains('payment_id', '!=', null))
+                                                                    <span style="background: teal !important"
+                                                                        class="badge badge-success text-light">Applied</span>
+                                                                @else
+                                                                    <span
+                                                                        class="badge badge-primary text-light">Registered</span>
+                                                                @endif
+                                                            @else
+                                                                <span class="badge badge-danger text-light">Not
+                                                                    Applied</span>
+                                                            @endif
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <a href="#" data-toggle="modal"
+                                                                data-target="#exampleModal"
+                                                                data-student-slug="{{ $student->nameSlug }}"
+                                                                class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
+                                                            </a>
+                                                            <a href="{{ route('admin.show.student', $student->nameSlug) }}"
+                                                                class="btn btn-sm btn-info">
+                                                                <i class="fas fa-user"></i>
+                                                            </a>
+                                                            <a href="{{ route('admin.edit.student', $student->nameSlug) }}"
+                                                                class="btn btn-sm btn-primary">
+                                                                <i class="fas fa-edit"></i>
+                                                            </a>
+                                                            <a href="#" class="btn btn-sm btn-warning mt-2"
+                                                                data-toggle="modal" data-target="#mailModal"
+                                                                data-student-email="{{ $student->email }}">
+                                                                <i class="fas fa-envelope"></i>
+                                                            </a>
 
-                                                </td>
-                                            </tr>
-                                            @empty
+                                                        </td>
+                                                    </tr>
+                                                @empty
 
-                                            @endforelse
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </form>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-center">
-                    {{ $students->links() }}
+                    <div class="d-flex justify-content-center">
+                        {{ $students->links() }}
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-</div>
+        </section>
+    </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger"><i class="fas fa-exclamation-triangle fa-3x"></i> Warning</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Are You Sure? <br> This action can not be undone. Do you want to continue?</p>
-            </div>
-            <div class="modal-footer bg-whitesmoke br">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <a href="#" class="btn btn-danger" id="deleteSingleStudent">Delete</a>
+    {{-- //delete modal --  --}}
+    <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-danger"><i class="fas fa-exclamation-triangle fa-3x"></i> Warning</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are You Sure? <br> This action can not be undone. Do you want to continue?</p>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="#" class="btn btn-danger" id="deleteSingleStudent">Delete</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Mail Modal -->
+    <div class="modal fade" id="mailModal" tabindex="-1" role="dialog" aria-labelledby="mailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div id="notification" class="notification mb-2" style="display: none;"></div>
+
+                <div class="modal-header">
+
+                    <h5 class="modal-title" id="mailModalLabel">Send Mail</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div id="loader" class="text-center" style="display: none;">
+                        <div class="spinner-border text-primary" role="status">
+                           <p><span class=""> <i class="fas fa-spinner fa-spin fa-3x"></i> SENDING ... </span></p>
+
+                        </div>
+                    </div>
+                    <form id="mailForm">
+                        @csrf
+                        <div class="form-group">
+                            <label for="mailSubject">Subject</label>
+                            <input type="text" class="form-control" id="mailSubject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="mailContent">Content</label>
+                            <textarea class="form-control" id="mailContent" name="content" rows="5" required></textarea>
+                        </div>
+                        <input type="hidden" id="mailRecipient" name="recipient">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="sendMail">Send Mail</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#mailModal').on('show.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                var studentEmail = button.data('student-email');
+                var modal = $(this);
+                modal.find('#mailRecipient').val(studentEmail);
+            });
+
+            function showNotification(message, type) {
+                var notification = $('#notification');
+                notification.removeClass('success error');
+                notification.addClass(type);
+                notification.html(message);
+                notification.fadeIn();
+                setTimeout(function() {
+                    notification.fadeOut();
+                }, 5000); // Adjust the duration (in milliseconds) as needed
+            }
 
 
+
+
+            $('#sendMail').click(function() {
+                var subject = $('#mailSubject').val();
+                var content = $('#mailContent').val();
+                var recipient = $('#mailRecipient').val();
+
+                // Show the loader
+                $('#loader').show();
+
+                // AJAX request to send the mail
+                $.ajax({
+                    url: '{{ route('admin.send.mail') }}',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        subject: subject,
+                        content: content,
+                        recipient: recipient
+                    },
+                    success: function(response) {
+                        // Hide the loader
+                        $('#loader').hide();
+
+                        showNotification(response.message, 'success');
+                        $('#mailModal').modal('hide');
+                        $('#mailForm')[0].reset();
+                    },
+                    error: function(xhr, status, error) {
+                        // Hide the loader
+                        $('#loader').hide();
+
+                        if (xhr.status === 422) {
+                            // Display validation errors
+                            var errors = xhr.responseJSON.errors;
+                            var errorMessages = '';
+                            $.each(errors, function(key, value) {
+                                errorMessages += value.join(' ') + '<br>';
+                            });
+                            showNotification(errorMessages, 'error');
+                        } else {
+                            showNotification('Error sending mail. Please try again later.',
+                                'error');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        // -- modal confirm for single delete
+        $('#exampleModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var studentSlug = button.data('student-slug');
+            var modal = $(this);
+            modal.find('#deleteSingleStudent').attr('href', '/admin/delete-student/' + studentSlug);
+        });
+    </script>
+
+    <script>
+        // -- checkbox for multi delete
+        document.addEventListener('DOMContentLoaded', function() {
+            const masterCheckbox = document.getElementById('checkbox-all');
+            const checkboxes = document.querySelectorAll('input[name="selected_students[]"]');
+
+            masterCheckbox.addEventListener('change', function() {
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+        });
+    </script>
 
 @endsection
 
 
 
 @section('js')
-<script>
-    $('#exampleModal').on('show.bs.modal', function (event) {
-       var button = $(event.relatedTarget);
-       var studentSlug = button.data('student-slug');
-       var modal = $(this);
-       modal.find('#deleteSingleStudent').attr('href', '/admin/delete-student/' + studentSlug);
-    });
-</script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const masterCheckbox = document.getElementById('checkbox-all');
-        const checkboxes = document.querySelectorAll('input[name="selected_students[]"]');
-
-        masterCheckbox.addEventListener('change', function () {
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = this.checked;
-            });
-        });
-    });
-</script>
 
 @endsection

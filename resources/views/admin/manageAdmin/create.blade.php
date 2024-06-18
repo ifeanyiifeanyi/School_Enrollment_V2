@@ -46,7 +46,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="last_name">Last Name</label>
+                                                <label for="last_name">Surname</label>
                                                 <input type="text" name="last_name" id="last_name"
                                                     class="form-control @error('last_name') border-danger @enderror"
                                                     value="{{ old('last_name') }}">

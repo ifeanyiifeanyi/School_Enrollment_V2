@@ -9,14 +9,15 @@ use App\Models\Department;
 use App\Models\Application;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
+use App\Models\AcademicSession;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EmailSetRequest;
-use App\Models\AcademicSession;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
+use App\Http\Requests\EmailSetRequest;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Artisan;
 
 
 
@@ -265,5 +266,41 @@ class DashboardController extends Controller
 
         $str = implode("\n", $envLines);
         file_put_contents($envFile, $str);
+    }
+
+    // send individual mail to student
+    public function sendMail(Request $request)
+    {
+        // Validate the request data
+        $validatedData = $request->validate([
+            'subject' => 'required|string|max:255',
+            'content' => 'required|string',
+            'recipient' => 'required|email',
+        ], [
+            'subject.required' => 'The subject field is required.',
+            'subject.string' => 'The subject must be a string.',
+            'subject.max' => 'The subject must not exceed 255 characters.',
+            'content.required' => 'The content field is required.',
+            'content.string' => 'The content must be a string.',
+            'recipient.required' => 'The recipient email address is required.',
+            'recipient.email' => 'The recipient email address is invalid.',
+        ]);
+
+        $subject = $validatedData['subject'];
+        $content = $validatedData['content'];
+        $recipient = $validatedData['recipient'];
+
+        try {
+            // Send the mail using the Mail facade
+            Mail::send('emails.mailToStudent',
+            ['subject' => $subject, 'content' => $content], function ($message) use ($subject, $recipient) {
+                $message->to($recipient)
+                    ->subject($subject);
+            });
+
+            return response()->json(['message' => 'Mail sent successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Error sending mail: ' . $e->getMessage()], 500);
+        }
     }
 }

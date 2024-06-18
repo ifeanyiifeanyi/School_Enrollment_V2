@@ -67,7 +67,7 @@
                     @enderror
                   </div>
                   <div class="form-group col-md-6 col-12">
-                    <label>Last Name</label>
+                    <label>Surname</label>
                     <input type="text" name="last_name" class="form-control" value="{{ old('last_name', $adminDetails->last_name) }}" >
                     @error('last_name')
                     <div class="text-danger">

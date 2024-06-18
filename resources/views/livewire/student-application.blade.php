@@ -24,9 +24,9 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="last_name">Last Name <span class="text-danger">*</span></label>
+                                <label for="last_name">Surname <span class="text-danger">*</span></label>
                                 <input wire:model.lazy="last_name" type="text" class="form-control" id="last_name"
-                                    placeholder="Enter Last Name" required>
+                                    placeholder="Enter Surname" required>
                                 @error('last_name')
                                     <div class="text-danger">
                                         {{ $message }}

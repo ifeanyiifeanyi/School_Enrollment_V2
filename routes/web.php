@@ -80,6 +80,8 @@ Route::middleware(['cors'])->group(function () {
                 Route::post('email-setup', 'emailSetup')->name('admin.email.setup');
                 Route::post('flutterwave/setup', 'storeFlutterwaveSettings')->name('admin.flutterwave.setup');
                 Route::post('paystack/setup', 'storePaystackSettings')->name('admin.paystack.setup');
+
+                Route::post('send-mail', 'sendMail')->name('admin.send.mail');
             });
         });
 

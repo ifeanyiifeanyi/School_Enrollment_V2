@@ -147,10 +147,10 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="last_name">Last Name <span class="text-danger">*</span></label>
+                                    <label for="last_name">Surname <span class="text-danger">*</span></label>
                                     <input name="last_name" type="text"
                                         class="form-control @error('last_name') border-danger @enderror" id="last_name"
-                                        placeholder="Enter Last Name"
+                                        placeholder="Enter Surname"
                                         value="{{ old('last_name', auth()->user()->last_name ?? '') }}">
                                     @error('last_name')
                                         <span class="text-danger">{{ $message }}</span>

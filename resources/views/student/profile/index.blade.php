@@ -135,10 +135,10 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label for="last_name">Last Name</label>
+                                                        <label for="last_name">Surname</label>
                                                         <input type="text" name="last_name" class="form-control"
                                                             value="{{ old('last_name', $user->last_name) }}"
-                                                            id="last_name" placeholder="Enter last name">
+                                                            id="last_name" placeholder="Enter Surname">
                                                         @error('last_name')
                                                         <span class="text-danger">{{ $message }}</span>
                                                         @enderror
@@ -163,7 +163,7 @@
                                                         <label for="email">Email Address</label>
                                                         <input type="email" name="email" class="form-control"
                                                             value="{{ old('email', $user->email) }}" id="email"
-                                                            placeholder="Enter last name">
+                                                            placeholder="Enter Email Address">
                                                         @error('email')
                                                         <span class="text-danger">{{ $message }}</span>
                                                         @enderror

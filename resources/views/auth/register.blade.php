@@ -99,7 +99,7 @@
                                             @enderror
                                         </div>
                                         <div class="form-group col-md-6">
-                                            <label for="last_name">Last Name</label>
+                                            <label for="last_name">Surname</label>
                                             <input id="last_name" type="text" class="form-control @error('last_name') border-danger @enderror" name="last_name" value="{{ old('last_name') }}">
                                             @error('last_name')
                                                 <span class="text-danger">{{ $message }}</span>

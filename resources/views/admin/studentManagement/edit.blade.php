@@ -219,7 +219,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>Last Name</label>
+                                    <label>Surname</label>
                                     <input name="last_name" type="text"
                                         class="form-control @error('last_name') is-invalid @enderror"
                                         value="{{ old('last_name', $user->last_name) }}">
