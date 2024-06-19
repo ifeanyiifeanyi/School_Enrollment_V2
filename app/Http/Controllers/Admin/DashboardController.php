@@ -168,8 +168,6 @@ class DashboardController extends Controller
         }
     }
 
-
-
     public function emailSetup(EmailSetRequest $request)
     {
         $validatedData = $request->validated();
@@ -304,5 +302,5 @@ class DashboardController extends Controller
         }
     }
 
-    
+
 }
