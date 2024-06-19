@@ -206,8 +206,6 @@ class DashboardController extends Controller
         return response()->json(['message' => 'Email Settings Created!']);
     }
 
-
-
     public function storeFlutterwaveSettings(Request $request)
     {
         $request->validate([
