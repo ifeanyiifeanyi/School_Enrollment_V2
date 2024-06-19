@@ -303,4 +303,6 @@ class DashboardController extends Controller
             return response()->json(['message' => 'Error sending mail: ' . $e->getMessage()], 500);
         }
     }
+
+    
 }
