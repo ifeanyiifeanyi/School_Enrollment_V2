@@ -31,7 +31,7 @@ class DashboardController extends Controller
         $studentCount = Student::count();
         $departmentCount = Department::count();
         $facultyCount = Faculty::count();
-        $activeApplication = Application::count();
+        $activeApplication = Application::whereNotNull('payment_id')->count();
         $applicationsByDepartment = Application::select('department_id', DB::raw('count(*) as total'))
             ->groupBy('department_id')
             ->get();

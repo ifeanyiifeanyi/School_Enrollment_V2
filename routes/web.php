@@ -90,6 +90,7 @@ Route::middleware(['cors'])->group(function () {
         Route::middleware(['permission:manage-site-settings'])->group(function () {
             Route::controller(ExamNotificationController::class)->group(function(){
                Route::get('exam-notifications', 'index')->name('admin.exam.notification');
+               Route::post('exam-notifications/store', 'store')->name('admin.exam.notificationStore');
             });
         });
 
