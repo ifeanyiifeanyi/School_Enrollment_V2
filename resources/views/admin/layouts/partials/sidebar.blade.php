@@ -9,7 +9,7 @@
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a navigate:wire href="{{ route('admin.dashboard') }}"
-                class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">AMD</a>
+                class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">ADM</a>
         </div>
         <ul class="sidebar-menu">
             <li class="menu-header">Dashboard</li>
@@ -114,7 +114,7 @@
                 <ul class="dropdown-menu">
                     <li><a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.manage.admin') ? 'active' : '' }}"
-                            href="{{ route('admin.manage.admin') }}">Send Notice</a></li>
+                            href="{{ route('admin.exam.notification') }}">Notify Manager</a></li>
                 </ul>
             </li>
 

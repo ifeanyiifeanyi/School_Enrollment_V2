@@ -93,14 +93,14 @@
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label for="first_name">First Name</label>
-                                            <input id="first_name" type="text" name="first_name" class="form-control @error('first_name') border-danger @enderror" autofocus value="{{ old('first_name') }}">
+                                            <input id="first_name" type="text" name="first_name" class="form-control @error('first_name') border-danger @enderror" autofocus value="{{ old('first_name') }}" required>
                                             @error('first_name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="last_name">Surname</label>
-                                            <input id="last_name" type="text" class="form-control @error('last_name') border-danger @enderror" name="last_name" value="{{ old('last_name') }}">
+                                            <input id="last_name" type="text" class="form-control @error('last_name') border-danger @enderror" name="last_name" value="{{ old('last_name') }}" required>
                                             @error('last_name')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -110,14 +110,14 @@
                                     <div class="row">
                                         <div class="form-group col-md-6">
                                             <label for="other_names" class="d-block">Other Names</label>
-                                            <input id="other_names" type="text" class="form-control @error('other_names') border-danger @enderror" name="other_names" value="{{ old('other_names') }}">
+                                            <input id="other_names" type="text" class="form-control @error('other_names') border-danger @enderror" name="other_names" value="{{ old('other_names') }}" required>
                                             @error('other_names')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="phone" class="d-block">Phone Number</label>
-                                            <input id="phone" type="tel" class="form-control @error('last_name') border-danger @enderror" name="phone" value="{{ old('phone') }}">
+                                            <input id="phone" type="tel" class="form-control @error('last_name') border-danger @enderror" name="phone" value="{{ old('phone') }}" required>
                                             @error('phone')
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
@@ -126,7 +126,7 @@
 
                                     <div class="form-group">
                                         <label for="email">Email</label>
-                                        <input id="email" type="email" class="form-control @error('email') border-danger @enderror"  name="email" value="{{ old('email') }}">
+                                        <input id="email" type="email" class="form-control @error('email') border-danger @enderror"  name="email" value="{{ old('email') }}" required>
                                         @error('email')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -136,7 +136,7 @@
                                         <div class="form-group col-md-6">
                                             <label for="password" class="d-block">Password</label>
                                             <input id="password" type="password" class="form-control pwstrength @error('password') border-danger @enderror"
-                                                data-indicator="pwindicator" name="password">
+                                                data-indicator="pwindicator" name="password" required>
                                             <div id="pwindicator" class="pwindicator">
                                                 <div class="bar"></div>
                                                 <div class="label"></div>
@@ -147,13 +147,13 @@
                                         </div>
                                         <div class="form-group col-md-6">
                                             <label for="password_confirmation" class="d-block">Password Confirmation</label>
-                                            <input id="password_confirmation" type="password" class="form-control" name="password_confirmation">
+                                            <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" name="agree" class="custom-control-input" id="agree">
+                                            <input required type="checkbox" name="agree" class="custom-control-input" id="agree">
                                             <label class="custom-control-label" for="agree">I agree with the terms and conditions</label>
                                         </div>
                                     </div>

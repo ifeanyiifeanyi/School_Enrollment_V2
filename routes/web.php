@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AdminProfileController;
 use League\CommonMark\Extension\SmartPunct\DashParser;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\ExamManagerController;
+use App\Http\Controllers\Admin\ExamNotificationController;
 use App\Http\Controllers\Admin\ManageAdminController;
 use App\Http\Controllers\Admin\ManageRolePermissionController;
 use App\Http\Controllers\Admin\PaymentMethodController;
@@ -70,6 +71,7 @@ Route::middleware(['cors'])->group(function () {
 
     // Admin Routes
     Route::prefix('admin')->middleware(['auth', 'verified', 'role:admin'])->group(function () {
+
         Route::controller(AdminDashboardController::class)->group(function () {
             Route::get('dashboard', 'index')->name('admin.dashboard');
             Route::get('logout', 'logout')->name('admin.logout');
@@ -82,6 +84,12 @@ Route::middleware(['cors'])->group(function () {
                 Route::post('paystack/setup', 'storePaystackSettings')->name('admin.paystack.setup');
 
                 Route::post('send-mail', 'sendMail')->name('admin.send.mail');
+            });
+        });
+
+        Route::middleware(['permission:manage-site-settings'])->group(function () {
+            Route::controller(ExamNotificationController::class)->group(function(){
+               Route::get('exam-notifications', 'index')->name('admin.exam.notification');
             });
         });
 

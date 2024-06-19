@@ -29,8 +29,21 @@
 
         /* Add any additional CSS styles here */
     </style>
-<link rel="shortcut icon" href="{{ asset('logo.png') }}" type="image/x-icon">
-<meta name="theme-color" content="#9B1B30" />
+    <link rel="shortcut icon" href="{{ asset($siteSetting->site_favicon ?? '') }}">
+    <meta name="theme-color" content="{{ asset($siteSetting->site_color ?? '') }}" />
+    <meta name="description" content="{{ $siteSetting->site_description ?? '' }}">
+
+    <!--  Essential META Tags -->
+    <meta property="og:title" content="{{ $siteSetting->site_description ?? '' }}">
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="{{ asset($siteSetting->site_color ?? '') }}">
+    <meta property="og:url" content="https://apply.shanahanuni.edu.ng">
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!--  Non-Essential, But Recommended -->
+    <meta property="og:description" content="{{ $siteSetting->site_description ?? '' }}">
+    <meta property="og:site_name" content="{{ $siteSetting->site_title ?? '' }}">
+    <meta name="twitter:image:alt" content="{{ $siteSetting->site_title ?? '' }}">
 
 </head>
 

@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Storage;
 
 class StudentManagementController extends Controller
 {
+    // display all students
     public function index()
     {
         $students = User::with(['applications' => function ($query) {
@@ -59,7 +60,6 @@ class StudentManagementController extends Controller
      * SHOW STUDENT DETAILS, AFTER SUBMITTING APPLICATION,
      * student application data
      */
-
     public function show($slug)
     {
         $student = User::with(['applications' => function ($query) {
@@ -101,7 +101,7 @@ class StudentManagementController extends Controller
     }
 
 
-    // HANDLE STUDENTS THAT HAS APPLIED FOR ADMISSION
+    // HANDLE STUDENTS THAT HAS APPLIED FOR ADMISSION (successfully)
     public function application(Request $request)
     {
         $departments = Department::latest()->get();
@@ -195,6 +195,7 @@ class StudentManagementController extends Controller
     }
 
 
+    // edit admin account details
     public function edit($slug)
     {
         $path = public_path('countries.json');
@@ -209,6 +210,7 @@ class StudentManagementController extends Controller
     }
 
 
+    // update admin account details
     public function update(Request $request, $slug)
     {
         $user = User::where('nameSlug', $slug)->firstOrFail();
@@ -286,6 +288,7 @@ class StudentManagementController extends Controller
         return redirect()->route('admin.student.management')->with($notification);
     }
 
+    // delete multiple students at once
     public function deleteMultipleStudents(Request $request)
     {
         $userIds = $request->input('selected_students'); // These are user IDs.
@@ -330,6 +333,7 @@ class StudentManagementController extends Controller
     }
 
 
+    // delete single student
     public function destroy($slug)
     {
         DB::transaction(function () use ($slug) {
@@ -364,6 +368,7 @@ class StudentManagementController extends Controller
 
         return redirect()->back()->with($notification);
     }
+
 
 
     protected function storeFile($file, $directory)
