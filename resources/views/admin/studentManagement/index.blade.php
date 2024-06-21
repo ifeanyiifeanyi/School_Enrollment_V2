@@ -150,10 +150,7 @@
                                                             @endif
                                                         </td>
                                                         <td class="align-middle">
-                                                            <a href="#" data-toggle="modal"
-                                                                data-target="#exampleModal"
-                                                                data-student-slug="{{ $student->nameSlug }}"
-                                                                class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
+                                                            <a href="{{ route('admin.destroy.student', $student->nameSlug) }}" onclick="return confirm('Are you sure of this action ? ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
                                                             </a>
                                                             <a href="{{ route('admin.show.student', $student->nameSlug) }}"
                                                                 class="btn btn-sm btn-info">
@@ -323,6 +320,7 @@
             });
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
     <script>
         // -- modal confirm for single delete
         $('#exampleModal').on('show.bs.modal', function(event) {

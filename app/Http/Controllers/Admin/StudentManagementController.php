@@ -339,6 +339,8 @@ class StudentManagementController extends Controller
         DB::transaction(function () use ($slug) {
             $user = User::where('nameSlug', $slug)->firstOrFail(); // Find the user by slug
 
+                // dd($user);
+
             $student = $user->student; // Assuming there is a 'student' relationship defined in the User model
 
             // Check and delete files associated with the student
