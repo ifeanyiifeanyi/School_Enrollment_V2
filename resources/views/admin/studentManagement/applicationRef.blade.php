@@ -53,38 +53,33 @@
                                         <th style="width: 20px">s/n</th>
                                         <th style="width: auto !important">Student</th>
                                         <th>profile</th>
-                                        <th style="width: 40px">Transactions</th>
+                                        <th style="width: 40px">Invoice</th>
                                         <th>Department</th>
-                                        <th>Exam Venue</th>
+                                        <th>Decision</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($applications as $ap)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>
+                                            <td class="align-middle">
                                                 {{ Str::title($ap->user->full_name) }} <br>
                                                 <code>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</code>
-                                                <p>Jamb Choice :
-                                                    <br>{{ Str::upper($ap->user->student->jamb_selection ?? '') }}</p>
+
                                             </td>
-                                            <td>
+                                            <td class="align-middle">
                                                 <img src="{{ empty($ap->user->student->passport_photo) ? asset('student.png') : asset($ap->user->student->passport_photo) }}"
                                                     alt="" class="img-fluid" width="90">
                                             </td>
-                                            <td>
-                                                <small><b>Invoice: </b> {{ $ap->invoice_number ?? 'N/A' }}</small> <br>
-                                                <small><b>Transact: </b>
-                                                    {{ $ap->payment->transaction_id ?? 'N/A' }}</small>
+                                            <td class="align-middle">
+                                                <p>{{ $ap->invoice_number ?? 'N/A' }}</p>
+
                                             </td>
-                                            <td>{{ Str::title($ap->department->name) ?? 'N/A' }}</td>
-                                            <td>
-                                                <small><b>Venue:
-                                                    </b>{{ $ap->department->exam_managers->venue ?? 'NOT DECIDED' }}</small>
-                                                <p><b>Date:
-                                                    </b>{{ $ap->department->exam_managers->date_time ?? 'NOT DECIDED' }}
-                                                </p>
+                                            <td class="align-middle">{{ Str::title($ap->department->name) ?? 'N/A' }}</td>
+                                            <td class="align-middle">
+                                                <p>{{ Str::upper(str_replace('_', ' ',$ap->user->student->jamb_selection ?? '')) }}</p>
                                             </td>
+
                                         </tr>
                                     @empty
                                         <div class="text-center alert alert-danger">Not available</div>

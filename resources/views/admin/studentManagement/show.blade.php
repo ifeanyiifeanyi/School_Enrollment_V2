@@ -4,7 +4,7 @@
 
 @section('css')
     <style>
-       
+
 
         .card {
             border-radius: 10px;
@@ -170,8 +170,8 @@
                                         <ul class="list-group">
                                             <li class="list-group-item">
                                                 <strong>Jamb Selection Choice:</strong>
-                                                <span
-                                                    class="badge badge-pill">{{ Str::lower($student->student->jamb_selection ?? 'N/A') }}</span>
+                                                <span class="badge badge-pill">{{ Str::upper(str_replace('_', ' ', $student->student->jamb_selection ?? 'N/A')) }}</span>
+
                                             </li>
                                             <li class="list-group-item">
                                                 <strong>Email Address:</strong>
@@ -318,14 +318,32 @@
             </div>
         </section>
     </div>
+    <!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Document Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img src="" alt="Document Image" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('js')
     <script>
         function showImage(src) {
-            const modal = document.getElementById('imageModal');
-            modal.style.display = 'block';
-            modal.querySelector('img').src = src;
+            const modal = $('#imageModal');
+            modal.find('img').attr('src', src);
+            modal.modal('show');
         }
     </script>
 @endsection
+

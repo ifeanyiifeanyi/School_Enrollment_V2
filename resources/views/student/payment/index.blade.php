@@ -9,8 +9,10 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                @if ($errors->any())
-                    <div class="m-4 alert alert-danger alert-dismissible fade show w-50" role="alert">
+
+                <div class="col-12">
+                    @if ($errors->any())
+                    <div class="m-4 alert alert-danger alert-dismissible fade show" role="alert">
                         <strong>Error!</strong>
                         @foreach ($errors->all() as $error)
                             <p>{{ $error }}</p>
@@ -20,7 +22,6 @@
                         </button>
                     </div>
                 @endif
-                <div class="col-12">
                     <div class="callout callout-danger">
                         <h5 class="text-danger"><i class="fas fa-info"></i> Important Notice for All Prospective Students
                         </h5>
@@ -124,11 +125,12 @@
                                     <table class="table">
                                         <tr>
                                             <th style="width:50%">Subtotal:</th>
-                                            <td>N{{ number_format($siteSetting->form_price, 2, '.', ',') }}</td>
+                                            {{-- <td>N{{ number_format($siteSetting->form_price, 2, '.', ',') }}</td> --}}
+                                            <td>N{{ number_format($siteSetting->form_price - 450, 2, '.', ',') }}</td>
                                         </tr>
                                         <tr>
-                                            <th>Tax (9.3%)</th>
-                                            <td>N0.0</td>
+                                            <th>Tax </th>
+                                            <td>N{{ number_format(450, 2, '.', ',') }}</td>
                                         </tr>
                                         <tr>
                                             <th>Total:</th>
@@ -144,14 +146,16 @@
                                         <input type="hidden" name="amount" value="{{ $siteSetting->form_price }}">
                                         @foreach ($paymentMethods as $pm)
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="payment_method_id"
+                                                <input {{ $pm->name == 'Paystack' ? 'checked' : '' }} class="form-check-input" type="radio" name="payment_method_id"
                                                     id="{{ $pm->id }}" value="{{ $pm->id }}">
                                                 <label class="form-check-label" for="{{ $pm->id }}">
                                                     <img src="{{ asset($pm->logo) }}" width="80"
-                                                        alt="{{ $pm->name }}"> {{ $pm->name }}
+                                                        alt="{{ $pm->name }}">
+                                                        {{-- {{ $pm->name }} --}}
                                                 </label>
                                             </div>
                                         @endforeach
+                                        <p><b class="text-info">Additional gateway convenience fee will be applied</b></p>
                                     </div>
                                     <div class="mt-3 col-md-12 btn-group">
                                         <button type="submit" class="float-right btn btn-success"><i

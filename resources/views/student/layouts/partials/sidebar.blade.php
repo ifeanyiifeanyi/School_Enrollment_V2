@@ -2,6 +2,11 @@
     $userHasApplication = DB::table('applications')
         ->where('user_id', auth()->user()->id)
         ->exists();
+    $userHasPaidApplication = DB::table('applications')
+        ->where('user_id', auth()->user()->id)
+        ->whereNotNull('payment_id')
+        ->where('payment_id', '!=', '')
+        ->exists();
 @endphp
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -17,7 +22,8 @@
         <!-- Sidebar user panel (optional) -->
         <div class="pb-3 mt-3 mb-3 user-panel d-flex">
             <div class="image">
-<img src="{{ empty(auth()->user()->student->passport_photo) ? 'https://placehold.it/150x100' : asset(auth()->user()->student->passport_photo) }} "class="elevation-2" alt="User Image">
+                <img src="{{ empty(auth()->user()->student->passport_photo) ? 'https://placehold.it/150x100' : asset(auth()->user()->student->passport_photo) }} "class="elevation-2"
+                    alt="User Image">
             </div>
             <div class="info">
                 <a wire:navigate href="{{ route('student.profile') }}"
@@ -37,12 +43,15 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a  href="{{ route('student.admission.application') }}" class="nav-link text-info">
-                        <i class="nav-icon fab fa-app-store text-light"></i>
-                        <p>Start Application</p>
-                    </a>
-                </li>
+                @if (!$userHasPaidApplication)
+                    <li class="nav-item">
+                        <a href="{{ route('student.admission.application') }}" class="nav-link text-info">
+                            <i class="nav-icon fab fa-app-store text-light"></i>
+                            <p>Start Application</p>
+                        </a>
+                    </li>
+                @endif
+
 
                 @if ($userHasApplication)
                     <li class="nav-item">

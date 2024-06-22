@@ -563,9 +563,8 @@
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="form-group">
-                                    <label for="jamb_selection" class="text-info">Did you select our university in
-                                        JAMB, or when you did
-                                        a change of school, or are you coming for direct entry? <span
+                                    <label for="jamb_selection" class="text-info">Did you choose our university as your JAMB selection, change your institution to ours, or are you applying for direct entry?
+                                        <span
                                             class="text-danger">*</span></label>
                                     <select name="jamb_selection" id="jamb_selection"
                                         class="form-control @error('jamb_selection') border-danger @enderror">
@@ -646,7 +645,7 @@
                             For admission form submission at Shanahan University, please note that the upload file size should not exceed 2MB. This applies to all required documents, ensure your files are properly compressed to meet the size limit. Adhering to this guideline will enable smooth processing of your application.
                         </p>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="passport_photo">Passport Photo <span class="text-danger">*</span></label>
                                     <input type="file" name="passport_photo" id="passport_photo" class="form-control"
@@ -658,7 +657,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="document_ssce">SSCE Document <span class="text-danger">*</span></label>
                                     <input type="file" name="document_ssce" id="document_ssce" class="form-control"
@@ -668,7 +667,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            {{-- <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="document_jamb">JAMB Document <span class="text-danger">*</span></label>
                                     <input type="file" name="document_jamb" id="document_jamb" class="form-control"
@@ -677,7 +676,7 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="mt-3 form-group form-check">
                             <input type="checkbox" name="terms" class="form-check-input" id="agreement">

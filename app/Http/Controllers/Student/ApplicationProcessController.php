@@ -150,7 +150,7 @@ class ApplicationProcessController extends Controller
                 $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
                 // Define subaccount details
-                $subAccountCode = 'ACCT_hwx8xizmhczqwnf'; // Replace with your actual sub-account code
+                $subAccountCode = config('paystack.subAccount'); 
 
                 $transaction = $paystack->transaction->initialize([
                     'email' => $user->email,
@@ -163,7 +163,10 @@ class ApplicationProcessController extends Controller
 
                 return redirect($transaction->data->authorization_url);
             } catch (\Exception $e) {
-                return redirect()->back()->withErrors('An error occurred: ' . $e->getMessage());
+                Log::error('Error in making payment: ' . $e->getMessage(), [
+                    'exception' => $e
+                ]);
+                return redirect()->back()->withErrors('An error occurred, Please Try again later ... ');
             }
         } else {
             return redirect()->back()->withErrors('Payment Method not found.');
