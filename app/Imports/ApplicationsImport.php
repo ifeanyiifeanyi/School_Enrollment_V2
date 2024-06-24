@@ -28,7 +28,9 @@ class ApplicationsImport implements ToModel, WithHeadingRow
 
             if ($student) {
                 // Find the corresponding Application record through the User model
-                $application = Application::where('user_id', $student->user_id)->first();
+                $application = Application::where('user_id', $student->user_id)
+                    ->whereNotNull('payment_id')
+                    ->first();
 
                 if ($application) {
                     // Update the student's exam score and application's admission status

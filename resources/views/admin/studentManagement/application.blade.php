@@ -6,9 +6,9 @@
     <style>
         /* Default styles */
         /* table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before,
-            table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
-                display: none !important;
-            } */
+                table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
+                    display: none !important;
+                } */
 
         table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
         table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
@@ -65,13 +65,19 @@
         }
 
         .loader {
-            border: 16px solid #f3f3f3;
+            border: 8px solid #f3f3f3;
             /* Light grey */
-            border-top: 16px solid #3498db;
+            border-top: 8px solid #3498db;
             /* Blue */
             border-radius: 50%;
-            width: 120px;
-            height: 120px;
+            width: 10%;
+            /* Percentage-based size for responsiveness */
+            max-width: 120px;
+            /* Max width for larger screens */
+            height: 10%;
+            /* Percentage-based size for responsiveness */
+            max-height: 120px;
+            /* Max height for larger screens */
             animation: spin 2s linear infinite;
             position: absolute;
             top: 50%;
@@ -88,6 +94,24 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* Responsive styles */
+        @media (max-width: 767px) {
+            .loader {
+                width: 20%;
+                /* Adjust size for smaller screens */
+                height: 20%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .loader {
+                width: 30%;
+                /* Adjust size for very small screens */
+                height: 30%;
+            }
+        }
+
 
         /* Loader Styles */
         .card {
@@ -272,16 +296,16 @@
                         <div class="card-body">
                             <p class="text-danger font-weight-bold">JAMB STATUS:</p>
                             <ul class="mb-4 list-group">
-                                <li class="list-group-item d-flex align-items-center flex-wrap">
+                                <li class="flex-wrap list-group-item d-flex align-items-center">
                                     <span class="mr-2 badge badge-info badge-pill">CHANGE_OF_SCHOOL</span>
                                     Students who changed to our school from JAMB after they had already applied to other
                                     universities but later made the switch to us.
                                 </li>
-                                <li class="list-group-item d-flex align-items-center flex-wrap">
+                                <li class="flex-wrap list-group-item d-flex align-items-center">
                                     <span class="mr-2 badge badge-info badge-pill">SELECTED_IN_JAMB</span>
                                     Students who selected our university as their choice when writing JAMB.
                                 </li>
-                                <li class="list-group-item d-flex align-items-center flex-wrap">
+                                <li class="flex-wrap list-group-item d-flex align-items-center">
                                     <span class="mr-2 badge badge-info badge-pill">DIRECT_ENTRY</span>
                                     Students who came to the school to purchase admission but did not add us in JAMB or
                                     change their institution.
