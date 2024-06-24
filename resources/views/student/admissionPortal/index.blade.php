@@ -266,7 +266,7 @@
                                         <option value="" selected>Select Country</option>
                                         @foreach ($countries as $countryName)
                                             <option value="{{ $countryName }}"
-                                                {{ old('country', auth()->user()->student->country) == $countryName ? 'selected' : '' }}>
+                                                {{ old('country', auth()->user()->student->country_of_origin) == $countryName ? 'selected' : '' }}>
                                                 {{ $countryName }}</option>
                                         @endforeach
                                     </select>
@@ -277,20 +277,20 @@
                             </div>
                             <div class="col-md-4" id="nigeriaStateField" style="display: none;">
                                 <div class="form-group">
-                                    <label for="state_of_origin">State <span class="text-danger">*</span></label> <br>
+                                    <label for="state_of_origin_nigeria">State <span class="text-danger">*</span></label> <br>
                                     <select style="width: 100% !important" name="state_of_origin_nigeria"
                                         id="state_of_origin_nigeria"
-                                        class="form-control @error('state_of_origin') border-danger @enderror"
+                                        class="form-control @error('state_of_origin_nigeria') border-danger @enderror"
                                         onchange="handleStateChange(this.value)">
                                         <option value="" disabled selected>Select State</option>
 
                                         @foreach ($nigerianStates as $state)
                                             <option value="{{ $state }}"
-                                                {{ old('state_of_origin', auth()->user()->student->state_of_origin) == $state ? 'selected' : '' }}>
+                                                {{ old('state_of_origin_nigeria', auth()->user()->student->state_of_origin) == $state ? 'selected' : '' }}>
                                                 {{ $state }}</option>
                                         @endforeach
                                     </select>
-                                    @error('state_of_origin')
+                                    @error('state_of_origin_nigeria')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -882,7 +882,7 @@
                     });
 
                     localGovernmentSelect.value =
-                        "{{ old('localGovernment', auth()->user()->student->localGovernment ?? '') }}";
+                        "{{ old('localGovernment', auth()->user()->student->lga_origin ?? '') }}";
                 }
             }
 

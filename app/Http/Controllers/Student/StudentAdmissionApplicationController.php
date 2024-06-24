@@ -114,6 +114,7 @@ class StudentAdmissionApplicationController extends Controller
 
         // Add custom validation rules based on the country
         if ($request->country == 'Nigeria') {
+
             $rules['state_of_origin_nigeria'] = 'required|string';
             $rules['localGovernment'] = 'required|string';
         } else {
@@ -134,9 +135,12 @@ class StudentAdmissionApplicationController extends Controller
             ]);
 
 
-            if ($request->country) {
+            if ($request->country == 'Nigeria') {
                 $studentData['state_of_origin'] = $request->state_of_origin_nigeria;
                 $studentData['lga_origin'] = $request->localGovernment;
+            }else{
+                $studentData['state_of_origin'] = $request->state_of_origin;
+                $studentData['lga_origin'] = $request->lga_origin;
             }
             // dd($request);
 
@@ -170,6 +174,7 @@ class StudentAdmissionApplicationController extends Controller
             Mail::to($user->email)->send(new RegistrationConfirmationMail($user, $application));
 
             return redirect()->route('payment.view.finalStep', ['userSlug' => Str::slug($user->nameSlug)]);
+            
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Error in submitting admission application: ' . $e->getMessage(), [
