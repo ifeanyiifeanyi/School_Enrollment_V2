@@ -48,7 +48,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="float-left pb-1">
-                                    <a href="{{ route('admin.export.allStudent') }}" class="btn btn-primary shadow"
+                                    <a href="{{ route('admin.export.allStudent') }}" class="shadow btn btn-primary"
                                         id="exportButton">Export to Excel</a>
                                 </div>
 
@@ -136,22 +136,22 @@
                                                             @endif
                                                         </td>
                                                         <td class="align-middle">
-                                                            @if ($student->applications->isNotEmpty())
                                                                 @if ($student->applications->contains('payment_id', '!=', null))
                                                                     <span style="background: teal !important"
                                                                         class="badge badge-success text-light">Applied</span>
                                                                 @else
-                                                                    <span
-                                                                        class="badge badge-primary text-light">Registered</span>
+                                                                    <span class="badge badge-primary text-light">Yet To
+                                                                        Apply</span>
                                                                 @endif
-                                                            @else
-                                                                <span class="badge badge-danger text-light">Not
-                                                                    Applied</span>
-                                                            @endif
                                                         </td>
                                                         <td class="align-middle">
-                                                            <a href="{{ route('admin.destroy.student', $student->nameSlug) }}" onclick="return confirm('Are you sure of this action ? ')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>
-                                                            </a>
+                                                            @if ($student->applications->contains('payment_id', null))
+                                                                <a href="{{ route('admin.destroy.student', $student->nameSlug) }}"
+                                                                    onclick="return confirm('Are you sure of this action?')"
+                                                                    class="btn btn-danger btn-sm"><i
+                                                                        class="fas fa-trash"></i></a>
+                                                            @endif
+
                                                             <a href="{{ route('admin.show.student', $student->nameSlug) }}"
                                                                 class="btn btn-sm btn-info">
                                                                 <i class="fas fa-user"></i>
@@ -160,7 +160,7 @@
                                                                 class="btn btn-sm btn-primary">
                                                                 <i class="fas fa-edit"></i>
                                                             </a>
-                                                            <a href="#" class="btn btn-sm btn-warning mt-2"
+                                                            <a href="#" class="btn btn-sm btn-warning"
                                                                 data-toggle="modal" data-target="#mailModal"
                                                                 data-student-email="{{ $student->email }}">
                                                                 <i class="fas fa-envelope"></i>
@@ -212,7 +212,7 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div id="notification" class="notification mb-2" style="display: none;"></div>
+                <div id="notification" class="mb-2 notification" style="display: none;"></div>
 
                 <div class="modal-header">
 
@@ -225,7 +225,7 @@
                 <div class="modal-body">
                     <div id="loader" class="text-center" style="display: none;">
                         <div class="spinner-border text-primary" role="status">
-                           <p><span class=""> <i class="fas fa-spinner fa-spin fa-3x"></i> SENDING ... </span></p>
+                            <p><span class=""> <i class="fas fa-spinner fa-spin fa-3x"></i> SENDING ... </span></p>
 
                         </div>
                     </div>
@@ -249,7 +249,7 @@
             </div>
         </div>
     </div>
-  <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#mailModal').on('show.bs.modal', function(event) {

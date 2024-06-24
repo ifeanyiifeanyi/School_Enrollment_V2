@@ -46,9 +46,9 @@ class StudentManagementController extends Controller
     }
 
     // export all students to excel
-    public function exportAllStudents(){
+    public function exportAllStudents()
+    {
         return Excel::download(new ExportAllStudents(), 'all_students.xlsx');
-
     }
 
     /**
@@ -137,8 +137,8 @@ class StudentManagementController extends Controller
                 ->simplePaginate(50);
         } else {
             $applications = Application::with(['user.student', 'department', 'academicSession'])
-            ->whereNotNull('payment_id')
-            ->simplePaginate(50);
+                ->whereNotNull('payment_id')
+                ->simplePaginate(50);
         }
 
         return view('admin.studentManagement.applicationRef', compact('applications', 'departments'));
@@ -289,48 +289,48 @@ class StudentManagementController extends Controller
     }
 
     // delete multiple students at once
-    public function deleteMultipleStudents(Request $request)
-    {
-        $userIds = $request->input('selected_students'); // These are user IDs.
+    // public function deleteMultipleStudents(Request $request)
+    // {
+    //     $userIds = $request->input('selected_students'); // These are user IDs.
 
-        DB::transaction(function () use ($userIds) {
-            $students = Student::whereIn('user_id', $userIds)->get();
+    //     DB::transaction(function () use ($userIds) {
+    //         $students = Student::whereIn('user_id', $userIds)->get();
 
-            foreach ($students as $student) {
-                // List of document columns to check and potentially delete
-                $documentFields = [
-                    'document_local_government_identification',
-                    'document_medical_report',
-                    'document_secondary_school_certificate'
-                ];
+    //         foreach ($students as $student) {
+    //             // List of document columns to check and potentially delete
+    //             $documentFields = [
+    //                 'document_local_government_identification',
+    //                 'document_medical_report',
+    //                 'document_secondary_school_certificate'
+    //             ];
 
-                // Delete passport photo if it exists
-                if ($student->passport_photo && file_exists(public_path($student->passport_photo))) {
-                    unlink(public_path($student->passport_photo));
-                }
+    //             // Delete passport photo if it exists
+    //             if ($student->passport_photo && file_exists(public_path($student->passport_photo))) {
+    //                 unlink(public_path($student->passport_photo));
+    //             }
 
-                // Check and delete each document if it exists
-                foreach ($documentFields as $field) {
-                    if ($student->$field && file_exists(public_path($student->$field))) {
-                        unlink(public_path($student->$field));
-                    }
-                }
+    //             // Check and delete each document if it exists
+    //             foreach ($documentFields as $field) {
+    //                 if ($student->$field && file_exists(public_path($student->$field))) {
+    //                     unlink(public_path($student->$field));
+    //                 }
+    //             }
 
-                // Delete the student record
-                $student->delete();
-            }
+    //             // Delete the student record
+    //             $student->delete();
+    //         }
 
-            // Delete users associated with these student records
-            User::whereIn('id', $userIds)->delete();
-        });
+    //         // Delete users associated with these student records
+    //         User::whereIn('id', $userIds)->delete();
+    //     });
 
-        $notification = [
-            'message' => 'Students deleted successfully!!',
-            'alert-type' => 'success'
-        ];
+    //     $notification = [
+    //         'message' => 'Students deleted successfully!!',
+    //         'alert-type' => 'success'
+    //     ];
 
-        return redirect()->back()->with($notification);
-    }
+    //     return redirect()->back()->with($notification);
+    // }
 
 
     // delete single student
@@ -339,7 +339,7 @@ class StudentManagementController extends Controller
         DB::transaction(function () use ($slug) {
             $user = User::where('nameSlug', $slug)->firstOrFail(); // Find the user by slug
 
-                // dd($user);
+            // dd($user);
 
             $student = $user->student; // Assuming there is a 'student' relationship defined in the User model
 
@@ -370,6 +370,62 @@ class StudentManagementController extends Controller
 
         return redirect()->back()->with($notification);
     }
+    public function deleteMultipleStudents(Request $request)
+    {
+        $userIds = $request->input('selected_students'); // These are user IDs.
+
+        DB::transaction(function () use ($userIds) {
+            // Get students whose user IDs match the selected ones
+            $students = Student::whereIn('user_id', $userIds)->get();
+
+            foreach ($students as $student) {
+                // Check if the student has an application with a non-null payment_id
+                $hasPaidApplication = $student->applications()->whereNotNull('payment_id')->exists();
+
+                // Skip deletion if there's a paid application
+                if ($hasPaidApplication) {
+                    continue;
+                }
+
+                // List of document columns to check and potentially delete
+                $documentFields = [
+                    'document_local_government_identification',
+                    'document_medical_report',
+                    'document_secondary_school_certificate'
+                ];
+
+                // Delete passport photo if it exists
+                if ($student->passport_photo && file_exists(public_path($student->passport_photo))) {
+                    unlink(public_path($student->passport_photo));
+                }
+
+                // Check and delete each document if it exists
+                foreach ($documentFields as $field) {
+                    if ($student->$field && file_exists(public_path($student->$field))) {
+                        unlink(public_path($student->$field));
+                    }
+                }
+
+                // Delete the student record
+                $student->delete();
+            }
+
+            // Delete users associated with these student records if they have no paid applications
+            User::whereIn('id', $userIds)
+                ->whereDoesntHave('student.applications', function ($query) {
+                    $query->whereNotNull('payment_id');
+                })
+                ->delete();
+        });
+
+        $notification = [
+            'message' => 'Students deleted successfully!',
+            'alert-type' => 'success'
+        ];
+
+        return redirect()->back()->with($notification);
+    }
+
 
 
 
