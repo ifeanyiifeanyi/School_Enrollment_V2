@@ -157,6 +157,7 @@ Route::middleware(['cors'])->group(function () {
             });
         });
 
+        
         Route::middleware(['permission:manage-students'])->group(function () {
             Route::controller(StudentManagementController::class)->group(function () {
                 Route::get('student-management', 'index')->name('admin.student.management');
