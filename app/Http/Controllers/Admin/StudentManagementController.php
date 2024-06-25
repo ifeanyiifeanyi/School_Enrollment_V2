@@ -71,13 +71,19 @@ class StudentManagementController extends Controller
      */
     public function show($slug)
     {
-        $student = User::with(['applications' => function ($query) {
-            $query->select('applications.*', 'departments.name as department_name')
-                ->join('departments', 'applications.department_id', '=', 'departments.id');
-        }])
+        // $student = User::with(['applications' => function ($query) {
+        //     $query->select('applications.*', 'departments.name as department_name')
+        //         ->join('departments', 'applications.department_id', '=', 'departments.id');
+        // }])
+        //     ->where('role', 'student')
+        //     ->where('nameSlug', $slug)
+        //     ->first();
+
+        $student = User::with(['applications.department'])
             ->where('role', 'student')
             ->where('nameSlug', $slug)
-            ->first();
+            ->firstOrFail();
+
 
         $documentKeys = [
             'birth_certificate' => 'document_birth_certificate',

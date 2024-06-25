@@ -25,4 +25,12 @@ class Department extends Model
     public function users(){
         return $this->hasMany(User::class);
     }
+
+    public function academic_sessions(){
+        return $this->hasMany(AcademicSession::class);
+    }
+
+    public function examNotification(){
+        return $this->hasMany(ExamNotification::class);
+    }
 }

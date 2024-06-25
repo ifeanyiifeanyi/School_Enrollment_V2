@@ -162,6 +162,9 @@
                                         @if ($student->student->nationality == 'Nigeria')
                                             <b>NIN: </b> {{ $student->student->nin ?? 'N/A' }}
                                         @endif
+                                        @if ($student->applications->isNotEmpty())
+                                            <p><strong>Department <br></strong> <span class="badge badge-pill" style="font-weight: bolder;text-transform:uppercase;font-size:20px">{{ $student->applications->first()->department->name ?? 'INACTIVE APPLICATION' }}</span></p>
+                                        @endif
                                     </p>
                                 </div>
                                 <hr>
@@ -262,13 +265,11 @@
                             </div>
                             <div class="card-body">
                                 <p><strong>Permanent Address:</strong></p>
-                                <blockquote>{{ $student->student->permanent_residence_address ?? 'N/A' }}</blockquote>
+                                <blockquote>{{ Str::title($student->student->permanent_residence_address ?? 'N/A') }}</blockquote>
                                 <p><strong>Current Address:</strong></p>
-                                <blockquote>{{ $student->student->current_residence_address ?? 'N/A' }}</blockquote>
-                                <p><strong>LGA, STATE, COUNTRY:</strong></p>
-                                <blockquote>{{ $student->student->lga_origin ?? 'N/A' }},
-                                    {{ $student->student->state_of_origin ?? 'N/A' }},
-                                    {{ $student->student->country_of_origin ?? 'N/A' }}</blockquote>
+                                <blockquote>{{ Str::title($student->student->current_residence_address ?? 'N/A') }}</blockquote>
+                                <p><strong>COUNTRY:</strong></p>
+                                <blockquote>{{ Str::upper($student->student->country_of_origin ?? 'N/A') }}</blockquote>
                             </div>
                         </div>
 
@@ -278,11 +279,11 @@
                             </div>
                             <div class="card-body">
                                 <p><strong>Guardian Name:</strong></p>
-                                <blockquote>{{ $student->student->guardian_name ?? 'N/A' }}</blockquote>
+                                <blockquote>{{ Str::title($student->student->guardian_name ?? 'N/A') }}</blockquote>
                                 <p><strong>Guardian Phone Number:</strong></p>
-                                <blockquote>{{ $student->student->guardian_phone_number ?? 'N/A' }}</blockquote>
+                                <blockquote>{{ Str::title($student->student->guardian_phone_number ?? 'N/A') }}</blockquote>
                                 <p><strong>Guardian Address:</strong></p>
-                                <blockquote>{{ $student->student->guardian_address ?? 'N/A' }}</blockquote>
+                                <blockquote>{{ Str::title($student->student->guardian_address ?? 'N/A') }}</blockquote>
                             </div>
                         </div>
 

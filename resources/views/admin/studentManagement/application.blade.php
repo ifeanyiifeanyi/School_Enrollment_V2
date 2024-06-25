@@ -4,11 +4,6 @@
 
 @section('css')
     <style>
-        /* Default styles */
-        /* table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before,
-                table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
-                    display: none !important;
-                } */
 
         table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
         table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
@@ -178,7 +173,7 @@
                         <ul>
                             <li>Pending</li>
                             <li>Approved</li>
-                            <li>denied</li>
+                            <li>Denied</li>
                         </ul>
                     </div>
                     <!-- /.card-header -->

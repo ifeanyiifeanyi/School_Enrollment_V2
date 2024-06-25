@@ -52,9 +52,9 @@
     <meta name="twitter:image:alt" content="{{ $siteSetting->site_title ?? '' }}">
 
     <style>
-        * {
+        /* * {
             font-weight: bold !important;
-        }
+        } */
     </style>
 
     <!-- Template CSS -->

@@ -109,12 +109,12 @@
                             href="{{ route('admin.manage.admin') }}">Admin Manager</a></li>
                 </ul>
             </li>
-            <li class="dropdown {{ request()->routeIs('admin.manage.admin') ? 'parent' : '' }}">
+            <li class="dropdown {{ request()->routeIs('admin.exam.notification') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-bell"></i><span>Notifications</span></a>
                 <ul class="dropdown-menu">
                     <li><a navigate:wire
-                            class="nav-link {{ request()->routeIs('admin.manage.admin') ? 'active' : '' }}"
-                            href="{{ route('admin.exam.notification') }}">Notify Manager</a></li>
+                            class="nav-link {{ request()->routeIs('admin.exam.notification') ? 'active' : '' }}"
+                            href="{{ route('admin.exam.notification') }}">Notice Manager</a></li>
                 </ul>
             </li>
 

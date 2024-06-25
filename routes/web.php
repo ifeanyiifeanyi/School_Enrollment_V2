@@ -91,6 +91,11 @@ Route::middleware(['cors'])->group(function () {
             Route::controller(ExamNotificationController::class)->group(function(){
                Route::get('exam-notifications', 'index')->name('admin.exam.notification');
                Route::post('exam-notifications/store', 'store')->name('admin.exam.notificationStore');
+               Route::get('notifications-sent', 'listNotifications')->name('admin.listNotifications');
+               Route::get('notifications-replies', 'repliedNotifications')->name('admin.repliedNotifications');
+               Route::get('exam-notification/{id}', 'showNotification')->name('admin.showNotification');
+               Route::get('exam-notification/{id}/delete', 'destroy')->name('admin.showNotification.destroy');
+
             });
         });
 

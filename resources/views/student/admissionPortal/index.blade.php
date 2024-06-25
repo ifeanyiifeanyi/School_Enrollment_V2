@@ -40,10 +40,10 @@
         }
 
         /* Page styles */
-        body {
+        /* body {
             font-family: 'Montserrat', sans-serif;
             background: linear-gradient(135deg, #667eea, #764ba2);
-        }
+        } */
 
         .content {
             background-color: rgba(255, 255, 255, 0.9);

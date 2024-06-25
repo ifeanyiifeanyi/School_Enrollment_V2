@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\EmailSetRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 
@@ -285,11 +286,14 @@ class DashboardController extends Controller
         $subject = $validatedData['subject'];
         $content = $validatedData['content'];
         $recipient = $validatedData['recipient'];
+        $getUser = User::where('email', $recipient)->first();
+        $user = $getUser->full_name;
+
 
         try {
             // Send the mail using the Mail facade
             Mail::send('emails.mailToStudent',
-            ['subject' => $subject, 'content' => $content], function ($message) use ($subject, $recipient) {
+            ['subject' => $subject, 'content' => $content, 'name' => $user], function ($message) use ($subject, $recipient) {
                 $message->to($recipient)
                     ->subject($subject);
             });

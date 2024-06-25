@@ -40,7 +40,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label for="description">Scholarship Description</label>
-                                        <textarea placeholder="Scholarship description" name="description" id="" cols="30" rows="10"
+                                        <textarea class="summernote-simple" placeholder="Scholarship description" name="description" id="" cols="30" rows="10"
                                             class="form-control @error('description') border-danger @enderror">{{ isset($scholarship) ? $scholarship->description : old('description') }}</textarea>
                                         @error('description')
                                             <span class="text-danger">{{ $message }}</span>
@@ -52,6 +52,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-7">
                         <div class="card">
 

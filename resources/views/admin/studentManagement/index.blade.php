@@ -58,7 +58,7 @@
                                                     <h4>Registered Students</h4>
                                                 </div>
                                                 <div class="card-body">
-                                                {{ $verifiedStudentsCount ?? 0 }}
+                                                    {{ $verifiedStudentsCount ?? 0 }}
                                                 </div>
                                             </div>
                                         </div>
@@ -73,7 +73,7 @@
                                                     <h4>Active Applications</h4>
                                                 </div>
                                                 <div class="card-body">
-                                                {{ $activeApplication ?? 0 }}
+                                                    {{ $activeApplication ?? 0 }}
                                                 </div>
                                             </div>
                                         </div>
@@ -114,7 +114,6 @@
                                                     <th>Student Name</th>
                                                     <th>Phone</th>
                                                     <th>Department</th>
-                                                    <th>Application Date</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -158,7 +157,7 @@
                                                             @endif
                                                         </td>
 
-                                                        <td class="align-middle">
+                                                        {{-- <td class="align-middle">
                                                             @if ($student->applications->isNotEmpty())
                                                                 @foreach ($student->applications as $application)
                                                                     <p>
@@ -168,23 +167,28 @@
                                                             @else
                                                                 null
                                                             @endif
+                                                        </td> --}}
+                                                        <td class="align-middle">
+                                                            @if ($student->applications->contains('payment_id', '!=', null))
+                                                                <span style="background: teal !important"
+                                                                    class="badge badge-success text-light">Active
+                                                                    Application</span>
+                                                            @else
+                                                                <span class="badge badge-primary text-light">Application
+                                                                    Incomplete</span>
+                                                            @endif
                                                         </td>
                                                         <td class="align-middle">
-                                                                @if ($student->applications->contains('payment_id', '!=', null))
-                                                                    <span style="background: teal !important"
-                                                                        class="badge badge-success text-light">Applied</span>
-                                                                @else
-                                                                    <span class="badge badge-primary text-light">Yet To
-                                                                        Apply</span>
-                                                                @endif
-                                                        </td>
-                                                        <td class="align-middle">
-                                                            @if ($student->applications->contains('payment_id', null))
+                                                            @if ($student->applications->contains('payment_id', '!=', null))
+                                                                {{-- Payment exists, hide the delete button --}}
+                                                            @else
+                                                                {{-- Payment does not exist, show the delete button --}}
                                                                 <a href="{{ route('admin.destroy.student', $student->nameSlug) }}"
                                                                     onclick="return confirm('Are you sure of this action?')"
                                                                     class="btn btn-danger btn-sm"><i
                                                                         class="fas fa-trash"></i></a>
                                                             @endif
+
 
                                                             <a href="{{ route('admin.show.student', $student->nameSlug) }}"
                                                                 class="btn btn-sm btn-info">

@@ -34,15 +34,15 @@ class ExamNotificationController extends Controller
         ]);
 
         // Check if an exam notification for the selected department already exists
-        $existingNotification = ExamNotification::where('department_id', $validatedData['department_id'])->first();
+        // $existingNotification = ExamNotification::where('department_id', $validatedData['department_id'])->first();
 
-        if ($existingNotification) {
-            $notification = [
-                'message' => 'An exam notification for this department already exists.',
-                'alert-type' => 'error'
-            ];
-            return redirect()->back()->with($notification);
-        }
+        // if ($existingNotification) {
+        //     $notification = [
+        //         'message' => 'An exam notification for this department already exists.',
+        //         'alert-type' => 'error'
+        //     ];
+        //     return redirect()->back()->with($notification);
+        // }
 
 
         $examNotification = ExamNotification::create($validatedData);
@@ -60,6 +60,37 @@ class ExamNotificationController extends Controller
         }
         $notification = [
             'message' => 'Exam notifications sent successfully!',
+            'alert-type' => 'success'
+        ];
+        return redirect()->back()->with($notification);
+    }
+
+    public function listNotifications()
+    {
+        $examNotifications = ExamNotification::query()->simplePaginate(10);
+        return view('admin.examNotification.listNotification', compact('examNotifications'));
+    }
+
+    public function showNotification($id)
+    {
+        $examNotification = ExamNotification::with('department')->findOrFail($id);
+        return response()->json([
+            'department' => $examNotification->department->name,
+            'exam_date' => $examNotification->exam_date,
+            'venue' => $examNotification->venue,
+            'requirements' => $examNotification->requirements,
+        ]);
+    }
+
+    public function repliedNotifications(){
+        return view('admin.examNotification.replies');
+    }
+
+    public function destroy($id){
+        $examNotification = ExamNotification::with('department')->findOrFail($id);
+        $examNotification->delete();
+        $notification = [
+            'message' => 'Exam notifications Deleted successfully!',
             'alert-type' => 'success'
         ];
         return redirect()->back()->with($notification);
