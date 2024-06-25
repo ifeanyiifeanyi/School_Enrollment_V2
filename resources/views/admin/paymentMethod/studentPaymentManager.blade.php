@@ -16,6 +16,10 @@
 
         <div class="section-body">
             <div class="p-3 shadow card">
+                <div class="float-left pb-1">
+                    <a href="{{ route('admin.export.payments') }}" class="shadow btn btn-primary" id="exportButton">Export to Excel</a>
+                </div>
+
                 <div class="table-responsive">
                     <table class="table table-bordered" id="example1" width="100%" cellspacing="0">
                         <thead>

@@ -45,10 +45,12 @@ class StudentScholarshipApplicationController extends Controller
 
     public function show($id)
     {
-        $application = ScholarApplication::with('user', 'scholarship', 'answers')->find($id);
+        $application = ScholarApplication::with(['user', 'scholarship', 'answers.question', 'department.faculty'])->find($id);
+        // dd($application);
         if (!$application) {
             return redirect()->back();
         }
         return view('admin.scholarshipApplication.details', compact('application'));
     }
+
 }

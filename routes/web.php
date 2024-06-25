@@ -179,6 +179,9 @@ Route::middleware(['cors'])->group(function () {
                 Route::patch('payment-method-manage/{id}', 'update')->name('admin.payment.update');
                 Route::get('payment-method-del/{id}', 'destroy')->name('admin.payment.destroy');
                 Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
+
+                Route::get('export-payments', 'exportPayments')->name('admin.export.payments');
+
             });
         });
 

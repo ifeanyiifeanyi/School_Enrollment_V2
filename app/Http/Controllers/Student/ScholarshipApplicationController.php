@@ -77,6 +77,8 @@ class ScholarshipApplicationController extends Controller
             'user_id' => auth()->user()->id,
             'scholarship_id' => $request->scholarship_id,
             'status' => 'pending',
+            'department_id' => $admissionApplication->department_id,
+            'faculty_id' => $admissionApplication->department->faculty_id,
         ]);
 
         // Store the answered questions

@@ -54,11 +54,11 @@
                             <h4>@yield('title')</h4>
                         </div>
                         <div class="card-body">
-                            <p class="text-muted">ALLOW SCHOLARSHP APPLICATION STATUS</p>
+                            <p class="text-muted">ALLOWED SCHOLARSHP APPLICATION STATUS</p>
                             <ul>
                                 <li>Pending</li>
                                 <li>Approved</li>
-                                <li>denied</li>
+                                <li>Denied</li>
                             </ul>
                         </div>
                         <div class="card-body">

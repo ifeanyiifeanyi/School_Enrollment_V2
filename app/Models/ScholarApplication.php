@@ -24,4 +24,11 @@ class ScholarApplication extends Model
     {
         return $this->hasMany(ScholarAnswer::class, 'application_id');
     }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+
 }

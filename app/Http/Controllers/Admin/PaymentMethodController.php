@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Payment;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
+use App\Exports\PaymentsExport;
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentMethodController extends Controller
 {
@@ -54,11 +56,9 @@ class PaymentMethodController extends Controller
             $paymentMethod->name = $request->name;
             $paymentMethod->description = $request->description;
             $paymentMethod->save();
-
-
         }
 
-        
+
 
         $notification = [
             'message' => 'Payment Method Created!',
@@ -105,25 +105,31 @@ class PaymentMethodController extends Controller
         return redirect()->route('admin.payment.manage')->with($notification);
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $payment = PaymentMethod::findOrFail($id);
         if (!empty($payment->logo) && file_exists(public_path($payment->logo))) {
             unlink(public_path($payment->logo));
         }
         $payment->delete();
         $notification = [
-           'message' => 'Payment Method Deleted!',
-            'alert-type' =>'success'
+            'message' => 'Payment Method Deleted!',
+            'alert-type' => 'success'
         ];
 
         return redirect()->route('admin.payment.manage')->with($notification);
     }
 
 
-    public function studentApplicationPayment(){
+    public function studentApplicationPayment()
+    {
 
         $payments = Payment::with('user', 'application')->simplePaginate('100');
         // dd($payments);
         return view('admin.paymentMethod.studentPaymentManager', compact('payments'));
+    }
+    public function exportPayments()
+    {
+        return Excel::download(new PaymentsExport(), 'payments.xlsx');
     }
 }

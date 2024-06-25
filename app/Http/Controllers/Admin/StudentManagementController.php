@@ -21,9 +21,17 @@ use Illuminate\Support\Facades\Storage;
 
 class StudentManagementController extends Controller
 {
+
     // display all students
     public function index()
     {
+        $activeApplication = Application::whereNotNull('payment_id')->count();
+
+        $verifiedStudentsCount = Student::whereHas('user', function ($query) {
+            $query->whereNotNull('email_verified_at');
+        })->count();
+
+
         $students = User::with(['applications' => function ($query) {
             $query->select('applications.*', 'departments.name as department_name')
                 ->join('departments', 'applications.department_id', '=', 'departments.id');
@@ -42,7 +50,8 @@ class StudentManagementController extends Controller
 
         // $students = User::where('role', 'student')->simplePaginate('100');
         // dd($students);
-        return view('admin.studentManagement.index', compact('students'));
+        return view('admin.studentManagement.index', compact(
+            'students', 'activeApplication', 'verifiedStudentsCount'));
     }
 
     // export all students to excel

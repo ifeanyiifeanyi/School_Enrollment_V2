@@ -20,10 +20,13 @@
             </div>
 
             <div class="section-body">
-                <div class="application-details card shadow">
+                <div class="shadow application-details card">
                     <h2>User Details</h2>
                     <div class="row">
                         <div class="col-md-6">
+                            <p>
+                                <img src="{{ asset($application->user->student->passport_photo) }}" alt="passport photo" class="" width="120">
+                            </p>
                             <p><strong>Name:</strong> {{ $application->user->full_name }}</p>
                             <p><strong>Email:</strong> {{ $application->user->email }}</p>
                         </div>
@@ -32,8 +35,10 @@
                             <p><strong>Status:</strong> {{ $application->status }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Department:</strong> {{ $application->departments->name ?? 'N/A' }}</p>
-                            <p><strong>Faculty:</strong> {{ $application->faculty->name ?? 'N/A' }}</p>
+                            <p><strong>Department:</strong> {{ $application->department->name ?? 'N/A' }}</p>
+
+
+                            <p><strong>Faculty:</strong> {{ $application->department->faculty->name ?? 'N/A' }}</p>
                         </div>
                     </div>
 
@@ -43,9 +48,9 @@
                     @forelse ($application->answers as $answer)
                         <div class="row">
                             <div class="col-md-6">
-                                <p>  <strong>{{ $loop->iteration }}.
-                                    <span class="text-danger">Questions: </span> <br>
-                                     {{ $answer->question->question_text }}</strong></p>
+                                <p> <strong>{{ $loop->iteration }}.
+                                        <span class="text-danger">Questions: </span> <br>
+                                        {{ $answer->question->question_text }}</strong></p>
                             </div>
                             <div class="col-md-6">
                                 <p><span class="text-info">Answer: </span> <br> {{ $answer->answer_text }}</p>

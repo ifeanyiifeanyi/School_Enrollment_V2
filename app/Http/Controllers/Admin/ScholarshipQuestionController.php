@@ -15,6 +15,7 @@ class ScholarshipQuestionController extends Controller
      */
     public function index()
     {
+        
         $scholarships = Scholarship::all();
 
 

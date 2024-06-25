@@ -71,6 +71,7 @@
                             <h4 class="mb-0 greeting-text"></h4>
                             <p class="text-muted">{{ Str::title(auth()->user()->first_name) }}</p>
                         </div>
+                        
                         <a wire:navigate href="{{ route('student.admission.application') }}" class="btn btn-outline-primary"><i
                                 class="fas fa-bookmark"></i> Start Your Application</a>
                     </div>

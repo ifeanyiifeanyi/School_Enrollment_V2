@@ -47,6 +47,40 @@
                                 <h4>@yield('title')</h4>
                             </div>
                             <div class="card-body">
+                                <div class="d-flex justify-content-center">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="shadow card card-statistic-1">
+                                            <div class="card-icon bg-primary">
+                                                <i class="fas fa-university"></i>
+                                            </div>
+                                            <div class="card-wrap">
+                                                <div class="card-header">
+                                                    <h4>Registered Students</h4>
+                                                </div>
+                                                <div class="card-body">
+                                                {{ $verifiedStudentsCount ?? 0 }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="shadow card card-statistic-1">
+                                            <div class="card-icon bg-info">
+                                                <i class="fas fa-graduation-cap""></i>
+                                            </div>
+                                            <div class="card-wrap">
+                                                <div class="card-header">
+                                                    <h4>Active Applications</h4>
+                                                </div>
+                                                <div class="card-body">
+                                                {{ $activeApplication ?? 0 }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
                                 <div class="float-left pb-1">
                                     <a href="{{ route('admin.export.allStudent') }}" class="shadow btn btn-primary"
                                         id="exportButton">Export to Excel</a>
