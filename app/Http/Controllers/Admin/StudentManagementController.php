@@ -128,15 +128,15 @@ class StudentManagementController extends Controller
                 ->where('department_id', $departmentId)
                 ->whereNotNull('payment_id') // Ensure payment_id is not null
                 ->where('payment_id', '!=', '') // Ensure payment_id is not empty
-                ->simplePaginate(100);
+                ->get();
 
         } else {
             $applications = Application::with(['user.student', 'department', 'academicSession'])
                 ->whereNotNull('payment_id') // Ensure payment_id is not null
                 ->where('payment_id', '!=', '') // Ensure payment_id is not empty
-                ->simplePaginate(100);
+                ->get();
         }
-        
+
 
         return view('admin.studentManagement.application', compact('applications', 'departments'));
     }

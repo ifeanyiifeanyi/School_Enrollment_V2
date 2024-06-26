@@ -227,14 +227,14 @@
                                         <th>Application No.</th>
                                         <th>Department</th>
                                         <th>Session</th>
-                                        <th style="width: 20px">Exam Score</th>
+                                        <th style="width: 20px">Exam</th>
                                         <th>Admission</th>
-                                        <th style="width: 20px">Payment Status</th>
+                                        {{-- <th style="width: 20px">Payment Status</th> --}}
                                     </tr>
                                     {{-- @dd($applications->academicSession) --}}
                                 </thead>
                                 <tbody>
-                                    @forelse ($applications as $index => $ap)
+                                    @forelse ($applications as $ap)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
@@ -248,8 +248,8 @@
                                             <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
                                             <td>{{ $ap->academicSession->session ?? 'N/A' }}</td>
 
-                                            <td>{{ $ap->user->student->exam_score ?? 'Loading ...' }}</td>
-                                            <td>
+                                            <td>{{ $ap->user->student->exam_score ?? 0 }}</td>
+                                            {{-- <td>
                                                 @if ($ap->admission_status == 'pending')
                                                     <span class="badge bg-warning text-light">Pending <i
                                                             class="fa fa-spinner fa-spin"></i></span>
@@ -260,7 +260,7 @@
                                                     <span class="badge bg-success text-light">Approved <i
                                                             class="fa fa-check"></i></span>
                                                 @endif
-                                            </td>
+                                            </td> --}}
 
                                             <td>
                                                 @if (!empty($ap->payment_id))
@@ -279,9 +279,9 @@
 
                             </table>
                         </div>
-                        <div class="text-center paginate">
+                        {{-- <div class="text-center paginate">
                             {{ $applications->links() }}
-                        </div>
+                        </div> --}}
                     </div>
 
                     <div class="mt-5 shadow-sm card">
