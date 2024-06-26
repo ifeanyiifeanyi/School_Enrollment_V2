@@ -40,7 +40,7 @@
             </li>
 
             <li class="dropdown {{ request()->routeIs('admin.academicSession.view') ? 'parent' : '' }}">
-                <a href="#" class="nav-link has-dropdown"><i class="fab fa-steam-symbol"></i><span>Academic
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-award"></i><span>Academic
                         Sessions</span></a>
                 <ul class="dropdown-menu">
                     <li><a navigate:wire
@@ -121,7 +121,7 @@
             <li
                 class="dropdown {{ request()->routeIs('admin.manage.scholarship') || request()->routeIs('admin.scholarship.question.view') || request()->routeIs('admin.scholarship.applicants') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i
-                        class="fas fa-cog fa-spin"></i><span>Scholarship</span></a>
+                        class="fas fa-school"></i><span>Scholarship</span></a>
                 <ul class="dropdown-menu">
                     <li>
                         <a navigate:wire
@@ -134,14 +134,14 @@
                         <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.scholarship.question.view') ? 'active' : '' }}"
                             href="{{ route('admin.scholarship.question.view') }}">
-                            Questions
+                            Create Questions
                         </a>
                     </li>
                     <li>
                         <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.scholarship.applicants') ? 'active' : '' }}"
                             href="{{ route('admin.scholarship.applicants') }}">
-                            Applications
+                           Active Applications
                         </a>
                     </li>
                 </ul>
