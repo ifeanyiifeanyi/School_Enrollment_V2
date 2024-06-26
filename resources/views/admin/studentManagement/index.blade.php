@@ -27,6 +27,45 @@
         .notification.error {
             background-color: #dc3545;
         }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            margin: 20px 0;
+            text-align: center
+        }
+
+        .search-input {
+            width: 80%;
+            padding: 15px 20px 15px 45px;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .search-input::placeholder {
+            color: #6c757d;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 12%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 18px;
+        }
     </style>
 
 @endsection
@@ -45,35 +84,42 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>@yield('title')</h4>
+
+                            </div>
+                            <div class="search-container">
+                                <input type="search" id="search" class="search-input" placeholder="Search Students...">
+                                <i class="search-icon fas fa-search"></i>
                             </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-center">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="shadow card card-statistic-1">
-                                            <div class="card-icon bg-primary">
-                                                <i class="fas fa-university"></i>
-                                            </div>
-                                            <div class="card-wrap">
-                                                <div class="card-header">
-                                                    <h4>Registered Students</h4>
+                                <div class="">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="shadow card card-statistic-1">
+                                                <div class="card-icon bg-primary">
+                                                    <i class="fas fa-university"></i>
                                                 </div>
-                                                <div class="card-body">
-                                                    {{ $verifiedStudentsCount ?? 0 }}
+                                                <div class="card-wrap">
+                                                    <div class="card-header">
+                                                        <h4>Registered Students</h4>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        {{ $verifiedStudentsCount ?? 0 }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="shadow card card-statistic-1">
-                                            <div class="card-icon bg-info">
-                                                <i class="fas fa-graduation-cap""></i>
-                                            </div>
-                                            <div class="card-wrap">
-                                                <div class="card-header">
-                                                    <h4>Active Applications</h4>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="shadow card card-statistic-1">
+                                                <div class="card-icon bg-info">
+                                                    <i class="fas fa-graduation-cap""></i>
                                                 </div>
-                                                <div class="card-body">
-                                                    {{ $activeApplication ?? 0 }}
+                                                <div class="card-wrap">
+                                                    <div class="card-header">
+                                                        <h4>Active Applications</h4>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        {{ $activeApplication ?? 0 }}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -98,7 +144,7 @@
                                     </div>
 
                                     <div class="table-responsive">
-                                        <table class="table table-striped" id="table-1">
+                                        <table class="table table-striped" id="">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center" style="width: 10px !important">
@@ -111,14 +157,14 @@
                                                         </div>
                                                     </th>
                                                     <th style="width: 10px !important">sn</th>
-                                                    <th>Student Name</th>
+                                                    <th style="">Student Name</th>
                                                     <th>Phone</th>
                                                     <th>Department</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="studentTableBody">
                                                 @forelse ($students as $student)
                                                     {{-- @dd($student->id) --}}
                                                     <tr>
@@ -149,25 +195,12 @@
                                                         </td>
                                                         <td class="align-middle">
                                                             @if ($student->applications->isNotEmpty())
-                                                                @foreach ($student->applications as $application)
-                                                                    <p>{{ $application->department_name ?? 'N/A' }}</p>
-                                                                @endforeach
+                                                                <p>{{ $student->applications->first()->department_name ?? 'N/A' }}
+                                                                </p>
                                                             @else
                                                                 <p>N/A</p>
                                                             @endif
                                                         </td>
-
-                                                        {{-- <td class="align-middle">
-                                                            @if ($student->applications->isNotEmpty())
-                                                                @foreach ($student->applications as $application)
-                                                                    <p>
-                                                                        {{ \Carbon\Carbon::parse($application->created_at)->format('jS F Y') }}
-                                                                    </p>
-                                                                @endforeach
-                                                            @else
-                                                                null
-                                                            @endif
-                                                        </td> --}}
                                                         <td class="align-middle">
                                                             @if ($student->applications->contains('payment_id', '!=', null))
                                                                 <span style="background: teal !important"
@@ -207,7 +240,6 @@
                                                         </td>
                                                     </tr>
                                                 @empty
-
                                                 @endforelse
                                             </tbody>
                                         </table>
@@ -288,6 +320,28 @@
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                var query = $(this).val();
+                fetch_students(query);
+            });
+
+            function fetch_students(query = '') {
+                $.ajax({
+                    url: "{{ route('admin.students.search') }}",
+                    method: 'GET',
+                    data: {
+                        query: query
+                    },
+                    success: function(data) {
+                        $('#studentTableBody').html(data);
+                    }
+                });
+            }
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             $('#mailModal').on('show.bs.modal', function(event) {

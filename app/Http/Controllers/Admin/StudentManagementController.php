@@ -32,27 +32,54 @@ class StudentManagementController extends Controller
         })->count();
 
 
+        // $students = User::with(['applications' => function ($query) {
+        //     $query->select('applications.*', 'departments.name as department_name')
+        //         ->join('departments', 'applications.department_id', '=', 'departments.id');
+        // }])
+        //     ->where('role', 'student')
+        //     ->simplePaginate(100);
+
+        // Order users by their account creation date
         $students = User::with(['applications' => function ($query) {
             $query->select('applications.*', 'departments.name as department_name')
                 ->join('departments', 'applications.department_id', '=', 'departments.id');
         }])
             ->where('role', 'student')
+            ->orderBy('created_at', 'desc') // Order by user creation date
             ->simplePaginate(100);
 
-        // $students = User::with(['applications' => function ($query) {
-        //     $query->select('applications.*', 'departments.name as department_name')
-        //         ->join('departments', 'applications.department_id', '=', 'departments.id')
-        //         ->whereNotNull('applications.payment_id') // Filter out applications with null or empty payment_id
-        //         ->where('applications.payment_id', '!=', '');
-        // }])
-        //     ->where('role', 'student')
-        //     ->simplePaginate(100);
 
-        // $students = User::where('role', 'student')->simplePaginate('100');
-        // dd($students);
         return view('admin.studentManagement.index', compact(
-            'students', 'activeApplication', 'verifiedStudentsCount'));
+            'students',
+            'activeApplication',
+            'verifiedStudentsCount'
+        ));
     }
+
+    public function search(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            $students = User::with(['applications' => function ($query) {
+                $query->select('applications.*', 'departments.name as department_name')
+                    ->join('departments', 'applications.department_id', '=', 'departments.id');
+            }])
+                ->where('role', 'student')
+                ->where(function ($q) use ($query) {
+                    $q->where('first_name', 'LIKE', "%{$query}%")
+                        ->orWhere('last_name', 'LIKE', "%{$query}%")
+                        ->orWhere('other_names', 'LIKE', "%{$query}%")
+                        ->orWhereHas('student', function ($subQuery) use ($query) {
+                            $subQuery->where('phone', 'LIKE', "%{$query}%");
+                        });
+                })
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return response()->json(view('admin.partials.studentTableBody', compact('students'))->render());
+        }
+    }
+
 
     // export all students to excel
     public function exportAllStudents()
@@ -71,13 +98,6 @@ class StudentManagementController extends Controller
      */
     public function show($slug)
     {
-        // $student = User::with(['applications' => function ($query) {
-        //     $query->select('applications.*', 'departments.name as department_name')
-        //         ->join('departments', 'applications.department_id', '=', 'departments.id');
-        // }])
-        //     ->where('role', 'student')
-        //     ->where('nameSlug', $slug)
-        //     ->first();
 
         $student = User::with(['applications.department'])
             ->where('role', 'student')
@@ -123,23 +143,48 @@ class StudentManagementController extends Controller
         $departmentId = $request->input('department_id');
 
         if ($departmentId) {
-
             $applications = Application::with(['user.student', 'department', 'academicSession'])
                 ->where('department_id', $departmentId)
-                ->whereNotNull('payment_id') // Ensure payment_id is not null
-                ->where('payment_id', '!=', '') // Ensure payment_id is not empty
-                ->get();
-
+                ->whereNotNull('payment_id')
+                ->where('payment_id', '!=', '')
+                ->orderBy('created_at', 'desc')
+                ->paginate(100); // Use pagination
         } else {
             $applications = Application::with(['user.student', 'department', 'academicSession'])
-                ->whereNotNull('payment_id') // Ensure payment_id is not null
-                ->where('payment_id', '!=', '') // Ensure payment_id is not empty
-                ->get();
+                ->whereNotNull('payment_id')
+                ->where('payment_id', '!=', '')
+                ->orderBy('created_at', 'desc')
+                ->paginate(100); // Use pagination
         }
-
 
         return view('admin.studentManagement.application', compact('applications', 'departments'));
     }
+
+
+
+    public function ApplicationSearch(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = $request->get('query');
+            $applications = Application::with(['user.student', 'department', 'academicSession'])
+                ->whereHas('user', function ($q) use ($query) {
+                    $q->where('first_name', 'LIKE', "%{$query}%")
+                        ->orWhere('email', 'LIKE', "%{$query}%");
+                })
+                ->orWhereHas('user.student', function ($q) use ($query) {
+                    $q->where('last_name', 'LIKE', "%{$query}%");
+                    $q->where('other_names', 'LIKE', "%{$query}%");
+                    $q->where('application_unique_number', 'LIKE', "%{$query}%");
+                })
+                ->whereNotNull('payment_id')
+                ->where('payment_id', '!=', '')
+                ->orderBy('created_at', 'desc')
+                ->paginate(100);
+
+            return response()->json(view('admin.partials.applicationTableBody', compact('applications'))->render());
+        }
+    }
+
 
 
 

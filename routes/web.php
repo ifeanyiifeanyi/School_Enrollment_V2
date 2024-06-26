@@ -176,6 +176,12 @@ Route::middleware(['cors'])->group(function () {
 
                 // export all student data
                 Route::get('export-all-students', 'exportAllStudents')->name('admin.export.allStudent');
+
+                //search for student
+                Route::get('students/search','search')->name('admin.students.search');
+                Route::get('applications/search','ApplicationSearch')->name('admin.student.applications.search');
+
+
             });
         });
 

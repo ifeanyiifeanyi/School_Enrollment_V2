@@ -4,21 +4,20 @@
 
 @section('css')
     <style>
-
         /* table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
-        table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
-            display: inline-block !important;
-            content: "+" !important`;
-            width: 20px !important`;
-            height: 20px !important`;
-            line-height: 20px !important`;
-            text-align: center !important`;
-            border-radius: 50% !important`;
-            background-color: #007bff !important`;
-            color: #fff !important`;
-            font-weight: bold !important`;
-            margin-right: 10px !important`;
-        } */
+                table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
+                    display: inline-block !important;
+                    content: "+" !important`;
+                    width: 20px !important`;
+                    height: 20px !important`;
+                    line-height: 20px !important`;
+                    text-align: center !important`;
+                    border-radius: 50% !important`;
+                    background-color: #007bff !important`;
+                    color: #fff !important`;
+                    font-weight: bold !important`;
+                    margin-right: 10px !important`;
+                } */
 
         card {
             width: 100%;
@@ -151,6 +150,45 @@
         tr {
             border: 2px solid #ddd !important;
         }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            margin: 20px 0;
+            text-align: center
+        }
+
+        .search-input {
+            width: 80%;
+            padding: 15px 20px 15px 45px;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .search-input::placeholder {
+            color: #6c757d;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 12%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 18px;
+        }
     </style>
 @endsection
 
@@ -164,7 +202,10 @@
             <div class="section-header">
                 <h1>@yield('title')</h1>
             </div>
-
+            <div class="search-container">
+                <input type="search" id="search" class="search-input" placeholder="Search Students...">
+                <i class="search-icon fas fa-search"></i>
+            </div>
             <div class="section-body">
 
                 <div class="card">
@@ -219,7 +260,7 @@
                                 id="exportButton">Export to Excel</a>
                         </div>
                         <div class="table-responsive">
-                            <table id="example1" class="table table-bordered table-striped">
+                            <table id="" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th style="width: 20px">s/n</th>
@@ -229,11 +270,9 @@
                                         <th>Session</th>
                                         <th style="width: 20px">Exam</th>
                                         <th>Admission</th>
-                                        {{-- <th style="width: 20px">Payment Status</th> --}}
                                     </tr>
-                                    {{-- @dd($applications->academicSession) --}}
                                 </thead>
-                                <tbody>
+                                <tbody id="applicationTableBody">
                                     @forelse ($applications as $ap)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
@@ -261,16 +300,6 @@
                                                             class="fa fa-check"></i></span>
                                                 @endif
                                             </td>
-{{--
-                                            <td>
-                                                @if (!empty($ap->payment_id))
-                                                    <span class="badge bg-success text-light">Paid <i
-                                                            class="fa fa-check"></i></span>
-                                                @else
-                                                    <span class="badge bg-danger text-light">Not Paid <i
-                                                            class="fa fa-times"></i></span>
-                                                @endif
-                                            </td> --}}
                                         </tr>
                                     @empty
                                         <div class="text-center alert alert-danger">Not available</div>
@@ -279,9 +308,9 @@
 
                             </table>
                         </div>
-                        {{-- <div class="text-center paginate">
+                        <div class="text-center paginate">
                             {{ $applications->links() }}
-                        </div> --}}
+                        </div>
                     </div>
 
                     <div class="mt-5 shadow-sm card">
@@ -296,7 +325,8 @@
                                     Students who changed to our school from JAMB after they had already applied to other
                                     universities but later made the switch to us.
                                 </li>
-                                <span class="float-left mt-5 mr-2 badge badge-info badge-pill" style="width: 290px">SELECTED_IN_JAMB</span>
+                                <span class="float-left mt-5 mr-2 badge badge-info badge-pill"
+                                    style="width: 290px">SELECTED_IN_JAMB</span>
                                 <li class="flex-wrap list-group-item d-flex ">
                                     Students who selected our university as their choice when writing JAMB.
                                 </li>
@@ -320,6 +350,28 @@
 
 
 @section('js')
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#search').on('keyup', function() {
+                var query = $(this).val();
+                fetch_students(query);
+            });
+
+            function fetch_students(query = '') {
+                $.ajax({
+                    url: "{{ route('admin.student.applications.search') }}",
+                    method: 'GET',
+                    data: {
+                        query: query
+                    },
+                    success: function(data) {
+                        $('#applicationTableBody').html(data);
+                    }
+                });
+            }
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const selectElement = document.querySelector('.selectric');
