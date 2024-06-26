@@ -109,6 +109,7 @@
                             href="{{ route('admin.manage.admin') }}">Admin Manager</a></li>
                 </ul>
             </li>
+            
             <li class="dropdown {{ request()->routeIs('admin.exam.notification') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-bell"></i><span>Notifications</span></a>
                 <ul class="dropdown-menu">
