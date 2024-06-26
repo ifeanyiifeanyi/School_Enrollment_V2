@@ -40,12 +40,14 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-Route::get('/run-migrations', function () {
-    Artisan::call('optimize:clear');
-    Artisan::call('migrate:fresh');
+// Route::get('/run-migrations', function () {
+//     Artisan::call('optimize:clear');
+//     Artisan::call('migrate:fresh');
 
-    return "migration was successful";
-});
+//     return "migration was successful";
+// });
+
+
 Route::middleware(['cors'])->group(function () {
 
     Route::get('/', function () {
@@ -157,7 +159,7 @@ Route::middleware(['cors'])->group(function () {
             });
         });
 
-        
+
         Route::middleware(['permission:manage-students'])->group(function () {
             Route::controller(StudentManagementController::class)->group(function () {
                 Route::get('student-management', 'index')->name('admin.student.management');
@@ -212,6 +214,7 @@ Route::middleware(['cors'])->group(function () {
                 Route::post('create-roles/store', 'storeRole')->name('admin.store.role');
                 Route::get('roles', 'viewRoles')->name('admin.view.role');
             });
+
         });
 
         Route::middleware(['permission:manage-scholarship'])->group(function () {
