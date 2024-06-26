@@ -261,7 +261,7 @@
                                                             class="fa fa-check"></i></span>
                                                 @endif
                                             </td>
-{{-- 
+{{--
                                             <td>
                                                 @if (!empty($ap->payment_id))
                                                     <span class="badge bg-success text-light">Paid <i
@@ -291,17 +291,17 @@
                         <div class="card-body">
                             <p class="text-danger font-weight-bold">JAMB STATUS:</p>
                             <ul class="mb-4 list-group">
-                                <li class="flex-wrap list-group-item d-flex align-items-center">
-                                    <span class="mr-2 badge badge-info badge-pill">CHANGE_OF_SCHOOL</span>
+                                <span class="mr-2 badge badge-info badge-pill" style="width: 290px">CHANGE_OF_SCHOOL</span>
+                                <li class="flex-wrap list-group-item d-flex ">
                                     Students who changed to our school from JAMB after they had already applied to other
                                     universities but later made the switch to us.
                                 </li>
-                                <li class="flex-wrap list-group-item d-flex align-items-center">
-                                    <span class="mr-2 badge badge-info badge-pill">SELECTED_IN_JAMB</span>
+                                <span class="float-left mt-5 mr-2 badge badge-info badge-pill" style="width: 290px">SELECTED_IN_JAMB</span>
+                                <li class="flex-wrap list-group-item d-flex ">
                                     Students who selected our university as their choice when writing JAMB.
                                 </li>
-                                <li class="flex-wrap list-group-item d-flex align-items-center">
-                                    <span class="mr-2 badge badge-info badge-pill">DIRECT_ENTRY</span>
+                                <span class="mt-5 mr-2 badge badge-info badge-pill" style="width: 290px">DIRECT_ENTRY</span>
+                                <li class="flex-wrap list-group-item d-flex ">
                                     Students who came to the school to purchase admission but did not add us in JAMB or
                                     change their institution.
                                 </li>
