@@ -28,6 +28,7 @@ class Handler extends ExceptionHandler
             //
         });
         $this->renderable(function (PostTooLargeException $e, $request) {
+            
             return response()->view('errors.post_too_large', [], 413);
         });
 

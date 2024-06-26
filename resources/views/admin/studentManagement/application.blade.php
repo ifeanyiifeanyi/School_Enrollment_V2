@@ -236,7 +236,7 @@
                                 <tbody>
                                     @forelse ($applications as $index => $ap)
                                         <tr>
-                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 {{ $ap->user->full_name ?? 'N/A' }}
                                                 <p>

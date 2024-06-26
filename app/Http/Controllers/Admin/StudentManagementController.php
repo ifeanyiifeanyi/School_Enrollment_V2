@@ -123,17 +123,20 @@ class StudentManagementController extends Controller
         $departmentId = $request->input('department_id');
 
         if ($departmentId) {
+
             $applications = Application::with(['user.student', 'department', 'academicSession'])
                 ->where('department_id', $departmentId)
                 ->whereNotNull('payment_id') // Ensure payment_id is not null
                 ->where('payment_id', '!=', '') // Ensure payment_id is not empty
                 ->simplePaginate(100);
+
         } else {
             $applications = Application::with(['user.student', 'department', 'academicSession'])
                 ->whereNotNull('payment_id') // Ensure payment_id is not null
                 ->where('payment_id', '!=', '') // Ensure payment_id is not empty
                 ->simplePaginate(100);
         }
+        
 
         return view('admin.studentManagement.application', compact('applications', 'departments'));
     }
