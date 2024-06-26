@@ -249,7 +249,7 @@
                                             <td>{{ $ap->academicSession->session ?? 'N/A' }}</td>
 
                                             <td>{{ $ap->user->student->exam_score ?? 0 }}</td>
-                                            {{-- <td>
+                                            <td>
                                                 @if ($ap->admission_status == 'pending')
                                                     <span class="badge bg-warning text-light">Pending <i
                                                             class="fa fa-spinner fa-spin"></i></span>
@@ -260,8 +260,8 @@
                                                     <span class="badge bg-success text-light">Approved <i
                                                             class="fa fa-check"></i></span>
                                                 @endif
-                                            </td> --}}
-
+                                            </td>
+{{-- 
                                             <td>
                                                 @if (!empty($ap->payment_id))
                                                     <span class="badge bg-success text-light">Paid <i
@@ -270,7 +270,7 @@
                                                     <span class="badge bg-danger text-light">Not Paid <i
                                                             class="fa fa-times"></i></span>
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @empty
                                         <div class="text-center alert alert-danger">Not available</div>
