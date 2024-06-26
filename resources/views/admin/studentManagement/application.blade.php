@@ -5,7 +5,7 @@
 @section('css')
     <style>
 
-        table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
+        /* table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
         table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
             display: inline-block !important;
             content: "+" !important`;
@@ -18,7 +18,7 @@
             color: #fff !important`;
             font-weight: bold !important`;
             margin-right: 10px !important`;
-        }
+        } */
 
         card {
             width: 100%;
