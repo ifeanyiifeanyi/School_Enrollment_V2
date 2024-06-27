@@ -77,6 +77,7 @@ class StudentAdmissionApplicationController extends Controller
     public function submitAdmissionApplication(Request $request)
     {
 
+        $userId = auth()->user()->id;
 
         // General validation rules
         $rules = [
@@ -85,7 +86,7 @@ class StudentAdmissionApplicationController extends Controller
             'genotype' => 'required|string',
             'last_name' => 'required|string',
             'other_names' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,' . $userId, // Ensure email is unique except for the current user
             'phone' => 'required|string',
             'gender' => 'required|string',
             'religion' => 'required|string',
