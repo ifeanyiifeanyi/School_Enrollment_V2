@@ -58,6 +58,7 @@ class ScholarshipApplicationController extends Controller
             ];
             return redirect()->back()->with($notification);
         }
+        
 
         // Check if the student has already applied for the selected scholarship
         $existingApplication = ScholarApplication::where('user_id', auth()->user()->id)
