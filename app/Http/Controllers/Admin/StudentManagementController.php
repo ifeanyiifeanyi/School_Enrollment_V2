@@ -169,12 +169,11 @@ class StudentManagementController extends Controller
             $applications = Application::with(['user.student', 'department', 'academicSession'])
                 ->whereHas('user', function ($q) use ($query) {
                     $q->where('first_name', 'LIKE', "%{$query}%")
-                        ->orWhere('email', 'LIKE', "%{$query}%");
+                        ->orWhere('last_name', 'LIKE', "%{$query}%");
                 })
                 ->orWhereHas('user.student', function ($q) use ($query) {
-                    $q->where('last_name', 'LIKE', "%{$query}%");
-                    $q->where('other_names', 'LIKE', "%{$query}%");
-                    $q->where('application_unique_number', 'LIKE', "%{$query}%");
+                    $q->where('phone', 'LIKE', "%{$query}%")
+                        ->orWhere('application_unique_number', 'LIKE', "%{$query}%");
                 })
                 ->whereNotNull('payment_id')
                 ->where('payment_id', '!=', '')
@@ -184,6 +183,7 @@ class StudentManagementController extends Controller
             return response()->json(view('admin.partials.applicationTableBody', compact('applications'))->render());
         }
     }
+
 
 
 

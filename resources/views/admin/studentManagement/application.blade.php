@@ -4,21 +4,6 @@
 
 @section('css')
     <style>
-        /* table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before,
-                table.dataTable.dtr-inline.collapsed>tbody>tr.parent>th:first-child:before {
-                    display: inline-block !important;
-                    content: "+" !important`;
-                    width: 20px !important`;
-                    height: 20px !important`;
-                    line-height: 20px !important`;
-                    text-align: center !important`;
-                    border-radius: 50% !important`;
-                    background-color: #007bff !important`;
-                    color: #fff !important`;
-                    font-weight: bold !important`;
-                    margin-right: 10px !important`;
-                } */
-
         card {
             width: 100%;
         }
@@ -151,44 +136,45 @@
             border: 2px solid #ddd !important;
         }
 
-        .search-container {
-            position: relative;
-            width: 100%;
-            margin: 20px 0;
-            text-align: center
-        }
+        
+            .search-container {
+                position: relative;
+                width: 100%;
+                margin: 20px 0;
+                text-align: center
+            }
 
-        .search-input {
-            width: 80%;
-            padding: 15px 20px 15px 45px;
-            font-size: 18px;
-            line-height: 1.5;
-            color: #333;
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
-            border-radius: 30px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+            .search-input {
+                width: 80%;
+                padding: 15px 20px 15px 45px;
+                font-size: 18px;
+                line-height: 1.5;
+                color: #333;
+                background-color: #f8f9fa;
+                border: 2px solid #e9ecef;
+                border-radius: 30px;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            }
 
-        .search-input:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-        }
+            .search-input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            }
 
-        .search-input::placeholder {
-            color: #6c757d;
-        }
+            .search-input::placeholder {
+                color: #6c757d;
+            }
 
-        .search-icon {
-            position: absolute;
-            top: 50%;
-            left: 12%;
-            transform: translateY(-50%);
-            color: #6c757d;
-            font-size: 18px;
-        }
+            .search-icon {
+                position: absolute;
+                top: 50%;
+                left: 12%;
+                transform: translateY(-50%);
+                color: #6c757d;
+                font-size: 18px;
+            }
     </style>
 @endsection
 
@@ -210,7 +196,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <p class="text-muted">ALLOW APPLICATION STATUS</p>
+                        <p class="text-muted">ALLOWED APPLICATION STATUS</p>
                         <ul>
                             <li>Pending</li>
                             <li>Approved</li>
@@ -350,7 +336,7 @@
 
 
 @section('js')
-    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script> --}}
     <script>
         $(document).ready(function() {
             $('#search').on('keyup', function() {
