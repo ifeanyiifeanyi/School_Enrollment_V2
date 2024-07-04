@@ -91,54 +91,12 @@
                                 <i class="search-icon fas fa-search"></i>
                             </div>
                             <div class="card-body">
-                                <div class="">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                            <div class="shadow card card-statistic-1">
-                                                <div class="card-icon bg-primary">
-                                                    <i class="fas fa-university"></i>
-                                                </div>
-                                                <div class="card-wrap">
-                                                    <div class="card-header">
-                                                        <h4>Registered Students</h4>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        {{ $verifiedStudentsCount ?? 0 }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                            <div class="shadow card card-statistic-1">
-                                                <div class="card-icon bg-info">
-                                                    <i class="fas fa-graduation-cap""></i>
-                                                </div>
-                                                <div class="card-wrap">
-                                                    <div class="card-header">
-                                                        <h4>Active Applications</h4>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        {{ $activeApplication ?? 0 }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="float-left pb-1">
-                                    <a href="{{ route('admin.export.allStudent') }}" class="shadow btn btn-primary"
-                                        id="exportButton">Export to Excel</a>
-                                </div>
-
-                                <form id="bulk-action-form" method="POST"
-                                    action="{{ route('admin.students.deleteMultiple') }}">
-                                    @csrf
+                                
                                     <div class="float-right mb-3">
                                         <select class="form-control selectric"
                                             onchange="if (this.value) { this.form.submit(); }">
                                             <option value="">Action For Selected</option>
+                                            <option value="vrify">Verify All Accounts</option>
                                             <option value="delete">Delete Permanently</option>
                                         </select>
                                     </div>
@@ -147,7 +105,7 @@
                                         <table class="table table-striped" id="">
                                             <thead>
                                                 <tr>
-                                                    {{-- <th class="text-center" style="width: 10px !important">
+                                                    <th class="text-center" style="width: 10px !important">
                                                         <div class="custom-checkbox custom-control">
                                                             <input type="checkbox" data-checkboxes="mygroup"
                                                                 data-checkbox-role="dad" class="custom-control-input"
@@ -155,12 +113,12 @@
                                                             <label for="checkbox-all"
                                                                 class="custom-control-label">&nbsp;</label>
                                                         </div>
-                                                    </th> --}}
+                                                    </th>
                                                     <th style="width: 10px !important">sn</th>
                                                     <th style="">Student Name</th>
                                                     <th>Phone</th>
-                                                    <th>Department</th>
-                                                    <th>Status</th>
+                                                    <th>Email</th>
+                                                    <th>Verify Student Account</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -168,7 +126,7 @@
                                                 @forelse ($students as $student)
                                                     {{-- @dd($student->id) --}}
                                                     <tr>
-                                                        {{-- <td>
+                                                        <td>
                                                             <div class="custom-checkbox custom-control">
                                                                 <input type="checkbox" name="selected_students[]"
                                                                     value="{{ $student->id }}" data-checkboxes="mygroup"
@@ -177,7 +135,7 @@
                                                                 <label for="checkbox-{{ $student->id }}"
                                                                     class="custom-control-label">&nbsp;</label>
                                                             </div>
-                                                        </td> --}}
+                                                        </td>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td class="align-middle">
                                                             <a href="#" style="text-decoration:none;color:#444"
@@ -185,8 +143,6 @@
                                                                 data-student-email="{{ $student->email }}">
                                                                 {{ Str::title($student->full_name ?? 'N/A') }}
 
-                                                                <br><code
-                                                                    style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;color:goldenrod">{{ $student->student->application_unique_number ?? 'N/A' }}</code>
 
                                                             </a>
                                                         </td>
@@ -194,22 +150,10 @@
                                                             {{ $student->student->phone }}
                                                         </td>
                                                         <td class="align-middle">
-                                                            @if ($student->applications->isNotEmpty())
-                                                                <p>{{ $student->applications->first()->department_name ?? 'N/A' }}
-                                                                </p>
-                                                            @else
-                                                                <p>N/A</p>
-                                                            @endif
+                                                           {{ $student->email }}
                                                         </td>
                                                         <td class="align-middle">
-                                                            @if ($student->applications->contains('payment_id', '!=', null))
-                                                                <span style="background: teal !important"
-                                                                    class="badge badge-success text-light">Active
-                                                                    Application</span>
-                                                            @else
-                                                                <span class="badge badge-primary text-light">Application
-                                                                    Incomplete</span>
-                                                            @endif
+                                                            <a onclick="return confirm('Are you sure of this action ?')" href="{{ route('admin.verify.student', $student->nameSlug) }}" class="btn btn-sm btn-primary">Verify Account</a>
                                                         </td>
                                                         <td class="align-middle">
                                                             @if ($student->applications->contains('payment_id', '!=', null))
@@ -244,7 +188,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </form>
                             </div>
                         </div>
                     </div>

@@ -25,7 +25,13 @@ class ApplicationsExport implements FromCollection, WithHeadings, ShouldAutoSize
      */
     public function collection()
     {
-        $query = Application::query()->with(['user.student', 'department']);
+        // $query = Application::query()->with(['user.student', 'department']);
+        $query = Application::query()
+            ->with(['user.student', 'department'])
+            ->whereNotNull('payment_id')
+            ->where('payment_id', '!=', '')
+            ->distinct(); // Ensure only distinct records are fetched
+
 
         if ($this->departmentId) {
             $query->where('department_id', $this->departmentId);

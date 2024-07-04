@@ -136,7 +136,7 @@
             border: 2px solid #ddd !important;
         }
 
-        
+
             .search-container {
                 position: relative;
                 width: 100%;
@@ -263,7 +263,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
-                                                {{ $ap->user->full_name ?? 'N/A' }}
+                                                {{ Str::title($ap->user->full_name) ?? 'N/A' }}
                                                 <p>
                                                     <a href="{{ route('admin.show.student', $ap->user->nameSlug) }}"
                                                         class="mt-2 link">Details</a>

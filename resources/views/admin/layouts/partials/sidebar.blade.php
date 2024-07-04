@@ -66,19 +66,31 @@
             </li>
 
             <li
-                class="dropdown {{ request()->routeIs('admin.student.management') || request()->routeIs('admin.student.application') || request()->routeIs('admin.student.applicationRef') ? 'parent' : '' }}">
+                class="dropdown {{ request()->routeIs('admin.unverified.student') ||request()->routeIs('admin.student.management') || request()->routeIs('admin.student.application') || request()->routeIs('admin.student.applicationRef') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i><span>Student
                         Management</span></a>
                 <ul class="dropdown-menu">
                     <li><a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.student.management') ? 'active' : '' }}"
                             href="{{ route('admin.student.management') }}">All Students</a></li>
-                    <li><a navigate:wire
+                    <li>
+                        <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.student.application') ? 'active' : '' }}"
-                            href="{{ route('admin.student.application') }}">Active Applications</a></li>
-                    <li><a navigate:wire
+                            href="{{ route('admin.student.application') }}">Active Applications
+                        </a>
+                    </li>
+                    <li>
+                        <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.unverified.student') ? 'active' : '' }}"
+                            href="{{ route('admin.unverified.student') }}">Unverified Student Emails
+                        </a>
+                    </li>
+                    <li>
+                        <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.student.applicationRef') ? 'active' : '' }}"
-                            href="{{ route('admin.student.applicationRef') }}">Application REF</a></li>
+                            href="{{ route('admin.student.applicationRef') }}">Application REF
+                        </a>
+                    </li>
                 </ul>
             </li>
 

@@ -9,15 +9,16 @@ use App\Models\Department;
 use App\Models\Application;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Exports\ExportAllStudents;
 use Illuminate\Support\Facades\DB;
 use App\Exports\ApplicationsExport;
-use App\Exports\ExportAllStudents;
 use App\Imports\ApplicationsImport;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class StudentManagementController extends Controller
 {
@@ -148,17 +149,20 @@ class StudentManagementController extends Controller
                 ->whereNotNull('payment_id')
                 ->where('payment_id', '!=', '')
                 ->orderBy('created_at', 'desc')
+                ->distinct() // Ensure only distinct records are fetched
                 ->paginate(100); // Use pagination
         } else {
             $applications = Application::with(['user.student', 'department', 'academicSession'])
                 ->whereNotNull('payment_id')
                 ->where('payment_id', '!=', '')
                 ->orderBy('created_at', 'desc')
+                ->distinct() // Ensure only distinct records are fetched
                 ->paginate(100); // Use pagination
         }
 
         return view('admin.studentManagement.application', compact('applications', 'departments'));
     }
+
 
 
 
@@ -240,19 +244,69 @@ class StudentManagementController extends Controller
 
 
 
+    // public function import(Request $request)
+    // {
+    //     $request->validate([
+    //         'file' => 'required|file|mimes:xlsx,xls',
+    //     ]);
+
+    //     $file = $request->file('file');
+
+    //     try {
+    //         Excel::import(new ApplicationsImport, $file);
+    //         $notification = [
+    //             'message' => 'File Import Was Successful!!',
+    //             'alert-type' => 'success'
+    //         ];
+    //     } catch (\Exception $e) {
+    //         // Log the error if needed
+    //         Log::error('Error during file import: ' . $e->getMessage());
+
+    //         // Set the error notification message
+    //         $notification = [
+    //             'message' => 'Error during file import: ' . $e->getMessage(),
+    //             'alert-type' => 'danger'
+    //         ];
+    //     }
+
+    //     return redirect()->back()->with($notification);
+    // }
+
     public function import(Request $request)
     {
         $request->validate([
             'file' => 'required|file|mimes:xlsx,xls',
         ]);
+
         $file = $request->file('file');
+        $import = new ApplicationsImport;
 
+        try {
+            Excel::import($import, $file);
 
-        Excel::import(new ApplicationsImport, $file);
-        $notification = [
-            'message' => 'File Import Was Successful!!',
-            'alert-type' => 'success'
-        ];
+            // Check for errors from the import process
+            $errors = $import->getErrors();
+            if (!empty($errors)) {
+                $notification = [
+                    'message' => 'Import completed with some errors: ' . implode(', ', $errors),
+                    'alert-type' => 'warning'
+                ];
+            } else {
+                $notification = [
+                    'message' => 'File Import Was Successful!!',
+                    'alert-type' => 'success'
+                ];
+            }
+        } catch (\Exception $e) {
+            // Log the error if needed
+            Log::error('Error during file import: ' . $e->getMessage());
+
+            // Set the error notification message
+            $notification = [
+                'message' => 'Error during file import: ' . $e->getMessage(),
+                'alert-type' => 'danger'
+            ];
+        }
 
         return redirect()->back()->with($notification);
     }
@@ -433,60 +487,79 @@ class StudentManagementController extends Controller
 
         return redirect()->back()->with($notification);
     }
-    public function deleteMultipleStudents(Request $request)
-    {
-        $userIds = $request->input('selected_students'); // These are user IDs.
+    // public function deleteMultipleStudents(Request $request)
+    // {
+    //     $userIds = $request->input('selected_students'); // These are user IDs.
 
-        DB::transaction(function () use ($userIds) {
-            // Get students whose user IDs match the selected ones
-            $students = Student::whereIn('user_id', $userIds)->get();
+    //     DB::transaction(function () use ($userIds) {
+    //         // Get students whose user IDs match the selected ones
+    //         $students = Student::whereIn('user_id', $userIds)->get();
 
-            foreach ($students as $student) {
-                // Check if the student has an application with a non-null payment_id
-                $hasPaidApplication = $student->applications()->whereNotNull('payment_id')->exists();
+    //         foreach ($students as $student) {
+    //             // Check if the student has an application with a non-null payment_id
+    //             $hasPaidApplication = $student->applications()->whereNotNull('payment_id')->exists();
 
-                // Skip deletion if there's a paid application
-                if ($hasPaidApplication) {
-                    continue;
-                }
+    //             // Skip deletion if there's a paid application
+    //             if ($hasPaidApplication) {
+    //                 continue;
+    //             }
 
-                // List of document columns to check and potentially delete
-                $documentFields = [
-                    'document_local_government_identification',
-                    'document_medical_report',
-                    'document_secondary_school_certificate'
-                ];
+    //             // List of document columns to check and potentially delete
+    //             $documentFields = [
+    //                 'document_local_government_identification',
+    //                 'document_medical_report',
+    //                 'document_secondary_school_certificate'
+    //             ];
 
-                // Delete passport photo if it exists
-                if ($student->passport_photo && file_exists(public_path($student->passport_photo))) {
-                    unlink(public_path($student->passport_photo));
-                }
+    //             // Delete passport photo if it exists
+    //             if ($student->passport_photo && file_exists(public_path($student->passport_photo))) {
+    //                 unlink(public_path($student->passport_photo));
+    //             }
 
-                // Check and delete each document if it exists
-                foreach ($documentFields as $field) {
-                    if ($student->$field && file_exists(public_path($student->$field))) {
-                        unlink(public_path($student->$field));
-                    }
-                }
+    //             // Check and delete each document if it exists
+    //             foreach ($documentFields as $field) {
+    //                 if ($student->$field && file_exists(public_path($student->$field))) {
+    //                     unlink(public_path($student->$field));
+    //                 }
+    //             }
 
-                // Delete the student record
-                $student->delete();
-            }
+    //             // Delete the student record
+    //             $student->delete();
+    //         }
 
-            // Delete users associated with these student records if they have no paid applications
-            User::whereIn('id', $userIds)
-                ->whereDoesntHave('student.applications', function ($query) {
-                    $query->whereNotNull('payment_id');
-                })
-                ->delete();
-        });
+    //         // Delete users associated with these student records if they have no paid applications
+    //         User::whereIn('id', $userIds)
+    //             ->whereDoesntHave('student.applications', function ($query) {
+    //                 $query->whereNotNull('payment_id');
+    //             })
+    //             ->delete();
+    //     });
 
+    //     $notification = [
+    //         'message' => 'Students deleted successfully!',
+    //         'alert-type' => 'success'
+    //     ];
+
+    //     return redirect()->back()->with($notification);
+    // }
+
+    public function unverifiedStudents(){
+        $students = User::with('Student')->where('email_verified_at', '=', null)->simplePaginate('100');
+        return view('admin.studentManagement.unverifiedStudentEmail', compact('students'));
+    }
+
+    public function verifyStudent($slug){
+        $student = User::where('nameSlug', $slug)->firstOrFail();
+        // dd($student);
+        $student->update([
+            'email_verified_at' => now()
+        ]);
         $notification = [
-            'message' => 'Students deleted successfully!',
+            'message' => 'Student Account verified successfully',
             'alert-type' => 'success'
         ];
-
         return redirect()->back()->with($notification);
+
     }
 
 

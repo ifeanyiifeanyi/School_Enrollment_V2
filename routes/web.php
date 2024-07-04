@@ -181,6 +181,11 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('students/search','search')->name('admin.students.search');
                 Route::get('applications/search','ApplicationSearch')->name('admin.student.applications.search');
 
+                //fetch all unverified student details
+                Route::get('unverified-students', 'unverifiedStudents')->name('admin.unverified.student');
+                Route::get('verify-student/{slug}', 'verifyStudent')->name('admin.verify.student');
+
+
 
             });
         });
