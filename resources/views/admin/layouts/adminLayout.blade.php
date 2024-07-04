@@ -69,10 +69,14 @@
         }
 
         .active {
-            background-color: #007bff !important;
+            background: url({{ asset('active.jpg') }}) !important;
+            background-size: cover;
+            background-position: center;
             color: #fff !important;
-            border-radius: 20px !important;
-            margin: 0 10px 0 10px !important;
+            /* font-size: 15px !important; */
+            font-weight:bold !important;
+            /* border-radius: 20px !important; */
+            /* margin: 0 10px 0 10px !important; */
         }
 
         .parent {

@@ -46,6 +46,28 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
     @yield('css')
     @livewireStyles
+    <style>
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+
+        .admission {
+            background: url({{ asset('active.jpg') }}) !important;
+            background-size: cover;
+            background-position: center;
+            color: #fff !important;
+            /* font-size: 15px !important; */
+            font-weight: bold !important;
+            /* border-radius: 20px !important; */
+            /* margin: 0 10px 0 10px !important; */
+        }
+
+        a {
+            text-decoration: none !important;
+        }
+    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">

@@ -74,6 +74,7 @@ class StudentAdmissionApplicationController extends Controller
     }
 
 
+    // submit first stage of admission application before payment
     public function submitAdmissionApplication(Request $request)
     {
 
@@ -139,7 +140,7 @@ class StudentAdmissionApplicationController extends Controller
             if ($request->country == 'Nigeria') {
                 $studentData['state_of_origin'] = $request->state_of_origin_nigeria;
                 $studentData['lga_origin'] = $request->localGovernment;
-            }else{
+            } else {
                 $studentData['state_of_origin'] = $request->state_of_origin;
                 $studentData['lga_origin'] = $request->lga_origin;
             }
@@ -175,7 +176,6 @@ class StudentAdmissionApplicationController extends Controller
             Mail::to($user->email)->send(new RegistrationConfirmationMail($user, $application));
 
             return redirect()->route('payment.view.finalStep', ['userSlug' => Str::slug($user->nameSlug)]);
-            
         } catch (\Exception $e) {
             // Log the error for debugging
             Log::error('Error in submitting admission application: ' . $e->getMessage(), [
@@ -199,12 +199,6 @@ class StudentAdmissionApplicationController extends Controller
             // Get the path
             $path = public_path($directory);
 
-            // // Check if the directory exists, and if not, return null or handle accordingly
-            // if (!File::exists($path)) {
-            //     // Handle the case where the directory does not exist (return null or log the error)
-            //     return null;
-            // }
-
             // Save the image
             $manager = new ImageManager(Driver::class);
             $image = $manager->read($file->getRealPath());
@@ -217,9 +211,25 @@ class StudentAdmissionApplicationController extends Controller
     }
 
 
+
+
+    // generate application number
     protected function generateUniqueNumber()
     {
         $lastRegisteredPerson = Student::max('id') + 1;
         return 'SHN' . mt_rand(1000000, 9999999) . $lastRegisteredPerson;
+    }
+
+
+
+
+    public function confirmAcceptanceOffer()
+    {
+        $student = Application::with('user.student')
+            ->where('payment_id', '!=', null)
+            ->where('user_id', auth()->user()->id)
+            ->first();
+            // dd($student);
+        return view('student.admissionPortal.congratulations', compact('student'));
     }
 }

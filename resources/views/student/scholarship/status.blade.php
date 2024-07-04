@@ -21,9 +21,23 @@
         .document {
             background-color: white;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 40px;
+            position: relative;
+            overflow: hidden;
+            position: relative;
+            overflow: hidden;
+
+        }
+        .document::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 10px;
+            background: linear-gradient(to right, #3498db, #2980b9);
         }
 
         .header {
@@ -61,6 +75,7 @@
             border-radius: 5px;
             padding: 15px;
             margin-top: 20px;
+            opacity: none;
         }
 
         .footer {
@@ -68,6 +83,19 @@
             text-align: center;
             font-size: 0.9em;
             color: #6c757d;
+        }
+
+        .watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.1;
+            z-index: 0;
+            pointer-events: none;
+            width: 60%;
+            height: auto;
+
         }
     </style>
 @endsection
@@ -83,6 +111,8 @@
             @endif
             <div class="container">
                 <div class="document">
+                    <img src="{{ asset('logo.png') }}" alt="Watermark" class="watermark  mt-5">
+
                     <div class="header">
                         <img src="{{ asset('logo1.png') }}" alt="University Logo" class="logo">
                         <h2>Scholarship Application Details</h2>
@@ -129,7 +159,7 @@
                         </p>
                     @endif
                     @if ($application->status == 'pending')
-                        <div class="notice">
+                        <div class="notice mb-3">
                             <h5><i class="fas fa-exclamation-triangle"></i> Important Notice</h5>
                             <p>Please be aware that the scholarship only covers tuition fees. Other expenses such as
                                 accommodation, books, and living costs are not included.</p>

@@ -283,6 +283,9 @@ Route::middleware(['cors'])->group(function () {
         Route::controller(StudentAdmissionApplicationController::class)->group(function(){
             Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.application.status');
             Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply');
+
+            Route::get('congratulations', 'confirmAcceptanceOffer')->name('student.confirm.admissionStatus');
+            Route::post('congratulations', 'admissionResponse')->name('student.admission.response');
         });
 
 

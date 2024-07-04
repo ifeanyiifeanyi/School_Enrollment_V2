@@ -7,9 +7,14 @@
         ->whereNotNull('payment_id')
         ->where('payment_id', '!=', '')
         ->exists();
+
+    $admissionOffered = DB::table('applications')
+        ->where('user_id', auth()->user()->id)
+        ->where('admission_status', 'approved')
+        ->exists();
 @endphp
 
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4 no-print">
     <!-- Brand Logo -->
     <a href="{{ route('student.dashboard') }}" class="brand-link" wire:navigate>
         <img src="{{ asset($siteSetting->site_icon ?? '') }}" alt="Logo" class="brand-image img-circle elevation-3"
@@ -22,13 +27,13 @@
         <!-- Sidebar user panel (optional) -->
         <div class="pb-3 mt-3 mb-3 user-panel d-flex">
             <div class="image">
-                <img src="{{ empty(auth()->user()->student->passport_photo) ? 'https://placehold.it/150x100' : asset(auth()->user()->student->passport_photo) }} "class="elevation-2"
-                    alt="User Image">
+                @if (!empty(auth()->user()->student->passport_photo))
+                    <img src="{{ asset(auth()->user()->student->passport_photo) }}" class="elevation-2" alt="User Image">
+                @else
+                    <h4>{{ Str::title(auth()->user()->first_name) }}</h4>
+                @endif
             </div>
-            <div class="info">
-                <a wire:navigate href="{{ route('student.profile') }}"
-                    class="d-block">{{ Str::title(auth()->user()->fullName) }} </a>
-            </div>
+
         </div>
 
 
@@ -51,6 +56,15 @@
                         </a>
                     </li>
                 @endif
+
+                @if ($admissionOffered)
+                <li class="nav-item">
+                    <a href="{{ route('student.confirm.admissionStatus') }}" class="nav-link text-info admission">
+                        <i class="nav-icon fas fa-trophy text-light"></i>
+                        <p>Admission Offer</p>
+                    </a>
+                </li>
+            @endif
 
 
                 @if ($userHasApplication)

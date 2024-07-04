@@ -21,10 +21,11 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $guarded = [];
 
-    // public function roles()
-    // {
-    //     return $this->belongsToMany(Role::class, 'user_roles');
-    // }
+    public function admissionAcceptanceManager(){
+        return $this->hasOne(AdmissionAcceptanceManager::class);
+    }
+
+
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'user_permissions', 'user_id', 'role_id');
@@ -35,13 +36,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Permission::class, 'user_permissions', 'user_id', 'role_id');
     }
 
-    // public function hasPermission($permission)
-    // {
-    //     return $this->permissions()->where('name', $permission)->exists() ||
-    //         $this->roles()->whereHas('permissions', function ($query) use ($permission) {
-    //             $query->where('name', $permission);
-    //         })->exists();
-    // }
 
     public function hasPermission($permission)
     {
