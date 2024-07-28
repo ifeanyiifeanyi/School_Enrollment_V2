@@ -1,0 +1,98 @@
+/* Base */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333333;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+    width: 100% !important;
+}
+
+h1, h2, h3, p, ul, ol, blockquote {
+    text-align: left;
+}
+
+a {
+    color: #3498db;
+}
+
+/* Typography */
+h1 {
+    color: #2c3e50;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 0;
+}
+
+p {
+    font-size: 16px;
+    line-height: 1.5em;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* Layout */
+.wrapper {
+    background-color: #f8f9fa;
+    padding: 30px;
+}
+
+.inner-body {
+    background-color: #ffffff;
+    border: 1px solid #e8e5ef;
+    border-radius: 5px;
+    box-shadow: 0 2px 0 rgba(0, 0, 150, 0.025), 2px 4px 0 rgba(0, 0, 150, 0.015);
+    margin: 0 auto;
+    padding: 30px;
+    width: 570px;
+}
+
+/* Logo */
+.logo {
+    display: block;
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+.button {
+    background-color: #3498db;
+    border-radius: 3px;
+    color: #ffffff;
+    display: inline-block;
+    padding: 12px 24px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #2980b9;
+}
+
+/* Footer */
+.footer {
+    margin-top: 30px;
+    text-align: left;
+    font-size: 14px;
+    color: #718096;
+}
+
+/* Utilities */
+.break-all {
+    word-break: break-all;
+}

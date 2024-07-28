@@ -111,7 +111,7 @@
                 <div class="row">
                   <div class="form-group col-md-7 col-12">
                     <label>Profile Photo</label>
-                    <input type="file" onChange="changeImg(this)" capture accept="image/*" name="photo" class="form-control">
+                    <input type="file" onChange="changeImg(this)"  accept="image/*" name="photo" class="form-control">
                     @error('photo')
                     <div class="text-danger">
                       {{ $message }}

@@ -59,10 +59,10 @@
                             </div>
                         @endif
                         <div class="card-body">
-                            <form method="POST" action="{{ route('login') }}">
+                            <form method="POST" action="{{ route('login') }}" id="contactUSForm">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="email">Email or Username</label>
+                                    <label for="login">Email or Username</label>
                                     <input id="login" type="text" class="form-control" name="login" tabindex="1"
                                         autofocus value="{{ old('login') }}">
                                     @error('login')
@@ -90,6 +90,27 @@
                                         </div>
                                     @enderror
                                 </div>
+                                <div class="row">
+
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+
+                                        {{-- <strong>ReCaptcha:</strong> --}}
+
+                                        <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+
+                                        @if ($errors->has('g-recaptcha-response'))
+
+                                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+
+                                        @endif
+
+                                    </div>
+
+                                </div>
+
+                            </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
@@ -116,4 +137,29 @@
 @endsection
 
 @section('js')
+<script type="text/javascript">
+
+    // $('#contactUSForm').submit(function(event) {
+
+    //     event.preventDefault();
+
+
+
+    //     grecaptcha.ready(function() {
+
+    //         grecaptcha.execute("{{ env('GOOGLE_RECAPTCHA_KEY') }}", {action: 'subscribe_newsletter'}).then(function(token) {
+
+    //             $('#contactUSForm').prepend('<input type="hidden" name="g-recaptcha-response" value="' + token + '">');
+
+    //             $('#contactUSForm').unbind('submit').submit();
+
+    //         });;
+
+    //     });
+
+    // });
+
+</script>
+
+
 @endsection

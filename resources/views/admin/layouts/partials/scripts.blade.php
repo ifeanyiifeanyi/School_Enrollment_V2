@@ -7,8 +7,7 @@
 <script src="{{ asset("") }}admin/assets/modules/moment.min.js"></script>
 <script src="{{ asset("") }}admin/assets/js/stisla.js"></script>
 
-<!-- JS Libraies -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 <script src="{{ asset("") }}admin/assets/modules/summernote/summernote-bs4.js"></script>
 <script src="{{ asset("") }}admin/assets/modules/codemirror/lib/codemirror.js"></script>
 <script src="{{ asset("") }}admin/assets/modules/codemirror/mode/javascript/javascript.js"></script>
@@ -26,6 +25,8 @@
 <!-- Template JS File -->
 <script src="{{ asset("") }}admin/assets/js/scripts.js"></script>
 <script src="{{ asset("") }}admin/assets/js/custom.js"></script>
+<!-- JS Libraies -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
   @if(Session::has('message'))
     var type = "{{ Session::get('alert-type','info') }}"

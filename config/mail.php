@@ -129,6 +129,10 @@ return [
         'paths' => [
             resource_path('views/vendor/mail'),
         ],
+        'css' => [
+            resource_path('css/email.css'),
+        ],
+
     ],
 
 ];

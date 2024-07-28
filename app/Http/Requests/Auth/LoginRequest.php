@@ -3,8 +3,9 @@
 namespace App\Http\Requests\Auth;
 
 use App\Models\User;
-use App\Rules\LoginCredentialRule;
+use App\Rules\ReCaptcha;
 use Illuminate\Support\Str;
+use App\Rules\LoginCredentialRule;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,6 +33,9 @@ class LoginRequest extends FormRequest
         return [
             'login' => ['required', 'string', 'max:255', new LoginCredentialRule],
             'password' => ['required', 'string'],
+            'g-recaptcha-response' => ['required', new ReCaptcha]
+
+
         ];
     }
 
@@ -40,34 +44,7 @@ class LoginRequest extends FormRequest
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    // public function authenticate(): void
-    // {
-    //     $this->ensureIsNotRateLimited();
 
-    //     if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-    //         RateLimiter::hit($this->throttleKey());
-
-    //         throw ValidationException::withMessages([
-    //             'email' => trans('auth.failed'),
-    //         ]);
-    //     }
-
-    //     $user = Auth::user();
-    //     // dd($user);
-    //     if ($user) {
-    //         // Get the authenticated user model instance
-    //         $userModel = $user->model;
-    //         $userModel->last_login_at = now();
-    //         // Store the current last_login_at value in previous_login_at
-    //         $userModel->previous_login_at = empty($userModel->last_login_at) ? now() : $userModel->last_login_at;
-
-    //         // Update the last_login_at value with the current timestamp
-
-    //         $userModel->save();
-    //     }
-
-    //     RateLimiter::clear($this->throttleKey());
-    // }
 
     public function authenticate(): void
     {
@@ -83,10 +60,10 @@ class LoginRequest extends FormRequest
                 'login' => trans('auth.failed'),
             ]);
         }
-        
+
         $user->previous_login_at = empty($user->last_login_at) ? now() : $user->last_login_at;
         $user->last_login_at = now();
-        
+
         // Store the current last_login_at value in previous_login_at
         $user->save();
 

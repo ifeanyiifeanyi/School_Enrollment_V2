@@ -38,7 +38,8 @@
     <meta property="og:site_name" content="{{ $siteSetting->site_title ?? '' }}">
     <meta name="twitter:image:alt" content="{{ $siteSetting->site_title ?? '' }}">
 
-
+    {{-- <script src="https://www.google.com/recaptcha/api.js?render={{ env('GOOGLE_RECAPTCHA_KEY') }}"></script> --}}
+    <script src='https://www.google.com/recaptcha/api.js'></script>
     @yield('css')
 </head>
 

@@ -163,7 +163,7 @@
                                 <input type="hidden" name="student_id" value="{{ $student->user_id }}">
                                 <button type="submit" name="decision" value="accept"
                                     class="btn btn-accept btn-lg me-3 mb-3">Accept Offer</button>
-                                <button type="button" onclick="window.print()" name="decision" value="decline"
+                                <button type="button"  name="decision" value="decline"
                                     class="btn btn-decline btn-lg mb-3">Decline Offer</button>
                             </form>
                         </div>
