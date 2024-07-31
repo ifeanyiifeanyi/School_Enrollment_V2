@@ -4,7 +4,6 @@
 
 @section('student')
 
-
     <style>
         /* Loader styles */
         .loader-overlay {
