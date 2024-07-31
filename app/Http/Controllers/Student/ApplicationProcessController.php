@@ -11,9 +11,10 @@ use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
 use Yabacon\Paystack\Paystack;
 
+use Illuminate\Support\Facades\DB;
 use App\Mail\ApplicationStatusMail;
-use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use Yabacon\Paystack\PaystackClient;
@@ -147,10 +148,11 @@ class ApplicationProcessController extends Controller
             }
         } else if ($paymentMethod->name == "Paystack") {
             try {
+                DB::beginTransaction();
                 $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
                 // Define subaccount details
-                $subAccountCode = config('paystack.subAccount'); 
+                $subAccountCode = config('paystack.subAccount');
 
                 $transaction = $paystack->transaction->initialize([
                     'email' => $user->email,
@@ -163,6 +165,7 @@ class ApplicationProcessController extends Controller
 
                 return redirect($transaction->data->authorization_url);
             } catch (\Exception $e) {
+                DB::rollBack();
                 Log::error('Error in making payment: ' . $e->getMessage(), [
                     'exception' => $e
                 ]);
@@ -180,6 +183,8 @@ class ApplicationProcessController extends Controller
         $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
         try {
+            DB::beginTransaction();
+
             $transaction = $paystack->transaction->verify([
                 'reference' => $request->reference,
             ]);
@@ -222,15 +227,12 @@ class ApplicationProcessController extends Controller
             } else {
                 // Handle declined transaction
                 $userSlug = optional(auth()->user())->nameSlug;
-                Log::info('Transaction declined', [
-                    'reference' => $request->reference,
-                    'status' => $transaction->data->status,
-                    'message' => $transaction->data->gateway_response
-                ]);
+                
                 return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
                     ->withErrors('Payment was declined: ' . $transaction->data->gateway_response);
             }
         } catch (\Exception $e) {
+            DB::rollBack();
             $userSlug = optional(auth()->user())->nameSlug;
             Log::error('Error processing payment', ['message' => $e->getMessage()]);
             return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
@@ -339,7 +341,7 @@ class ApplicationProcessController extends Controller
 
         $userId = auth()->user()->id;
         $timestamp = time();
-        $randomString = Str::random(10);
-        return $userId . '_' . $timestamp . '_' . $randomString;
+        // $randomString = Str::random(10);
+        return $userId . '' . $timestamp;
     }
 }

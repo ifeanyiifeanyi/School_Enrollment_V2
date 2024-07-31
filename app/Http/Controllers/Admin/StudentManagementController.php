@@ -99,12 +99,10 @@ class StudentManagementController extends Controller
      */
     public function show($slug)
     {
-
         $student = User::with(['applications.department'])
             ->where('role', 'student')
             ->where('nameSlug', $slug)
             ->firstOrFail();
-
 
         $documentKeys = [
             'birth_certificate' => 'document_birth_certificate',
@@ -116,25 +114,30 @@ class StudentManagementController extends Controller
         $documents = [];
         foreach ($documentKeys as $label => $key) {
             $filename = $student->student->$key;
-            if ($filename) { // Corrected path check
-                $filePath = asset($filename); // Corrected URL generation
-                $isPdf = Str::endsWith($filename, '.pdf');
-                $documents[$label] = [
-                    'filePath' => $filePath,
-                    'isPdf' => $isPdf,
-                    'exists' => true
-                ];
+            if ($filename) {
+                if ($filename === 'awaiting') {
+                    $documents[$label] = [
+                        'awaiting' => true
+                    ];
+                } else {
+                    $filePath = asset($filename);
+                    $isPdf = Str::endsWith($filename, '.pdf');
+                    $documents[$label] = [
+                        'filePath' => $filePath,
+                        'isPdf' => $isPdf,
+                        'exists' => true
+                    ];
+                }
             } else {
                 $documents[$label] = [
                     'exists' => false
                 ];
             }
         }
-        // dd($documents);
-
 
         return view('admin.studentManagement.show', compact('student', 'documents'));
     }
+
 
 
     // HANDLE STUDENTS THAT HAS APPLIED FOR ADMISSION (successfully)
@@ -543,12 +546,14 @@ class StudentManagementController extends Controller
     //     return redirect()->back()->with($notification);
     // }
 
-    public function unverifiedStudents(){
+    public function unverifiedStudents()
+    {
         $students = User::with('Student')->where('email_verified_at', '=', null)->simplePaginate('100');
         return view('admin.studentManagement.unverifiedStudentEmail', compact('students'));
     }
 
-    public function verifyStudent($slug){
+    public function verifyStudent($slug)
+    {
         $student = User::where('nameSlug', $slug)->firstOrFail();
         // dd($student);
         $student->update([
@@ -559,7 +564,6 @@ class StudentManagementController extends Controller
             'alert-type' => 'success'
         ];
         return redirect()->back()->with($notification);
-
     }
 
 
