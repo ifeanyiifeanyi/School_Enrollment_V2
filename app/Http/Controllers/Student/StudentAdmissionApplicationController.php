@@ -117,11 +117,11 @@ class StudentAdmissionApplicationController extends Controller
 
         // Add custom validation rules based on the country
         if ($request->country == 'Nigeria') {
-            $rules['state_of_origin_nigeria'] = 'required|string';
-            $rules['localGovernment'] = 'required|string';
+            $rules['state_of_origin_nigeria'] = 'nullable|string';
+            $rules['localGovernment'] = 'nullable|string';
         } else {
-            $rules['state_of_origin'] = 'required|string';
-            $rules['lga_origin'] = 'required|string';
+            $rules['state_of_origin'] = 'nullable|string';
+            $rules['lga_origin'] = 'nullable|string';
         }
 
         // Only require the SSCE document if the "I Have the Result" checkbox is checked
@@ -181,7 +181,7 @@ class StudentAdmissionApplicationController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('Unexpected error in submitAdmissionApplication: ' . $e->getMessage());
-            
+
             return redirect()->back()->withInput()->withErrors(['error' => 'An unexpected error occurred. Please try again.']);
         }
     }

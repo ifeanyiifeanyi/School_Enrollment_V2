@@ -3,6 +3,8 @@
 @section('title', 'Admission Center')
 
 @section('student')
+
+
     <style>
         /* Loader styles */
         .loader-overlay {
@@ -41,9 +43,9 @@
 
         /* Page styles */
         /* body {
-                                                    font-family: 'Montserrat', sans-serif;
-                                                    background: linear-gradient(135deg, #667eea, #764ba2);
-                                                } */
+                                                            font-family: 'Montserrat', sans-serif;
+                                                            background: linear-gradient(135deg, #667eea, #764ba2);
+                                                        } */
 
         .content {
             background-color: rgba(255, 255, 255, 0.9);
@@ -107,9 +109,9 @@
     </div>
 
     <!-- Button to open the modal with animation class -->
-    <button type="button" class="m-3 btn btn-primary animate-btn" data-toggle="modal" data-target="#instructionsModal">
+    {{-- <button type="button" class="m-3 btn btn-primary animate-btn" data-toggle="modal" data-target="#instructionsModal">
         View Application Instructions
-    </button>
+    </button> --}}
 
     @if ($errors->has('error'))
         <div class="m-3 alert alert-danger">
@@ -183,7 +185,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="phone">Phone Number <span class="text-danger">*</span></label>
@@ -299,8 +301,8 @@
                             </div>
                             <div class="col-md-4" id="nigeriaLgaField" style="display: none;">
                                 <div class="form-group">
-                                    <label for="localGovernment">Local Government <span
-                                            class="text-danger">*</span></label> <br>
+                                    <label for="localGovernment">Local Government <small
+                                            class="text-info">optional</small></label> <br>
                                     <select style="width: 100% !important" name="localGovernment" id="localGovernment"
                                         class="form-control custom-select @error('localGovernment') border-danger @enderror">
                                         <option value="" disabled selected>Select Local Government</option>
@@ -313,7 +315,8 @@
                             </div>
                             <div class="col-md-4" id="otherCountryStateField" style="display: none;">
                                 <div class="form-group">
-                                    <label for="state_of_origin">State/Province <span class="text-danger">*</span></label>
+                                    <label for="state_of_origin">State/Province <small
+                                            class="text-info">optional</small></label>
                                     <input type="text" name="state_of_origin" id="state_of_origin"
                                         class="form-control @error('state_of_origin') border-danger @enderror"
                                         placeholder="State/Province"
@@ -506,8 +509,9 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="secondary_school_certificate_type">Certificate Obtained <span
-                                            class="text-danger">*</span></label>
+                                    <label for="secondary_school_certificate_type">Certificate Obtained br
+                                        <small class="text-info">(students on awaiting result should type <b>AWAITING
+                                                RESULT</b> )</small></label>
                                     <input name="secondary_school_certificate_type" type="text"
                                         class="form-control @error('secondary_school_certificate_type') border-danger @enderror"
                                         id="secondary_school_certificate_type" placeholder="Certificate Obtained"

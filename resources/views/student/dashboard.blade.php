@@ -54,6 +54,35 @@
             }
         }
     </style>
+    <style>
+        .notice {
+            background: linear-gradient(135deg, #6a82fb, #fc5c7d);
+            border-radius: 10px;
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .notice {
+                padding: 20px;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+
 @endsection
 
 
@@ -62,6 +91,38 @@
 
 @section('student')
     <section class="content">
+        <div class="container mt-5 mb-5">
+            <div class="p-4 notice">
+                <h2 class="text-center">Scholarship Eligibility and Conditions</h2>
+                <p><strong>1.</strong> The scholarship fund refers <strong>ONLY</strong> to the tuition cost for the
+                    University
+                    for the period of two years at a time but renewable every year based on other conditions now stated
+                    below.
+                </p>
+                <p><strong>2.</strong> The beneficiary should undertake to cover the accommodation and feeding costs for
+                    his/her
+                    studies. SEF does not include accommodation and feeding.</p>
+                <p><strong>3.</strong> The beneficiary of the SEF scholarship should maintain a minimum of 2.4 CGPA. If not,
+                    the
+                    scholarship will be reduced to between 30% - 50% as the case may be.</p>
+                <p><strong>4.</strong> The scholarship covers <strong>ONLY</strong> regular courses under the normal course
+                    of
+                    studies and not for carry overs or repeats. In case of carry-overs, the student covers those personally.
+                </p>
+                <p><strong>5.</strong> The scholarship is not transferable from one course to another except with the
+                    written
+                    approval of the SEF Management.</p>
+                <p><strong>6.</strong> The beneficiary should be of good behaviour and not be under any major sanctions or
+                    censure by the University. In case of censures or major sanctions, the scholarship is revoked as the
+                    sanction or censure sets in. Such sanctions are to be found in the University Code of Conduct.</p>
+                <p><strong>7.</strong> The SEF has the right to compute data from the personal information given above but
+                    will
+                    not share personal details with a Third Party.</p>
+                <p><strong>8.</strong> The SEF reserves the right to ask for further information from applicants to enable
+                    her
+                    to discharge her duties effectively.</p>
+            </div>
+        </div>
         <div class="row">
             <div class="mx-auto col-md-4 col-sm-12">
                 <div class="container">
@@ -71,13 +132,14 @@
                             <h4 class="mb-0 greeting-text"></h4>
                             <p class="text-muted">{{ Str::title(auth()->user()->first_name) }}</p>
                         </div>
-                        
-                        <a wire:navigate href="{{ route('student.admission.application') }}" class="btn btn-outline-primary"><i
-                                class="fas fa-bookmark"></i> Start Your Application</a>
+
+                        <a wire:navigate href="{{ route('student.admission.application') }}"
+                            class="btn btn-outline-primary"><i class="fas fa-bookmark"></i> Start Your Application</a>
                     </div>
                 </div>
             </div>
         </div>
+
 
         @if ($application)
 
