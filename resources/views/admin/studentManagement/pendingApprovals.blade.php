@@ -88,12 +88,12 @@
                                                 @csrf
                                                 <button type="submit" class="btn btn-success btn-sm mr-1">Approve</button>
                                             </form>
-                                            <form onsubmit="return confirm('are you sure of this action')"
+                                            {{-- <form onsubmit="return confirm('are you sure of this action')"
                                                 action="{{ route('admin.reject.application', $application->id) }}"
                                                 method="POST" style="display: inline;">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                                            </form>
+                                            </form> --}}
                                         </div>
                                     </td>
                                 </tr>

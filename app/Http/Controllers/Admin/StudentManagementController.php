@@ -212,7 +212,7 @@ class StudentManagementController extends Controller
         });
 
         // Send approval notification to student
-        Mail::to($application->user->email)->send(new ApplicationApprovedMailAdmin($application));
+        // Mail::to($application->user->email)->send(new ApplicationApprovedMailAdmin($application));
 
         return redirect()->back()->with('success', 'Application approved successfully');
     }
@@ -256,7 +256,7 @@ class StudentManagementController extends Controller
             $application->payment->delete();
         }
 
-        
+
 
         // Send rejection notification to student
         Mail::to($application->user->email)->send(new ApplicationRejectedMail($application));
