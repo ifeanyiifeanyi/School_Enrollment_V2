@@ -81,6 +81,12 @@
                     </li>
                     <li>
                         <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.pending.approvals') ? 'active' : '' }}"
+                            href="{{ route('admin.pending.approvals') }}">Applicant Errors
+                        </a>
+                    </li>
+                    <li>
+                        <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.unverified.student') ? 'active' : '' }}"
                             href="{{ route('admin.unverified.student') }}">Unverified Student Emails
                         </a>
@@ -121,7 +127,7 @@
                             href="{{ route('admin.manage.admin') }}">Admin Manager</a></li>
                 </ul>
             </li>
-            
+
             <li class="dropdown {{ request()->routeIs('admin.exam.notification') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-bell"></i><span>Notifications</span></a>
                 <ul class="dropdown-menu">

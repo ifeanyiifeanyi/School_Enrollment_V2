@@ -90,14 +90,13 @@ Route::middleware(['cors'])->group(function () {
         });
 
         Route::middleware(['permission:manage-site-settings'])->group(function () {
-            Route::controller(ExamNotificationController::class)->group(function(){
-               Route::get('exam-notifications', 'index')->name('admin.exam.notification');
-               Route::post('exam-notifications/store', 'store')->name('admin.exam.notificationStore');
-               Route::get('notifications-sent', 'listNotifications')->name('admin.listNotifications');
-               Route::get('notifications-replies', 'repliedNotifications')->name('admin.repliedNotifications');
-               Route::get('exam-notification/{id}', 'showNotification')->name('admin.showNotification');
-               Route::get('exam-notification/{id}/delete', 'destroy')->name('admin.showNotification.destroy');
-
+            Route::controller(ExamNotificationController::class)->group(function () {
+                Route::get('exam-notifications', 'index')->name('admin.exam.notification');
+                Route::post('exam-notifications/store', 'store')->name('admin.exam.notificationStore');
+                Route::get('notifications-sent', 'listNotifications')->name('admin.listNotifications');
+                Route::get('notifications-replies', 'repliedNotifications')->name('admin.repliedNotifications');
+                Route::get('exam-notification/{id}', 'showNotification')->name('admin.showNotification');
+                Route::get('exam-notification/{id}/delete', 'destroy')->name('admin.showNotification.destroy');
             });
         });
 
@@ -178,14 +177,18 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('export-all-students', 'exportAllStudents')->name('admin.export.allStudent');
 
                 //search for student
-                Route::get('students/search','search')->name('admin.students.search');
-                Route::get('applications/search','ApplicationSearch')->name('admin.student.applications.search');
+                Route::get('students/search', 'search')->name('admin.students.search');
+                Route::get('applications/search', 'ApplicationSearch')->name('admin.student.applications.search');
 
                 //fetch all unverified student details
                 Route::get('unverified-students', 'unverifiedStudents')->name('admin.unverified.student');
                 Route::get('verify-student/{slug}', 'verifyStudent')->name('admin.verify.student');
 
-
+                // this portion is for manually managing application status
+                Route::get('pending-approvals', 'pendingApprovals')->name('admin.pending.approvals');
+                Route::post('/admin/approve-application/{application}',  'approveApplication')->name('admin.approve.application');
+                Route::post('/admin/reject-application/{application}',  'rejectApplication')->name('admin.reject.application');
+                Route::get('/admin/search-pending-approvals',  'searchPendingApprovals')->name('admin.search.pending.approvals');
 
             });
         });
@@ -200,7 +203,6 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
 
                 Route::get('export-payments', 'exportPayments')->name('admin.export.payments');
-
             });
         });
 
@@ -225,7 +227,6 @@ Route::middleware(['cors'])->group(function () {
                 Route::post('create-roles/store', 'storeRole')->name('admin.store.role');
                 Route::get('roles', 'viewRoles')->name('admin.view.role');
             });
-
         });
 
         Route::middleware(['permission:manage-scholarship'])->group(function () {
@@ -280,7 +281,7 @@ Route::middleware(['cors'])->group(function () {
         });
 
         // NEW ADMISSION APPLICATION ROUTE ********
-        Route::controller(StudentAdmissionApplicationController::class)->group(function(){
+        Route::controller(StudentAdmissionApplicationController::class)->group(function () {
             Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.application.status');
             Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply');
 

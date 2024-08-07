@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Payment;
 use App\Models\Student;
 use Barryvdh\DomPDF\PDF;
 use App\Models\Department;
@@ -16,8 +17,11 @@ use App\Imports\ApplicationsImport;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Mail\ApplicationRejectedMail;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\ApplicationApprovedMailAdmin;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class StudentManagementController extends Controller
@@ -165,6 +169,106 @@ class StudentManagementController extends Controller
 
         return view('admin.studentManagement.application', compact('applications', 'departments'));
     }
+
+    // this function is used for managing students that their application
+    // needs to be processed manually
+    // 1.
+    public function pendingApprovals()
+    {
+        $pendingApplications = Application::with(['user.student', 'department', 'payment'])
+            ->where(function ($query) {
+                $query->whereNull('payment_id')
+                    ->orWhereHas('payment', function ($q) {
+                        $q->where('payment_status', '!=', 'successful');
+                    });
+            })
+            ->where('admission_status', 'pending')
+            ->paginate(15);
+
+        return view('admin.studentManagement.pendingApprovals', compact('pendingApplications'));
+    }
+
+    // manually approve the student application
+    // 2.
+    public function approveApplication(Application $application)
+    {
+        DB::transaction(function () use ($application) {
+            // Update or create payment record
+            $payment = Payment::updateOrCreate(
+                ['user_id' => $application->user_id, 'transaction_id' => $application->transaction_id],
+                [
+                    'amount' => $application->amount ?? 0,
+                    'payment_method' => $application->paymentMethod->name ?? 'Admin Approval',
+                    'payment_status' => 'successful',
+                    'transaction_id' => $application->transaction_id ?? 'ADMIN_' . Str::random(10),
+                ]
+            );
+
+            // Update the application
+            $application->update([
+                'payment_id' => $payment->id,
+                'admission_status' => 'approved'
+            ]);
+        });
+
+        // Send approval notification to student
+        Mail::to($application->user->email)->send(new ApplicationApprovedMailAdmin($application));
+
+        return redirect()->back()->with('success', 'Application approved successfully');
+    }
+    // search the pending approval table
+    // 3.
+    public function searchPendingApprovals(Request $request)
+    {
+        $query = Application::with(['user', 'department', 'payment'])
+            ->where(function ($q) {
+                $q->whereNull('payment_id')
+                    ->orWhereHas('payment', function ($pq) {
+                        $pq->where('payment_status', '!=', 'successful');
+                    });
+            })
+            ->where('admission_status', 'pending');
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->whereHas('user', function ($uq) use ($searchTerm) {
+                    $uq->where('first_name', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('last_name', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('email', 'LIKE', "%{$searchTerm}%");
+                })
+                    ->orWhereHas('department', function ($dq) use ($searchTerm) {
+                        $dq->where('name', 'LIKE', "%{$searchTerm}%");
+                    });
+            });
+        }
+
+        $pendingApplications = $query->paginate(15)->appends($request->all());
+
+        return view('admin.studentManagement.pendingApprovals', compact('pendingApplications'));
+    }
+    // reject the said applications
+    // 4.
+    public function rejectApplication(Application $application)
+    {
+        // Delete the payment record if it exists
+        if ($application->payment) {
+            $application->payment->delete();
+        }
+
+        
+
+        // Send rejection notification to student
+        Mail::to($application->user->email)->send(new ApplicationRejectedMail($application));
+
+        // Delete the application
+        $application->delete();
+
+        return redirect()->back()->with('success', 'Application rejected and deleted');
+    }
+
+
+
 
 
 

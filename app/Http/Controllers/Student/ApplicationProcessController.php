@@ -148,7 +148,6 @@ class ApplicationProcessController extends Controller
             }
         } else if ($paymentMethod->name == "Paystack") {
             try {
-                DB::beginTransaction();
                 $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
                 // Define subaccount details
@@ -164,18 +163,96 @@ class ApplicationProcessController extends Controller
                 ]);
 
                 return redirect($transaction->data->authorization_url);
+            } catch (\Yabacon\Paystack\Exception\ApiException $e) {
+                Log::error('Paystack API Error: ' . $e->getMessage(), [
+                    'exception' => $e
+                ]);
+                return redirect()->back()->withErrors('An error occurred while initializing the payment. Please try again later.');
             } catch (\Exception $e) {
-                DB::rollBack();
                 Log::error('Error in making payment: ' . $e->getMessage(), [
                     'exception' => $e
                 ]);
-                return redirect()->back()->withErrors('An error occurred, Please Try again later ... ');
+                return redirect()->back()->withErrors('An unexpected error occurred. Please try again later.');
             }
         } else {
             return redirect()->back()->withErrors('Payment Method not found.');
         }
     }
 
+
+    // // PAY-STACK CALLBACK
+    // public function handlePaymentCallBackPayStack(Request $request)
+    // {
+    //     $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         $transaction = $paystack->transaction->verify([
+    //             'reference' => $request->reference,
+    //         ]);
+
+    //         if ($transaction->data->status === 'success') {
+    //             $user = User::where('email', $transaction->data->customer->email)->first();
+
+    //             if ($user) {
+    //                 $application = $user->applications()->first();
+    //                 $paymentMethodId = PaymentMethod::where('name', 'Paystack')->first()->id;
+
+    //                 $paymentData = [
+    //                     'user_id' => $user->id,
+    //                     'amount' => $transaction->data->amount / 100, // Convert kobo to Naira
+    //                     'payment_method' => 'Paystack',
+    //                     'payment_status' => 'Successful',
+    //                     'transaction_id' => $transaction->data->reference,
+    //                     'payment_method_id' => $paymentMethodId,
+    //                 ];
+
+    //                 $payment = Payment::create($paymentData);
+
+    //                 if ($application) {
+    //                     $application->update(['payment_id' => $payment->id]);
+    //                 }
+    //                 Mail::to($user->email)->send(new ApplicationStatusMail($user, $application, $payment));
+    //                 $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
+
+    //                 return view('student.payment.success', [
+    //                     'user' => $user,
+    //                     'application' => $application,
+    //                     'payment' => $payment,
+    //                     'barcodeUrl' => $barcodeUrl
+    //                 ]);
+
+    //                 DB::commit();
+    //             } else {
+    //                 $payment = Payment::where('transaction_id', $$transaction->data->reference)->first();
+    //                 if ($payment) {
+    //                     $payment->update(['payment_status' => 'failed']);
+    //                 }
+    //                 $userSlug = optional(auth()->user())->nameSlug;
+    //                 return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
+    //                     ->withErrors('Payment was not successful. Please try again.');
+    //             }
+    //         } else {
+    //             // Handle declined transaction
+    //             $payment = Payment::where('transaction_id', $$transaction->data->reference)->first();
+    //             if ($payment) {
+    //                 $payment->update(['payment_status' => 'failed']);
+    //             }
+
+    //             $userSlug = optional(auth()->user())->nameSlug;
+
+    //             return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
+    //                 ->withErrors('Payment was declined: ' . $transaction->data->gateway_response);
+    //         }
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         $userSlug = optional(auth()->user())->nameSlug;
+    //         Log::error('Error processing payment', ['message' => $e->getMessage()]);
+    //         return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
+    //             ->withErrors('An error occurred while processing the payment. Please try again.');
+    //     }
+    // }
 
     // PAY-STACK CALLBACK
     public function handlePaymentCallBackPayStack(Request $request)
@@ -190,54 +267,63 @@ class ApplicationProcessController extends Controller
             ]);
 
             if ($transaction->data->status === 'success') {
-                $user = User::where('email', $transaction->data->customer->email)->first();
+                $user = User::where('email', $transaction->data->customer->email)->firstOrFail();
 
-                if ($user) {
-                    $application = $user->applications()->first();
-                    $paymentMethodId = PaymentMethod::where('name', 'Paystack')->first()->id;
+                $application = $user->applications()->firstOrFail();
+                $paymentMethod = PaymentMethod::where('name', 'Paystack')->firstOrFail();
 
-                    $paymentData = [
-                        'user_id' => $user->id,
-                        'amount' => $transaction->data->amount / 100, // Convert kobo to Naira
-                        'payment_method' => 'Paystack',
-                        'payment_status' => 'Successful',
-                        'transaction_id' => $transaction->data->reference,
-                        'payment_method_id' => $paymentMethodId,
-                    ];
+                $paymentData = [
+                    'user_id' => $user->id,
+                    'amount' => $transaction->data->amount / 100, // Convert kobo to Naira
+                    'payment_method' => 'Paystack',
+                    'payment_status' => 'Successful',
+                    'transaction_id' => $transaction->data->reference,
+                    'payment_method_id' => $paymentMethod->id,
+                ];
 
-                    $payment = Payment::create($paymentData);
+                $payment = Payment::create($paymentData);
+                $application->update(['payment_id' => $payment->id]);
 
-                    if ($application) {
-                        $application->update(['payment_id' => $payment->id]);
-                    }
-                    Mail::to($user->email)->send(new ApplicationStatusMail($user, $application, $payment));
-                    $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
+                DB::commit();
 
-                    return view('student.payment.success', [
-                        'user' => $user,
-                        'application' => $application,
-                        'payment' => $payment,
-                        'barcodeUrl' => $barcodeUrl
-                    ]);
-                } else {
-                    $userSlug = optional(auth()->user())->nameSlug;
-                    return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-                        ->withErrors('Payment was not successful. Please try again.');
-                }
+                // Send email after transaction is committed
+                Mail::to($user->email)->send(new ApplicationStatusMail($user, $application, $payment));
+
+                $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
+
+                return view('student.payment.success', [
+                    'user' => $user,
+                    'application' => $application,
+                    'payment' => $payment,
+                    'barcodeUrl' => $barcodeUrl
+                ]);
             } else {
                 // Handle declined transaction
-                $userSlug = optional(auth()->user())->nameSlug;
-                
+                DB::rollBack();
+                $userSlug = auth()->user()->nameSlug ?? null;
                 return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
                     ->withErrors('Payment was declined: ' . $transaction->data->gateway_response);
             }
+        } catch (\Yabacon\Paystack\Exception\ApiException $e) {
+            DB::rollBack();
+            Log::error('Paystack API Error', ['message' => $e->getMessage()]);
+            return $this->handlePaymentError('An error occurred while verifying the payment.');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            DB::rollBack();
+            Log::error('Model Not Found', ['message' => $e->getMessage()]);
+            return $this->handlePaymentError('User or application not found.');
         } catch (\Exception $e) {
             DB::rollBack();
-            $userSlug = optional(auth()->user())->nameSlug;
-            Log::error('Error processing payment', ['message' => $e->getMessage()]);
-            return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-                ->withErrors('An error occurred while processing the payment. Please try again.');
+            Log::error('General Error', ['message' => $e->getMessage()]);
+            return $this->handlePaymentError('An unexpected error occurred. Please try again.');
         }
+    }
+
+    private function handlePaymentError($message)
+    {
+        $userSlug = auth()->user()->nameSlug ?? null;
+        return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
+            ->withErrors($message);
     }
 
 
