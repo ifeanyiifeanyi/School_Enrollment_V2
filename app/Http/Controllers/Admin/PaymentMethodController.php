@@ -134,7 +134,7 @@ class PaymentMethodController extends Controller
                     ->orWhere('transaction_id', 'LIKE', "%{$search}%");
             })
             ->orWhere('transaction_id', 'LIKE', "%{$search}%")
-            ->latest();
+            ->latest()->simplePaginate();
 
         return view('admin.paymentMethod.studentPaymentManager', compact('payments', 'search', 'payment_count'));
     }
