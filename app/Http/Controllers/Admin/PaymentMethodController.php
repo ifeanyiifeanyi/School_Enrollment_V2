@@ -121,18 +121,11 @@ class PaymentMethodController extends Controller
     }
 
 
-    // public function studentApplicationPayment()
-    // {
-
-    //     $payments = Payment::with('user', 'application')->simplePaginate(100);
-    //     // dd($payments);
-    //     return view('admin.paymentMethod.studentPaymentManager', compact('payments'));
-    // }
 
     public function studentApplicationPayment(Request $request)
     {
         $search = $request->input('search');
-// dd(Payment::with('user.student')->get());
+        $payment_count = Payment::count();
         $payments = Payment::with('user.student', 'application')
             ->whereHas('user', function ($query) use ($search) {
                 $query->where('first_name', 'LIKE', "%{$search}%")
@@ -141,9 +134,9 @@ class PaymentMethodController extends Controller
                     ->orWhere('transaction_id', 'LIKE', "%{$search}%");
             })
             ->orWhere('transaction_id', 'LIKE', "%{$search}%")
-            ->simplePaginate(100);
+            ->simplePaginate(300);
 
-        return view('admin.paymentMethod.studentPaymentManager', compact('payments', 'search'));
+        return view('admin.paymentMethod.studentPaymentManager', compact('payments', 'search', 'payment_count'));
     }
     public function exportPayments()
     {

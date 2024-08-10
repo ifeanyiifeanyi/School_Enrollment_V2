@@ -13,7 +13,11 @@
             <div class="section-header">
                 <h1>@yield('title')</h1>
             </div>
-
+<div class="card">
+    <div class="card-body">
+        <h3>Total number of payment: <span class="badge badge-info">{{ $payment_count }}</span></h3>
+    </div>
+</div>
             <div class="section-body">
                 <div class="p-3 shadow card">
                     <div class="float-left pb-1">
