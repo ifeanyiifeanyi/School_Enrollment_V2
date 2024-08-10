@@ -18,7 +18,7 @@
                 <a navigate:wire
                     class="bg-primary text-light nav-link {{ request()->routeIs('admin.student.application') ? 'active' : '' }}"
                     href="{{ route('admin.student.application') }}"><i class="fas fa-graduation-cap"></i>
-                    <span>Active Applications
+                    <span>Applications
                         <span style="border-radius: 50px !important;color: white !important"
                             class="p-1 shadow bg-danger text-light">{{ $countapp ?? '0' }}</span>
                     </span>
@@ -66,7 +66,7 @@
             </li>
 
             <li
-                class="dropdown {{ request()->routeIs('admin.unverified.student') ||request()->routeIs('admin.student.management') || request()->routeIs('admin.student.application') || request()->routeIs('admin.student.applicationRef') ? 'parent' : '' }}">
+                class="dropdown {{ request()->routeIs('admin.unverified.student') || request()->routeIs('admin.student.management') || request()->routeIs('admin.student.application') || request()->routeIs('admin.student.applicationRef') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i><span>Student
                         Management</span></a>
                 <ul class="dropdown-menu">
@@ -111,9 +111,8 @@
                             href="{{ route('admin.payment.manage') }}">Create Payment</a>
                     </li>
                     <li>
-                        <a navigate:wire
-                            class="nav-link {{ request()->routeIs('admin.studentApplication.payment') ? 'active' : '' }}"
-                            href="{{ route('admin.studentApplication.payment') }}">Payments</a>
+<a navigate:wire class="nav-link {{ request()->routeIs('admin.studentApplication.payment') ? 'active' : '' }}"
+    href="{{ route("admin.studentApplication.payment") }}">Payments</a>
                     </li>
                 </ul>
             </li>
@@ -129,7 +128,8 @@
             </li>
 
             <li class="dropdown {{ request()->routeIs('admin.exam.notification') ? 'parent' : '' }}">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-bell"></i><span>Notifications</span></a>
+                <a href="#" class="nav-link has-dropdown"><i
+                        class="fas fa-bell"></i><span>Notifications</span></a>
                 <ul class="dropdown-menu">
                     <li><a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.exam.notification') ? 'active' : '' }}"
@@ -160,7 +160,7 @@
                         <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.scholarship.applicants') ? 'active' : '' }}"
                             href="{{ route('admin.scholarship.applicants') }}">
-                           Active Applications
+                            Active Applications
                         </a>
                     </li>
                 </ul>
@@ -181,7 +181,8 @@
                     <li><a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.create.permission') ? 'active' : '' }}"
                             href="{{ route('admin.create.permission') }}">Create Permission</a></li>
-                    <li><a navigate:wire class="nav-link {{ request()->routeIs('admin.create.role') ? 'active' : '' }}"
+                    <li><a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.create.role') ? 'active' : '' }}"
                             href="{{ route('admin.create.role') }}">Create Roles</a></li>
                     <li><a navigate:wire class="nav-link {{ request()->routeIs('admin.view.role') ? 'active' : '' }}"
                             href="{{ route('admin.view.role') }}">View Roles</a></li>

@@ -207,7 +207,7 @@ class StudentManagementController extends Controller
             // Update the application
             $application->update([
                 'payment_id' => $payment->id,
-                'admission_status' => 'approved'
+                'admission_status' => 'pending'
             ]);
         });
 
@@ -266,6 +266,27 @@ class StudentManagementController extends Controller
 
         return redirect()->back()->with('success', 'Application rejected and deleted');
     }
+
+    public function denyApplication(Application $application)
+    {
+        // dd($application->user->student);
+        if ($application->admission_status === 'approved') {
+            $application->update(['admission_status' => 'pending']);
+
+
+
+            return redirect()->back()->with([
+                'message' => 'Application Status has been reset',
+                'alert-type' => 'success'
+            ]);
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Cannot deny an approved application',
+            'alert-type' => 'error'
+        ]);
+    }
+
 
 
 
@@ -349,35 +370,6 @@ class StudentManagementController extends Controller
         return Excel::download(new ApplicationsExport($departmentId), 'applications.xlsx');
     }
 
-
-
-    // public function import(Request $request)
-    // {
-    //     $request->validate([
-    //         'file' => 'required|file|mimes:xlsx,xls',
-    //     ]);
-
-    //     $file = $request->file('file');
-
-    //     try {
-    //         Excel::import(new ApplicationsImport, $file);
-    //         $notification = [
-    //             'message' => 'File Import Was Successful!!',
-    //             'alert-type' => 'success'
-    //         ];
-    //     } catch (\Exception $e) {
-    //         // Log the error if needed
-    //         Log::error('Error during file import: ' . $e->getMessage());
-
-    //         // Set the error notification message
-    //         $notification = [
-    //             'message' => 'Error during file import: ' . $e->getMessage(),
-    //             'alert-type' => 'danger'
-    //         ];
-    //     }
-
-    //     return redirect()->back()->with($notification);
-    // }
 
     public function import(Request $request)
     {

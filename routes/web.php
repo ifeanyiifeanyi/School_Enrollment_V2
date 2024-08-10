@@ -186,9 +186,11 @@ Route::middleware(['cors'])->group(function () {
 
                 // this portion is for manually managing application status
                 Route::get('pending-approvals', 'pendingApprovals')->name('admin.pending.approvals');
-                Route::post('/admin/approve-application/{application}',  'approveApplication')->name('admin.approve.application');
-                Route::post('/admin/reject-application/{application}',  'rejectApplication')->name('admin.reject.application');
-                Route::get('/admin/search-pending-approvals',  'searchPendingApprovals')->name('admin.search.pending.approvals');
+                Route::post('approve-application/{application}',  'approveApplication')->name('admin.approve.application');
+                Route::post('reject-application/{application}',  'rejectApplication')->name('admin.reject.application');
+                Route::get('search-pending-approvals',  'searchPendingApprovals')->name('admin.search.pending.approvals');
+
+                Route::put('deny-application/{application}', 'denyApplication')->name('admin.deny.application');
 
             });
         });
@@ -200,8 +202,10 @@ Route::middleware(['cors'])->group(function () {
                 Route::post('payment-method-manager', 'store')->name('admin.payment.store');
                 Route::patch('payment-method-manage/{id}', 'update')->name('admin.payment.update');
                 Route::get('payment-method-del/{id}', 'destroy')->name('admin.payment.destroy');
-                Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
 
+    Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
+
+                Route::post('/student-application-payment', 'studentApplicationPayment')->name('admin.studentApplicationPayment');
                 Route::get('export-payments', 'exportPayments')->name('admin.export.payments');
             });
         });

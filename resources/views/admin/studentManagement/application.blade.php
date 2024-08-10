@@ -137,44 +137,44 @@
         }
 
 
-            .search-container {
-                position: relative;
-                width: 100%;
-                margin: 20px 0;
-                text-align: center
-            }
+        .search-container {
+            position: relative;
+            width: 100%;
+            margin: 20px 0;
+            text-align: center
+        }
 
-            .search-input {
-                width: 80%;
-                padding: 15px 20px 15px 45px;
-                font-size: 18px;
-                line-height: 1.5;
-                color: #333;
-                background-color: #f8f9fa;
-                border: 2px solid #e9ecef;
-                border-radius: 30px;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
+        .search-input {
+            width: 80%;
+            padding: 15px 20px 15px 45px;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-            .search-input:focus {
-                outline: none;
-                border-color: #007bff;
-                box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-            }
+        .search-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
 
-            .search-input::placeholder {
-                color: #6c757d;
-            }
+        .search-input::placeholder {
+            color: #6c757d;
+        }
 
-            .search-icon {
-                position: absolute;
-                top: 50%;
-                left: 12%;
-                transform: translateY(-50%);
-                color: #6c757d;
-                font-size: 18px;
-            }
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 12%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 18px;
+        }
     </style>
 @endsection
 
@@ -282,6 +282,15 @@
                                                     <span class="badge bg-danger text-light">Denied <i
                                                             class="fa fa-times"></i></span>
                                                 @elseif ($ap->admission_status == 'approved')
+                                                {{-- // deny the admission set to pending --}}
+                                                    <form onsubmit="return confirm('Are you sure of this action ?')" action="{{ route('admin.deny.application', $ap->id) }}"
+                                                        method="POST" style="display:inline;">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit" class="btn btn-danger">Deny</button>
+                                                    </form>
+
+
                                                     <span class="badge bg-success text-light">Approved <i
                                                             class="fa fa-check"></i></span>
                                                 @endif

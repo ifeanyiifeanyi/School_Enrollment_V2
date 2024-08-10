@@ -121,12 +121,29 @@ class PaymentMethodController extends Controller
     }
 
 
-    public function studentApplicationPayment()
-    {
+    // public function studentApplicationPayment()
+    // {
 
-        $payments = Payment::with('user', 'application')->simplePaginate('100');
-        // dd($payments);
-        return view('admin.paymentMethod.studentPaymentManager', compact('payments'));
+    //     $payments = Payment::with('user', 'application')->simplePaginate(100);
+    //     // dd($payments);
+    //     return view('admin.paymentMethod.studentPaymentManager', compact('payments'));
+    // }
+
+    public function studentApplicationPayment(Request $request)
+    {
+        $search = $request->input('search');
+// dd(Payment::with('user.student')->get());
+        $payments = Payment::with('user.student', 'application')
+            ->whereHas('user', function ($query) use ($search) {
+                $query->where('first_name', 'LIKE', "%{$search}%")
+                    ->orWhere('last_name', 'LIKE', "%{$search}%")
+                    ->orWhere('other_names', 'LIKE', "%{$search}%")
+                    ->orWhere('transaction_id', 'LIKE', "%{$search}%");
+            })
+            ->orWhere('transaction_id', 'LIKE', "%{$search}%")
+            ->simplePaginate(100);
+
+        return view('admin.paymentMethod.studentPaymentManager', compact('payments', 'search'));
     }
     public function exportPayments()
     {

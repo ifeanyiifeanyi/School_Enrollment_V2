@@ -78,7 +78,7 @@
                                 <li class="text-danger">All fields marked with <q><span class="text-danger">*</span></q> are required.</li>
                                 <li class="text-danger">Ensure you write your names correctly as you have it on <b>JAMB</b>.</li>
                                 <li>Please provide accurate and up-to-date information to avoid delays or rejection of your application.</li>
-                                <li>Have all necessary documents ready for upload in PDF or image format (max 2MB each).</li>
+                                <li>Have all necessary documents ready for upload in  image format (max 2MB each).</li>
                                 <li>Make sure to review your application thoroughly before submission.</li>
                                 <li>Recent photograph (taken within the last 6 months)</li>
                                 <li>Colored photograph with a white background</li>
