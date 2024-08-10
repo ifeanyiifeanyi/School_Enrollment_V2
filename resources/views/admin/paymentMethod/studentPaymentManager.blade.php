@@ -49,6 +49,7 @@
                                     <th>Payment Type</th>
                                     <th>Invoice No.</th>
                                     <th>Status</th>
+                                    <th>Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,6 +72,7 @@
                                                 <p class="badge badge-danger">Error! <i class="fas fa-user-slash"></i></p>
                                             @endif
                                         </td>
+                                        <th>{{ $payment->created_at }}</th>
                                     </tr>
                                 @endforeach
                             </tbody>
