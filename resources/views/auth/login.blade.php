@@ -52,9 +52,13 @@
                         @if (session('status'))
                             <div class="m-3 alert alert-danger">
                                 <ul>
-                                    @foreach (session('status') as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
+                                    @if (is_array(session('status')))
+                                        @foreach (session('status') as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    @else
+                                        <li>{{ session('status') }}</li>
+                                    @endif
                                 </ul>
                             </div>
                         @endif
@@ -92,25 +96,24 @@
                                 </div>
                                 <div class="row">
 
-                                <div class="col-md-12">
+                                    <div class="col-md-12">
 
-                                    <div class="form-group">
+                                        <div class="form-group">
 
-                                        {{-- <strong>ReCaptcha:</strong> --}}
+                                            {{-- <strong>ReCaptcha:</strong> --}}
 
-                                        <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+                                            <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
 
-                                        @if ($errors->has('g-recaptcha-response'))
+                                            @if ($errors->has('g-recaptcha-response'))
+                                                <span
+                                                    class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
+                                            @endif
 
-                                            <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
-
-                                        @endif
+                                        </div>
 
                                     </div>
 
                                 </div>
-
-                            </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" name="remember" class="custom-control-input" tabindex="3"
@@ -119,7 +122,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-danger btn-lg btn-block" style="background: #ef2e4b" tabindex="4">
+                                    <button type="submit" class="btn btn-danger btn-lg btn-block"
+                                        style="background: #ef2e4b" tabindex="4">
                                         Login
                                     </button>
                                 </div>
@@ -137,29 +141,27 @@
 @endsection
 
 @section('js')
-<script type="text/javascript">
+    <script type="text/javascript">
+        // $('#contactUSForm').submit(function(event) {
 
-    // $('#contactUSForm').submit(function(event) {
-
-    //     event.preventDefault();
-
+        //     event.preventDefault();
 
 
-    //     grecaptcha.ready(function() {
 
-    //         grecaptcha.execute("{{ env('GOOGLE_RECAPTCHA_KEY') }}", {action: 'subscribe_newsletter'}).then(function(token) {
+        //     grecaptcha.ready(function() {
 
-    //             $('#contactUSForm').prepend('<input type="hidden" name="g-recaptcha-response" value="' + token + '">');
+        //         grecaptcha.execute("{{ env('GOOGLE_RECAPTCHA_KEY') }}", {action: 'subscribe_newsletter'}).then(function(token) {
 
-    //             $('#contactUSForm').unbind('submit').submit();
+        //             $('#contactUSForm').prepend('<input type="hidden" name="g-recaptcha-response" value="' + token + '">');
 
-    //         });;
+        //             $('#contactUSForm').unbind('submit').submit();
 
-    //     });
+        //         });;
 
-    // });
+        //     });
 
-</script>
+        // });
+    </script>
 
 
 @endsection

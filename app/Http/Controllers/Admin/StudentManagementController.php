@@ -61,6 +61,31 @@ class StudentManagementController extends Controller
         ));
     }
 
+    // public function search(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $query = $request->get('query');
+    //         $students = User::with(['applications' => function ($query) {
+    //             $query->select('applications.*', 'departments.name as department_name')
+    //                 ->join('departments', 'applications.department_id', '=', 'departments.id');
+    //         }])
+    //             ->where('role', 'student')
+    //             ->where(function ($q) use ($query) {
+    //                 $q->where('first_name', 'LIKE', "%{$query}%")
+    //                     ->orWhere('last_name', 'LIKE', "%{$query}%")
+    //                     ->orWhere('other_names', 'LIKE', "%{$query}%")
+    //                     ->orWhereHas('student', function ($subQuery) use ($query) {
+    //                         $subQuery->where('phone', 'LIKE', "%{$query}%");
+    //                     });
+    //             })
+    //             ->orderBy('created_at', 'desc')
+    //             ->get();
+
+    //         return response()->json(view('admin.partials.studentTableBody', compact('students'))->render());
+    //     }
+    // }
+
+
     public function search(Request $request)
     {
         if ($request->ajax()) {
@@ -74,6 +99,7 @@ class StudentManagementController extends Controller
                     $q->where('first_name', 'LIKE', "%{$query}%")
                         ->orWhere('last_name', 'LIKE', "%{$query}%")
                         ->orWhere('other_names', 'LIKE', "%{$query}%")
+                        ->orWhereRaw("CONCAT(IFNULL(first_name, ''), ' ', IFNULL(last_name, ''), ' ', IFNULL(other_names, '')) LIKE ?", ["%{$query}%"])
                         ->orWhereHas('student', function ($subQuery) use ($query) {
                             $subQuery->where('phone', 'LIKE', "%{$query}%");
                         });
@@ -294,18 +320,44 @@ class StudentManagementController extends Controller
 
 
 
+    // public function ApplicationSearch(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $query = $request->get('query');
+    //         $applications = Application::with(['user.student', 'department', 'academicSession'])
+    //             ->whereHas('user', function ($q) use ($query) {
+    //                 $q->where('first_name', 'LIKE', "%{$query}%")
+    //                     ->orWhere('last_name', 'LIKE', "%{$query}%");
+    //             })
+    //             ->orWhereHas('user.student', function ($q) use ($query) {
+    //                 $q->where('phone', 'LIKE', "%{$query}%")
+    //                     ->orWhere('application_unique_number', 'LIKE', "%{$query}%");
+    //             })
+    //             ->whereNotNull('payment_id')
+    //             ->where('payment_id', '!=', '')
+    //             ->orderBy('created_at', 'desc')
+    //             ->paginate(100);
+
+    //         return response()->json(view('admin.partials.applicationTableBody', compact('applications'))->render());
+    //     }
+    // }
+
     public function ApplicationSearch(Request $request)
     {
         if ($request->ajax()) {
             $query = $request->get('query');
             $applications = Application::with(['user.student', 'department', 'academicSession'])
-                ->whereHas('user', function ($q) use ($query) {
-                    $q->where('first_name', 'LIKE', "%{$query}%")
-                        ->orWhere('last_name', 'LIKE', "%{$query}%");
-                })
-                ->orWhereHas('user.student', function ($q) use ($query) {
-                    $q->where('phone', 'LIKE', "%{$query}%")
-                        ->orWhere('application_unique_number', 'LIKE', "%{$query}%");
+                ->where(function ($q) use ($query) {
+                    $q->whereHas('user', function ($subQ) use ($query) {
+                        $subQ->where('first_name', 'LIKE', "%{$query}%")
+                            ->orWhere('last_name', 'LIKE', "%{$query}%")
+                            ->orWhere('other_names', 'LIKE', "%{$query}%")
+                            ->orWhereRaw("CONCAT(IFNULL(first_name, ''), ' ', IFNULL(last_name, ''), ' ', IFNULL(other_names, '')) LIKE ?", ["%{$query}%"]);
+                    })
+                        ->orWhereHas('user.student', function ($subQ) use ($query) {
+                            $subQ->where('phone', 'LIKE', "%{$query}%")
+                                ->orWhere('application_unique_number', 'LIKE', "%{$query}%");
+                        });
                 })
                 ->whereNotNull('payment_id')
                 ->where('payment_id', '!=', '')
