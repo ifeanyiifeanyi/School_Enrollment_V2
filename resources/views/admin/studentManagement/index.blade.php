@@ -249,7 +249,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center">
-                        {{ $students->links() }}
+                        {{-- {{ $students->links() }} --}}
+                        {!! $students->links('pagination::bootstrap-4') !!}
                     </div>
                 </div>
             </div>

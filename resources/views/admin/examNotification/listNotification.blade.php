@@ -35,13 +35,13 @@
                         <div class="container-fluid">
                             <div class="mx-auto">
                                 @forelse ($examNotifications as $examNotification)
-                                    <div class="card shadow">
+                                    <div class="shadow card">
                                         <div class="card-body">
                                             <p>{{ $loop->iteration }}</p>
-                                            <p class="text-muted mb-2">Notification For: <span class="text-primary">
+                                            <p class="mb-2 text-muted">Notification For: <span class="text-primary">
                                                     {{ Str::title($examNotification->department->name ?? 'Loading ...') }}</span>
                                             </p>
-                                            <button class="btn btn-sm btn-primary shadow" data-toggle="modal"
+                                            <button class="shadow btn btn-sm btn-primary" data-toggle="modal"
                                                 data-target="#notificationModal"
                                                 data-id="{{ $examNotification->id }}">
                                                 <i class="fas fa-book-reader"></i>
@@ -56,7 +56,8 @@
                                     <div class="alert alert-danger">No Notification At The Moment</div>
                                 @endforelse
                                 <div class="card-body">
-                                    {{ $examNotifications->links() }}
+                                    {{-- {{ $examNotifications->links() }} --}}
+                                    {!! $examNotifications->links('pagination::bootstrap-4') !!}
                                 </div>
                             </div>
                         </div>

@@ -304,7 +304,8 @@
                             </table>
                         </div>
                         <div class="text-center paginate">
-                            {{ $applications->links() }}
+                            {{-- {{ $applications->links() }} --}}
+                            {!! $applications->links('pagination::bootstrap-4') !!}
                         </div>
                     </div>
 

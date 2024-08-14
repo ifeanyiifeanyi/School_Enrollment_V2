@@ -196,7 +196,8 @@
                                     @endforelse
                                 </div>
                                 <div class="mt-4 d-flex justify-content-center">
-                                    {{ $faculties->links() }}
+                                    {{-- {{ $faculties->links() }} --}}
+                                    {!! $faculties->links('pagination::bootstrap-4') !!}
                                 </div>
                             </div>
                         </div>

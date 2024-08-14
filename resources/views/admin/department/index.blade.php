@@ -56,7 +56,7 @@
 
                                             <td>
                                                 <p class="text-muted">{{ Str::title($department->name) }}</p>
-                                                
+
                                             </td>
                                             <td>
                                                 <p class="text-muted">{{ Str::title($department->faculty->name) }}</p>
@@ -80,7 +80,8 @@
                                         @endforelse
                                     </tbody>
                                 </table>
-                                {{ $departments->links() }}
+                                {{-- {{ $departments->links() }} --}}
+                                {!! $departments->links('pagination::bootstrap-4') !!}
                             </div>
                         </div>
                     </div>

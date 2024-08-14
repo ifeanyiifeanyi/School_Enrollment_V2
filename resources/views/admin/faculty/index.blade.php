@@ -70,7 +70,8 @@
                   </tbody>
                 </table>
               </div>
-              {{ $faculties->links() }}
+              {{-- {{ $faculties->links() }} --}}
+              {!! $faculties->links('pagination::bootstrap-4') !!}
             </div>
           </div>
         </div>

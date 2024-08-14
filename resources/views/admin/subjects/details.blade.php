@@ -37,7 +37,7 @@
                             <div class="table-responsive">
                                 <table class="table table-striped" id="table-2">
                                     <tr>
-                                        <th class="text-center pt-2" style="width: 12px">
+                                        <th class="pt-2 text-center" style="width: 12px">
                                             <div class="custom-checkbox custom-checkbox-table custom-control">
                                                 <input type="checkbox" data-checkboxes="mygroup"
                                                     data-checkbox-role="dad" class="custom-control-input"
@@ -78,7 +78,10 @@
 
                                 </table>
                             </div>
-                            <div class="mt-5">{{ $exams->links() }}</div>
+                            <div class="mt-5">
+                                {{-- {{ $exams->links() }} --}}
+                                {!! $exams->links('pagination::bootstrap-4') !!}
+                            </div>
                         </div>
                     </div>
                 </div>

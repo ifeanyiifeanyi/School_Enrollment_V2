@@ -95,7 +95,7 @@
         </div>
 
         <div class="section-body">
-            <div class="card mt-4 shadow">
+            <div class="mt-4 shadow card">
                 <div class="card-header">
                     <h4 class="card-title">Existing Roles</h4>
                 </div>
@@ -116,7 +116,8 @@
                             </li>
                         @endforeach
                     </ul>
-                {{ $roles->links() }}
+                {{-- {{ $roles->links() }} --}}
+                {!! $roles->links('pagination::bootstrap-4') !!}
                 </div>
             </div>
 

@@ -28,7 +28,7 @@
         <div class="section-body">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card permission-card shadow">
+                    <div class="shadow card permission-card">
                         <div class="card-header">
                             <h4 class="card-title">Permissions and Their Roles</h4>
                         </div>
@@ -48,7 +48,8 @@
                                 </div>
                                 <hr>
                             @endforeach
-                            {{ $permissions->links() }}
+                            {{-- {{ $permissions->links() }} --}}
+                            {!! $permissions->links('pagination::bootstrap-4') !!}
                         </div>
                     </div>
                 </div>

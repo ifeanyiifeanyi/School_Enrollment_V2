@@ -80,7 +80,8 @@
                     </div>
                 </div>
                 <div class="text-center pagination paginate d-flex justify-content-center">
-                    {{ $payments->links() }}
+                    {{-- {{ $payments->links() }} --}}
+                    {!! $payments->links('pagination::bootstrap-4') !!}
                 </div>
             </div>
     </div>
