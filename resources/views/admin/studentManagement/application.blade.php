@@ -251,6 +251,7 @@
                                     <tr>
                                         <th style="width: 20px">s/n</th>
                                         <th style="width: auto !important">Student</th>
+                                        <th style="width: auto !important">Phone Number</th>
                                         <th>Application No.</th>
                                         <th>Department</th>
                                         <th>Session</th>
@@ -258,6 +259,7 @@
                                         <th>Admission</th>
                                     </tr>
                                 </thead>
+                                {{-- @dd($applications) --}}
                                 <tbody id="applicationTableBody">
                                     @forelse ($applications as $ap)
                                         <tr>
@@ -268,6 +270,9 @@
                                                     <a href="{{ route('admin.show.student', $ap->user->nameSlug) }}"
                                                         class="mt-2 link">Details</a>
                                                 </p>
+                                            </td>
+                                            <td>
+                                                <p>{{ $ap->user->student->phone }}</p>
                                             </td>
                                             <td>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</td>
                                             <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
