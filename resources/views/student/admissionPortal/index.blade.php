@@ -190,7 +190,7 @@
                                     <label for="phone">Phone Number <span class="text-danger">*</span></label>
                                     <input name="phone" type="tel"
                                         class="form-control @error('phone') border-danger @enderror" id="phone"
-                                        placeholder="Enter Phone Number"
+                                        placeholder="Example. 08012345678"
                                         value="{{ old('phone', auth()->user()->student->phone ?? '') }}">
                                     @error('phone')
                                         <span class="text-danger">{{ $message }}</span>
