@@ -200,6 +200,9 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('search-pending-approvals',  'searchPendingApprovals')->name('admin.search.pending.approvals');
 
                 Route::put('deny-application/{application}', 'denyApplication')->name('admin.deny.application');
+                Route::post('applications/bulk-action', 'bulkAction')->name('admin.bulk.action');
+                Route::put('applications/{application}/approve', 'approveApplicationSingle')->name('admin.approve.application');
+                // Route::put('applications/{application}/deny', 'denyApplication')->name('admin.deny.application');
             });
 
             Route::controller(AcceptanceFeeManagerController::class)->group(function () {

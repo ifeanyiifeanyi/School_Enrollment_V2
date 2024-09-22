@@ -23,6 +23,7 @@ use App\Mail\ApplicationRejectedMail;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\ApplicationApprovedMailAdmin;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use App\Mail\AdmissionStatusUpdated;
 
 class StudentManagementController extends Controller
 {
@@ -293,54 +294,91 @@ class StudentManagementController extends Controller
         return redirect()->back()->with('success', 'Application rejected and deleted');
     }
 
+
+    // bulk action for approved/pending
+    public function bulkAction(Request $request)
+    {
+        $ids = $request->input('ids');
+        $action = $request->input('action');
+
+        $applications = Application::whereIn('id', $ids)->get();
+
+        foreach ($applications as $application) {
+            if ($action === 'approve' && $application->admission_status !== 'approved') {
+                $application->update(['admission_status' => 'approved']);
+                $this->sendStatusUpdateEmail($application);
+            } elseif ($action === 'pending' && $application->admission_status !== 'pending') {
+                $application->update(['admission_status' => 'pending']);
+                $this->sendStatusUpdateEmail($application);
+            }
+        }
+
+        return response()->json(['message' => 'Applications updated successfully']);
+    }
+    // HERE WE DENY APPROVED APPLICATIONS(singular)
+    // public function denyApplication(Application $application)
+    // {
+    //     // dd($application->user->student);
+    //     if ($application->admission_status == 'approved') {
+    //         $application->update(['admission_status' => 'pending']);
+
+
+
+    //         return redirect()->back()->with([
+    //             'message' => 'Application Status has been reset',
+    //             'alert-type' => 'success'
+    //         ]);
+    //     }
+
+    //     return redirect()->back()->with([
+    //         'message' => 'Cannot deny an approved application',
+    //         'alert-type' => 'error'
+    //     ]);
+    // }
+
     public function denyApplication(Application $application)
     {
-        // dd($application->user->student);
-        if ($application->admission_status === 'approved') {
+        if ($application->admission_status !== 'pending') {
             $application->update(['admission_status' => 'pending']);
-
-
+            $this->sendStatusUpdateEmail($application);
 
             return redirect()->back()->with([
-                'message' => 'Application Status has been reset',
+                'message' => 'Application Status has been reset to Pending',
                 'alert-type' => 'success'
             ]);
         }
 
         return redirect()->back()->with([
-            'message' => 'Cannot deny an approved application',
-            'alert-type' => 'error'
+            'message' => 'Application is already pending',
+            'alert-type' => 'info'
         ]);
     }
 
+    // HERE WE SET APPROVED APPLICATIONS(singular)
+    public function approveApplicationSingle(Application $application)
+    {
+        if ($application->admission_status !== 'approved') {
+            $application->update(['admission_status' => 'approved']);
+            $this->sendStatusUpdateEmail($application);
+
+            return redirect()->back()->with([
+                'message' => 'Application Status has been updated to Approved',
+                'alert-type' => 'success'
+            ]);
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Application is already approved',
+            'alert-type' => 'info'
+        ]);
+    }
+
+    private function sendStatusUpdateEmail(Application $application)
+    {
+        Mail::to($application->user->email)->send(new AdmissionStatusUpdated($application->user->student, $application));
+    }
 
 
-
-
-
-
-
-    // public function ApplicationSearch(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         $query = $request->get('query');
-    //         $applications = Application::with(['user.student', 'department', 'academicSession'])
-    //             ->whereHas('user', function ($q) use ($query) {
-    //                 $q->where('first_name', 'LIKE', "%{$query}%")
-    //                     ->orWhere('last_name', 'LIKE', "%{$query}%");
-    //             })
-    //             ->orWhereHas('user.student', function ($q) use ($query) {
-    //                 $q->where('phone', 'LIKE', "%{$query}%")
-    //                     ->orWhere('application_unique_number', 'LIKE', "%{$query}%");
-    //             })
-    //             ->whereNotNull('payment_id')
-    //             ->where('payment_id', '!=', '')
-    //             ->orderBy('created_at', 'desc')
-    //             ->paginate(100);
-
-    //         return response()->json(view('admin.partials.applicationTableBody', compact('applications'))->render());
-    //     }
-    // }
 
     public function ApplicationSearch(Request $request)
     {
@@ -437,6 +475,13 @@ class StudentManagementController extends Controller
 
             // Check for errors from the import process
             $errors = $import->getErrors();
+
+            if (!empty($errors)) {
+                session()->flash('import_errors', $errors);
+            } else {
+                session()->flash('success', 'Import completed successfully.');
+            }
+
             if (!empty($errors)) {
                 $notification = [
                     'message' => 'Import completed with some errors: ' . implode(', ', $errors),

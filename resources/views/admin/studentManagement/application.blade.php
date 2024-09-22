@@ -4,6 +4,11 @@
 
 @section('css')
     <style>
+        .action-buttons {
+            display: flex;
+            justify-content: space-around;
+        }
+
         card {
             width: 100%;
         }
@@ -185,6 +190,22 @@
 
     <div class="main-content">
         @include('student.alert')
+        @if (session('import_errors'))
+            <div class="alert alert-danger">
+                <h4>Import Errors:</h4>
+                <ul>
+                    @foreach (session('import_errors') as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <section class="section">
             <div class="section-header">
                 <h1>@yield('title')</h1>
@@ -243,13 +264,20 @@
                         </div>
 
                         <div class="float-right pb-1">
-                            <a href="{{ route('admin.student.applications.export') }}" class="btn btn-success"
-                                id="exportButton">Export to Excel</a>
+                            <button onclick="return confirm('Are you sure of this APPROVE action ?')" id="bulkApprove"
+                                class="btn" style="background: blueviolet; color: white">Approve
+                                Selected</button>
+                            <button onclick="return confirm('Are you sure of this PENDING action ?')" id="bulkPending"
+                                class="btn" style="background: rgb(213, 45, 3); color:white">Set
+                                Selected to Pending</button>
+                            <a href="{{ route('admin.student.applications.export') }}" class="btn"
+                                style="background: rgb(227, 6, 150);color:white" id="exportButton">Export to Excel</a>
                         </div>
                         <div class="table-responsive">
                             <table id="" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th><input type="checkbox" id="selectAll"></th>
                                         <th style="width: 20px">s/n</th>
                                         <th style="width: auto !important">Student</th>
                                         <th style="width: auto !important">Phone Number</th>
@@ -258,12 +286,15 @@
                                         <th>Session</th>
                                         <th style="width: 20px">Exam</th>
                                         <th>Admission</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 {{-- @dd($applications) --}}
                                 <tbody id="applicationTableBody">
                                     @forelse ($applications as $ap)
                                         <tr>
+                                            <td><input type="checkbox" class="application-checkbox"
+                                                    value="{{ $ap->id }}"></td>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 {{ Str::title($ap->user->full_name) ?? 'N/A' }}
@@ -288,17 +319,33 @@
                                                     <span class="badge bg-danger text-light">Denied <i
                                                             class="fa fa-times"></i></span>
                                                 @elseif ($ap->admission_status == 'approved')
-                                                {{-- // deny the admission set to pending --}}
-                                                    <form onsubmit="return confirm('Are you sure of this action ?')" action="{{ route('admin.deny.application', $ap->id) }}"
-                                                        method="POST" style="display:inline;">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <button type="submit" class="btn btn-danger">Deny</button>
-                                                    </form>
-
-
                                                     <span class="badge bg-success text-light">Approved <i
                                                             class="fa fa-check"></i></span>
+                                                @endif
+                                            </td>
+
+                                            <td class="btn-group" style="display: flex;">
+                                                @if ($ap->admission_status == 'pending')
+                                                    <p>
+                                                    <form action="{{ route('admin.approve.application', $ap->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit" class="btn btn-sm btn-success"
+                                                            onclick="return confirm('Are you sure you want to approve this application?')">Approve</button>
+                                                    </form>
+                                                    </p>
+                                                @elseif ($ap->admission_status == 'approved')
+                                                    <p>
+                                                    <form action="{{ route('admin.deny.application', $ap->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <button type="submit" class="btn btn-sm btn-warning"
+                                                            onclick="return confirm('Are you sure you want to set this application to pending?')">Set
+                                                            Pending</button>
+                                                    </form>
+                                                    </p>
                                                 @endif
                                             </td>
                                         </tr>
@@ -332,7 +379,8 @@
                                 <li class="flex-wrap list-group-item d-flex ">
                                     Students who selected our university as their choice when writing JAMB.
                                 </li>
-                                <span class="mt-5 mr-2 badge badge-info badge-pill" style="width: 290px">DIRECT_ENTRY</span>
+                                <span class="mt-5 mr-2 badge badge-info badge-pill"
+                                    style="width: 290px">DIRECT_ENTRY</span>
                                 <li class="flex-wrap list-group-item d-flex ">
                                     Students who came to the school to purchase admission but did not add us in JAMB or
                                     change their institution.
@@ -353,6 +401,66 @@
 
 @section('js')
     {{-- <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script> --}}
+
+
+    <script>
+        $(document).ready(function() {
+            // Select All checkbox
+            $('#selectAll').click(function() {
+                $('.application-checkbox').prop('checked', this.checked);
+            });
+
+            // Bulk Approve
+            $('#bulkApprove').click(function() {
+                bulkAction('approve');
+
+            });
+
+            // Bulk Set to Pending
+            $('#bulkPending').click(function() {
+                bulkAction('pending');
+            });
+
+            function bulkAction(action) {
+                var selectedIds = $('.application-checkbox:checked').map(function() {
+                    return this.value;
+                }).get();
+
+                if (selectedIds.length === 0) {
+                    alert('Please select at least one application.');
+                    return;
+                }
+
+                $.ajax({
+                    url: "{{ route('admin.bulk.action') }}",
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        ids: selectedIds,
+                        action: action
+                    },
+                    success: function(response) {
+                        alert(response.message);
+                        location.reload();
+                    },
+                    error: function(xhr) {
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
+        });
+    </script>
+
+
+
+
+
+
+
+
+
+
+
     <script>
         $(document).ready(function() {
             $('#search').on('keyup', function() {
