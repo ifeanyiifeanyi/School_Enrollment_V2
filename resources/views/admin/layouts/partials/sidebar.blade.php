@@ -97,6 +97,12 @@
                             href="{{ route('admin.student.applicationRef') }}">Application REF
                         </a>
                     </li>
+                    <li>
+                        <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.acceptance_fees.index') ? 'active' : '' }}"
+                            href="{{ route('admin.acceptance_fees.index') }}">Acceptance Fee Manager
+                        </a>
+                    </li>
                 </ul>
             </li>
 

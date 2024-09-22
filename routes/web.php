@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AcademicSessionController;
+use App\Http\Controllers\Admin\AcceptanceFeeManagerController;
 use App\Http\Controllers\Student\BarcodeViewController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,7 @@ use App\Http\Controllers\Student\StudentAcceptanceFeeController;
 use App\Http\Controllers\Student\StudentAdmissionApplicationController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentProfileController;
+use App\Models\AdmissionAcceptanceManager;
 use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Artisan;
 
@@ -198,6 +200,12 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('search-pending-approvals',  'searchPendingApprovals')->name('admin.search.pending.approvals');
 
                 Route::put('deny-application/{application}', 'denyApplication')->name('admin.deny.application');
+            });
+
+            Route::controller(AcceptanceFeeManagerController::class)->group(function () {
+                Route::get('manage-acceptance-fees', 'index')->name('admin.acceptance_fees.index');
+                Route::get('/acceptance-fees/{acceptanceFee}', 'show')->name('admin.acceptance_fee.show');
+                Route::delete('/acceptance-fees/{acceptanceFee}', 'destroy')->name('admin.acceptance_fee.destroy');
             });
         });
 
