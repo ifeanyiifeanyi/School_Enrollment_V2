@@ -116,8 +116,8 @@
                         </tr>
 
                         <tr class="total">
-                            <td></td>
-                            <td>Total: ₦40, 450.00</td>
+
+                            <td colspan="2">Total: ₦40, 450.00</td>
                         </tr>
                     </table>
 
