@@ -62,9 +62,18 @@
                                                     </td>
                                                     <td>
                                                         @if ($acceptance->status == 'paid')
+                                                        <form action="{{ route('admin.acceptance_fee.approved_manually', $acceptance->id) }}" method="post">
+                                                            @csrf
+                                                            <button onclick="return confirm('Are sure of this action ?')" type="submit" class="btn btn-sm" style="background: blueviolet;color:white">Approve Payment</button>
+                                                        </form>
                                                             <button class="btn btn-sm btn-success">PAID</button>
                                                         @elseif($acceptance->status == 'pending')
                                                             <button class="btn btn-sm btn-waring">PENDING</button>
+                                                            <br>
+                                                            <form action="{{ route('admin.acceptance_fee.approved_manually', $acceptance->id) }}" method="post">
+                                                                @csrf
+                                                                <button onclick="return confirm('Are sure of this action ?')" type="submit" class="btn btn-sm" style="background: blueviolet">Approve Payment</button>
+                                                            </form>
                                                         @elseif($acceptance->status == 'expired')
                                                             <button class="btn btn-sm btn-danger">EXPIRED</button>
                                                         @endif

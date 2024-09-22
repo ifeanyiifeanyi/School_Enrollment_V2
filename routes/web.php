@@ -208,6 +208,7 @@ Route::middleware(['cors'])->group(function () {
             Route::controller(AcceptanceFeeManagerController::class)->group(function () {
                 Route::get('manage-acceptance-fees', 'index')->name('admin.acceptance_fees.index');
                 Route::get('/acceptance-fees/{acceptanceFee}', 'show')->name('admin.acceptance_fee.show');
+                Route::put('/acceptance-fees/{acceptanceFee}/approve', 'approvedManually')->name('admin.acceptance_fee.approved_manually');
                 Route::delete('/acceptance-fees/{acceptanceFee}', 'destroy')->name('admin.acceptance_fee.destroy');
             });
         });

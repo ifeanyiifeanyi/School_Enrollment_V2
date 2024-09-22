@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\AcceptanceFee;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\AcceptanceFee;
+use Illuminate\Support\Facades\DB;
+use App\Mail\AcceptanceFeePaidMail;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 class AcceptanceFeeManagerController extends Controller
 {
@@ -41,6 +46,43 @@ class AcceptanceFeeManagerController extends Controller
     public function show(AcceptanceFee $acceptanceFee)
     {
         return view('admin.acceptanceFees.show', compact('acceptanceFee'));
+    }
+
+    public function manualApproval(Request $request, $acceptanceFeeId)
+    {
+        try {
+            DB::beginTransaction();
+
+            $acceptanceFee = AcceptanceFee::findOrFail($acceptanceFeeId);
+            $user = User::findOrFail($acceptanceFee->user_id);
+
+            $acceptanceFee->update([
+                'status' => 'paid',
+                'paid_at' => now(),
+                // 'approved_by' => Auth::id(),
+            ]);
+
+            DB::commit();
+
+            // Send email notification
+            $this->sendAcceptanceFeePaidEmail($user, $acceptanceFee);
+
+            return redirect()->back()->with('success', 'Acceptance fee manually approved and email sent.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error manually approving acceptance fee', ['message' => $e->getMessage()]);
+            return redirect()->back()->withErrors('An error occurred while approving the acceptance fee.');
+        }
+    }
+
+    private function sendAcceptanceFeePaidEmail(User $user, AcceptanceFee $acceptanceFee)
+    {
+        try {
+            Mail::to($user->email)->send(new AcceptanceFeePaidMail($user, $acceptanceFee));
+        } catch (\Exception $e) {
+            Log::error('Error sending acceptance fee paid email', ['message' => $e->getMessage()]);
+            // Consider how you want to handle email sending failures
+        }
     }
 
 

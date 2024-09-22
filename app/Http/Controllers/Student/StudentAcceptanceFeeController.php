@@ -10,9 +10,11 @@ use Illuminate\Http\Request;
 use App\Models\AcceptanceFee;
 use App\Models\AcademicSession;
 use Illuminate\Support\Facades\DB;
+use App\Mail\AcceptanceFeePaidMail;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class StudentAcceptanceFeeController extends Controller
 {
@@ -115,6 +117,8 @@ class StudentAcceptanceFeeController extends Controller
                 DB::commit();
 
                 // You can add any additional logic here, like sending an email
+                $this->sendAcceptanceFeePaidEmail($user, $acceptanceFee);
+
 
                 return view('student.acceptance_fee.success', [
                     'user' => $user,
@@ -155,5 +159,15 @@ class StudentAcceptanceFeeController extends Controller
         }
 
         return view('student.acceptance_fee.receipt', compact('user', 'acceptanceFee'));
+    }
+
+    private function sendAcceptanceFeePaidEmail(User $user, AcceptanceFee $acceptanceFee)
+    {
+        try {
+            Mail::to($user->email)->send(new AcceptanceFeePaidMail($user, $acceptanceFee));
+        } catch (\Exception $e) {
+            Log::error('Error sending acceptance fee paid email', ['message' => $e->getMessage()]);
+            // Consider how you want to handle email sending failures
+        }
     }
 }
