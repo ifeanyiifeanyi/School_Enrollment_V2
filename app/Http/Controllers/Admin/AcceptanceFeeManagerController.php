@@ -10,7 +10,7 @@ class AcceptanceFeeManagerController extends Controller
 {
     /**
      * Display a listing of the resource.
-    */
+     */
 
     public function index(Request $request)
     {
@@ -43,27 +43,15 @@ class AcceptanceFeeManagerController extends Controller
         return view('admin.acceptanceFees.show', compact('acceptanceFee'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AcceptanceFee $acceptanceFee)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, AcceptanceFee $acceptanceFee)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(AcceptanceFee $acceptanceFee)
     {
-        //
+        $acceptanceFee->delete();
+
+        return redirect()->back()
+            ->with([
+                'alert-type' => 'success',
+                'message' => 'Acceptance fee record has been deleted successfully.',
+            ]);
     }
 }
