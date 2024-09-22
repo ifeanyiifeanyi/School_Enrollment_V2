@@ -33,7 +33,7 @@ class LoginRequest extends FormRequest
         return [
             'login' => ['required', 'string', 'max:255', new LoginCredentialRule],
             'password' => ['required', 'string'],
-            'g-recaptcha-response' => ['required', new ReCaptcha]
+            'g-recaptcha-response' => ['nullable', new ReCaptcha]
 
 
         ];

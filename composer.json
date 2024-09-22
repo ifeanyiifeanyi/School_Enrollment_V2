@@ -19,6 +19,7 @@
         "livewire/livewire": "^3.5",
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^11.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "yabacon/paystack-php": "^2.2"
     },
     "require-dev": {

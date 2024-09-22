@@ -78,5 +78,9 @@ class Kernel extends HttpKernel
         'check.application.status' => \App\Http\Middleware\CheckApplicationStatus::class,
         'cors' => \App\Http\Middleware\CorsMiddleware::class,
 
+        // this line is used to protect the receipt success page after payment
+        'success.receipt' => \App\Http\Middleware\AcceptanceReceiptSuccessfulPaid::class,
+        'public.receipt.view' => \App\Http\Middleware\AcceptanceReceiptPublicViewVerification::class,
+
     ];
 }

@@ -169,6 +169,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\SiteSettingServiceProvider::class,
         // \Yabacon\Paystack\PaystackServiceProvider::class,
+        SimpleSoftwareIO\QrCode\QrCodeServiceProvider::class,
+
 
 
 
@@ -187,7 +189,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        
+        'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class,
+
+
     ])->toArray(),
 
 ];

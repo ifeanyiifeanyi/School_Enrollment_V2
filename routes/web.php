@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\StudentScholarshipApplicationController;
 use App\Http\Controllers\Installer\InstallerController;
 use App\Http\Controllers\Student\ApplicationProcessController;
 use App\Http\Controllers\Student\ScholarshipApplicationController;
+use App\Http\Controllers\Student\StudentAcceptanceFeeController;
 use App\Http\Controllers\Student\StudentAdmissionApplicationController;
 use App\Http\Controllers\Student\StudentDashboardController;
 use App\Http\Controllers\Student\StudentProfileController;
@@ -54,9 +55,15 @@ Route::middleware(['cors'])->group(function () {
         return view('auth.login');
     });
 
+    // acceptance fee payment
+
+
     //barcode student route
     Route::controller(BarcodeViewController::class)->group(function () {
         Route::get('student/details/{nameSlug}', 'showDetails')->name('student.details.show');
+        Route::get('acceptance/{transactionId}', 'receiptDetail')
+            ->name('student.acceptancefee.verify')
+            ->middleware('public.receipt.view');
     });
 
     // confirm student application registration mail route
@@ -191,7 +198,6 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('search-pending-approvals',  'searchPendingApprovals')->name('admin.search.pending.approvals');
 
                 Route::put('deny-application/{application}', 'denyApplication')->name('admin.deny.application');
-
             });
         });
 
@@ -203,7 +209,7 @@ Route::middleware(['cors'])->group(function () {
                 Route::patch('payment-method-manage/{id}', 'update')->name('admin.payment.update');
                 Route::get('payment-method-del/{id}', 'destroy')->name('admin.payment.destroy');
 
-    Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
+                Route::get('student-application-payment', 'studentApplicationPayment')->name('admin.studentApplication.payment');
 
                 Route::post('/student-application-payment', 'studentApplicationPayment')->name('admin.studentApplicationPayment');
                 Route::get('export-payments', 'exportPayments')->name('admin.export.payments');
@@ -330,6 +336,16 @@ Route::middleware(['cors'])->group(function () {
 
             // application success route
             Route::get('scholarship-status', 'scholarshipStatus')->name('student.scholarships.status')->middleware('scholarship.submitted');
+        });
+
+        Route::controller(StudentAcceptanceFeeController::class)->group(function () {
+            Route::get('pay-acceptance-fee', 'create')->name('student.pay_acceptance_fee.create');
+            Route::post('pay-acceptance-fee/store', 'processPayments')->name('student.pay.acceptance.fee');
+            Route::get('student/acceptance-fee/callback', 'handleCallback')->name('student.acceptance_fee.callback');
+
+            Route::get('pay-acceptance-fee/success', 'success')->name('student.acceptance_fee.success')
+                ->middleware('success.receipt');
+            Route::get('pay-acceptance-fee/receipt', 'viewReceipt')->name('student.acceptance_fee.viewReceipt');
         });
     });
 });

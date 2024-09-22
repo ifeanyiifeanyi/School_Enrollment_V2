@@ -134,10 +134,27 @@ class StudentAdmissionApplicationController extends Controller
         try {
             DB::beginTransaction();
             $studentData = $request->only([
-                'phone', 'gender', 'marital_status', 'jamb_selection', 'dob', 'religion', 'nin', 'state_of_origin', 'lga_origin', 'current_residence_address', 'permanent_residence_address',
-                'guardian_name', 'guardian_phone_number', 'guardian_address', 'secondary_school_attended',
-                'secondary_school_graduation_year', 'secondary_school_certificate_type', 'jamb_reg_no',
-                'jamb_score', 'blood_group', 'genotype'
+                'phone',
+                'gender',
+                'marital_status',
+                'jamb_selection',
+                'dob',
+                'religion',
+                'nin',
+                'state_of_origin',
+                'lga_origin',
+                'current_residence_address',
+                'permanent_residence_address',
+                'guardian_name',
+                'guardian_phone_number',
+                'guardian_address',
+                'secondary_school_attended',
+                'secondary_school_graduation_year',
+                'secondary_school_certificate_type',
+                'jamb_reg_no',
+                'jamb_score',
+                'blood_group',
+                'genotype'
             ]);
 
             if ($request->country == 'Nigeria') {
@@ -188,6 +205,25 @@ class StudentAdmissionApplicationController extends Controller
 
 
 
+    // protected function storeFile($file, $directory)
+    // {
+    //     if ($file) {
+    //         $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
+
+    //         // Get the path
+    //         $path = public_path($directory);
+
+    //         // Save the image
+    //         $manager = new ImageManager(Driver::class);
+    //         $image = $manager->read($file->getRealPath());
+    //         $image->save($path . '/' . $filename);
+
+    //         return $directory . '/' . $filename;
+    //     }
+
+    //     return null;
+    // }
+
     protected function storeFile($file, $directory)
     {
         if ($file) {
@@ -195,6 +231,11 @@ class StudentAdmissionApplicationController extends Controller
 
             // Get the path
             $path = public_path($directory);
+
+            // Create the directory if it doesn't exist
+            if (!File::isDirectory($path)) {
+                File::makeDirectory($path, 0755, true, true);
+            }
 
             // Save the image
             $manager = new ImageManager(Driver::class);

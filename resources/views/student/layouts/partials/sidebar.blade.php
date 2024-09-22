@@ -12,6 +12,11 @@
         ->where('user_id', auth()->user()->id)
         ->where('admission_status', 'approved')
         ->exists();
+
+    $paidReceipt = DB::table('acceptance_fees')
+        ->where('user_id', auth()->user()->id)
+        ->where('status', 'paid')
+        ->exists();
 @endphp
 
 <aside class="main-sidebar sidebar-dark-primary elevation-4 no-print">
@@ -28,9 +33,12 @@
         <div class="pb-3 mt-3 mb-3 user-panel d-flex">
             <div class="image">
                 @if (!empty(auth()->user()->student->passport_photo))
-                    <img src="{{ asset(auth()->user()->student->passport_photo) }}" class="elevation-2" alt="User Image">
+                    <img src="{{ asset(auth()->user()->student->passport_photo) }}" class="elevation-2"
+                        alt="User Image">
                 @else
-                    <h4 class="text-light">Hi, <span class="brand-text font-weight-light">{{ Str::title(auth()->user()->first_name) }}</span></h4>
+                    <h4 class="text-light">Hi, <span
+                            class="brand-text font-weight-light">{{ Str::title(auth()->user()->first_name) }}</span>
+                    </h4>
                 @endif
             </div>
 
@@ -58,13 +66,31 @@
                 @endif
 
                 @if ($admissionOffered)
-                <li class="nav-item">
+                    {{-- <li class="nav-item">
                     <a href="{{ route('student.confirm.admissionStatus') }}" class="nav-link text-info admission">
                         <i class="nav-icon fas fa-trophy text-light"></i>
                         <p>Admission Offer</p>
                     </a>
-                </li>
-            @endif
+                </li> --}}
+                    @if (!$paidReceipt)
+                        <li class="nav-item">
+                            <a href="{{ route('student.pay_acceptance_fee.create') }}" class="nav-link text-info">
+                                <i class="nav-icon fas fa-credit-card text-light"></i>
+                                <p>Pay Acceptance Fee</p>
+                            </a>
+                        </li>
+                    @endif
+
+                    @if ($paidReceipt)
+                        <li class="nav-item">
+                            <a href="{{ route('student.acceptance_fee.viewReceipt') }}" class="nav-link text-info">
+                                <i class="nav-icon fas fas fa-receipt text-light"></i>
+                                <p>Acceptance Receipt</p>
+                            </a>
+                        </li>
+                    @endif
+
+                @endif
 
 
                 @if ($userHasApplication)
