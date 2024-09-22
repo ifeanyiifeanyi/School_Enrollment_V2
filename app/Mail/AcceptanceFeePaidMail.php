@@ -2,12 +2,14 @@
 
 namespace App\Mail;
 
+use App\Models\User;
+use App\Models\AcceptanceFee;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AcceptanceFeePaidMail extends Mailable
 {
@@ -16,9 +18,13 @@ class AcceptanceFeePaidMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public $user;
+    public $acceptanceFee;
+
+    public function __construct(User $user, AcceptanceFee $acceptanceFee)
     {
-        //
+        $this->user = $user;
+        $this->acceptanceFee = $acceptanceFee;
     }
 
     /**
@@ -27,7 +33,7 @@ class AcceptanceFeePaidMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Acceptance Fee Paid Mail',
+            subject: 'Congratulations on Your Admission to Shanahan University',
         );
     }
 
@@ -37,7 +43,7 @@ class AcceptanceFeePaidMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.acceptance_fee_paid',
         );
     }
 
