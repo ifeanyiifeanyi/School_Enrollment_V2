@@ -8,69 +8,63 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Mail\AdmissionStatusUpdated;
 use Illuminate\Support\Facades\Mail;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Maatwebsite\Excel\Concerns\WithChunkReading;
+use Maatwebsite\Excel\Concerns\WithBatchInserts;
+use Illuminate\Support\Collection;
 
-class ApplicationsImport implements ToModel, WithHeadingRow
+class ApplicationsImport implements ToCollection, WithHeadingRow, WithChunkReading, WithBatchInserts
 {
     private $errors = [];
 
-    /**
-     * @param array $row
-     *
-     * @return \Illuminate\Database\Eloquent\Model|null
-     */
-
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
-        // Begin transaction to ensure data integrity
-        DB::beginTransaction();
+        foreach ($rows as $row) {
+            DB::beginTransaction();
+            try {
+                $student = Student::where('application_unique_number', $row['application_no'])->first();
+                if (!$student) {
+                    $this->errors[] = "Student with application number " . $row['application_no'] . " not found.";
+                    DB::rollBack();
+                    continue;
+                }
 
-        try {
-            // Find the Student by the application_unique_number
-            $student = Student::where('application_unique_number', $row['application_no'])->first();
+                $application = Application::where('user_id', $student->user_id)
+                    ->whereNotNull('payment_id')
+                    ->first();
+                if (!$application) {
+                    $this->errors[] = "Application for student " . $student->full_name . " with valid payment_id not found.";
+                    DB::rollBack();
+                    continue;
+                }
 
-            if (!$student) {
-                $this->errors[] = "Student with application number " . $row['application_no'] . " not found.";
+                $student->exam_score = $row['exam_score'];
+                $student->admission_status = $row['admission_status'];
+                $student->save();
+
+                $application->admission_status = $row['admission_status'];
+                $application->save();
+
+                Mail::to($student->user->email)->send(new AdmissionStatusUpdated($student, $application));
+
+                DB::commit();
+            } catch (\Exception $e) {
                 DB::rollBack();
-                return null;
+                Log::error('Error during import: ' . $e->getMessage());
+                $this->errors[] = "Error during import for application_no " . $row['application_no'] . ": " . $e->getMessage();
             }
-
-            // Find the corresponding Application record through the User model
-            $application = Application::where('user_id', $student->user_id)
-                ->whereNotNull('payment_id')
-                ->first();
-
-            if (!$application) {
-                $this->errors[] = "Application for student " . $student->full_name . " with valid payment_id not found.";
-                DB::rollBack();
-                return null;
-            }
-
-            // Update the student's exam score and application's admission status
-            $student->exam_score = $row['exam_score'];
-            $student->admission_status = $row['admission_status'];
-            $student->save();
-
-            $application->admission_status = $row['admission_status'];
-            $application->save();
-
-            // Send email notification regardless of admission status change
-            Mail::to($student->user->email)->send(new AdmissionStatusUpdated($student, $application));
-
-            // Commit the transaction
-            DB::commit();
-        } catch (\Exception $e) {
-            // Rollback the transaction in case of error
-            DB::rollBack();
-            // Optionally, log the error or handle it as needed
-            Log::error('Error during import: ' . $e->getMessage());
-            $this->errors[] = "Error during import: " . $e->getMessage();
-            return null;
         }
+    }
 
-        // Return the application if needed or null
-        return isset($application) ? $application : null;
+    public function chunkSize(): int
+    {
+        return 100;  // Process 100 rows at a time
+    }
+
+    public function batchSize(): int
+    {
+        return 100;  // Insert 100 records at a time
     }
 
     public function getErrors()

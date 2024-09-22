@@ -184,6 +184,7 @@
     </div>
 
     <div class="main-content">
+        @include('student.alert')
         <section class="section">
             <div class="section-header">
                 <h1>@yield('title')</h1>
