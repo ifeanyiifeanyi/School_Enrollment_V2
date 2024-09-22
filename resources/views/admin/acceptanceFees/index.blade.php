@@ -42,6 +42,7 @@
                                             <tr>
                                                 <th>SN</th>
                                                 <th>Student</th>
+                                                <th>Phone Number</th>
                                                 <th>Department</th>
                                                 <th>Transaction ID</th>
                                                 <th>Date</th>
@@ -54,6 +55,7 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ Str::title($acceptance->user->full_name) }}</td>
+                                                    <td>{{ Str::title($acceptance->user->student->phone) }}</td>
                                                     <td>{{ $acceptance->department }}</td>
                                                     <td>{{ $acceptance->transaction_id }}</td>
                                                     <td>{{ $acceptance->paid_at ? $acceptance->paid_at->format('F d, Y H:i:s') : 'Not paid' }}
@@ -71,6 +73,8 @@
                                                     <td class="action-buttons">
                                                         <a href="{{ route('admin.acceptance_fee.show', $acceptance->id) }}"
                                                             class="btn btn-sm btn-info">View</a>
+
+
                                                         {{-- <form
                                                             action="{{ route('admin.acceptance_fee.destroy', $acceptance->id) }}"
                                                             method="POST" style="display:inline;">

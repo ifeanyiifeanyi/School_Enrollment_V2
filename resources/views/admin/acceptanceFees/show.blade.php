@@ -23,6 +23,7 @@
                                 <h5 class="card-title">Student Information</h5>
                                 <p><strong>Student ID:</strong> {{ $acceptanceFee->user->student->application_unique_number }}</p>
                                 <p><strong>Name:</strong> {{ Str::title($acceptanceFee->user->full_name) }}</p>
+                                <p><strong>Phone Number:</strong> {{ $acceptanceFee->user->student->phone }}</p>
                                 <p><strong>Email:</strong> {{ $acceptanceFee->user->email }}</p>
                                 <p><strong>Department:</strong> {{ $acceptanceFee->department }}</p>
 

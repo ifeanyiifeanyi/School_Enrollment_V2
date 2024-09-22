@@ -440,6 +440,7 @@
                         action: action
                     },
                     success: function(response) {
+                        console.log
                         alert(response.message);
                         location.reload();
                     },
