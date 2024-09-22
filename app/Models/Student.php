@@ -17,6 +17,14 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getProfilePhotoAttribute(){
+        if ($this->profile_photo) {
+            return asset($this->profile_photo);
+        }
+        return asset('logo.png');
+
+    }
+
     // public function applications()
     // {
     //     return $this->hasMany(Application::class);
@@ -24,6 +32,6 @@ class Student extends Model
 
     protected $casts = [
         // 'dob' => 'date',
-        
+
     ];
 }

@@ -10,27 +10,7 @@ class AcceptanceFeeManagerController extends Controller
 {
     /**
      * Display a listing of the resource.
-     */
-    // public function index(Request $request)
-    // {
-    //     $query = AcceptanceFee::with('user');
-
-    //     if ($request->has('search')) {
-    //         $search = $request->input('search');
-    //         $query->where(function ($q) use ($search) {
-    //             $q->whereHas('user', function ($userQuery) use ($search) {
-    //                 $userQuery->where('first_name', 'LIKE', "%{$search}%")
-    //                     ->orWhere('last_name', 'LIKE', "%{$search}%")
-    //                     ->orWhereHas('user.student', function ($studentQuery) use ($search) {
-    //                         $studentQuery->where('application_unique_number', 'LIKE', "%{$search}%");
-    //                     });
-    //             })->orWhere('department', 'LIKE', "%{$search}%");
-    //         });
-    //     }
-
-    //     $acceptanceFees = $query->latest('paid_at')->get();
-    //     return view('admin.acceptanceFees.index', compact('acceptanceFees'));
-    // }
+    */
 
     public function index(Request $request)
     {
@@ -57,28 +37,10 @@ class AcceptanceFeeManagerController extends Controller
         return view('admin.acceptanceFees.index', compact('acceptanceFees'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(AcceptanceFee $acceptanceFee)
     {
-        //
+        return view('admin.acceptanceFees.show', compact('acceptanceFee'));
     }
 
     /**

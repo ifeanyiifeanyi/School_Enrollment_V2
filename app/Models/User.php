@@ -25,6 +25,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(AdmissionAcceptanceManager::class);
     }
 
+    public function faculty(){
+        return $this->belongsTo(Faculty::class);
+    }
+
 
     public function roles()
     {
