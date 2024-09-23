@@ -1,16 +1,20 @@
 @forelse ($applications as $ap)
     <tr>
+        <td><input type="checkbox" class="application-checkbox" value="{{ $ap->id }}"></td>
         <td>{{ $loop->iteration }}</td>
         <td>
-            {{ $ap->user->full_name ?? 'N/A' }}
+            {{ Str::title($ap->user->full_name) ?? 'N/A' }}
             <p>
-                <a href="{{ route('admin.show.student', $ap->user->nameSlug) }}"
-                    class="mt-2 link">Details</a>
+                <a href="{{ route('admin.show.student', $ap->user->nameSlug) }}" class="mt-2 link">Details</a>
             </p>
+        </td>
+        <td>
+            <p>{{ $ap->user->student->phone }}</p>
         </td>
         <td>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</td>
         <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
         <td>{{ $ap->academicSession->session ?? 'N/A' }}</td>
+
         <td>{{ $ap->user->student->exam_score ?? 0 }}</td>
         <td>
             @if ($ap->admission_status == 'pending')
@@ -21,9 +25,30 @@
                 <span class="badge bg-success text-light">Approved <i class="fa fa-check"></i></span>
             @endif
         </td>
+
+        <td class="btn-group" style="display: flex;">
+            @if ($ap->admission_status == 'pending')
+                <p>
+                <form action="{{ route('admin.approve.application', $ap->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="btn btn-sm btn-success"
+                        onclick="return confirm('Are you sure you want to approve this application?')">Approve</button>
+                </form>
+                </p>
+            @elseif ($ap->admission_status == 'approved')
+                <p>
+                <form action="{{ route('admin.deny.application', $ap->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="btn btn-sm btn-warning"
+                        onclick="return confirm('Are you sure you want to set this application to pending?')">Set
+                        Pending</button>
+                </form>
+                </p>
+            @endif
+        </td>
     </tr>
 @empty
-    <tr>
-        <td colspan="7" class="text-center">No applications found.</td>
-    </tr>
+    <div class="text-center alert alert-danger">Not available</div>
 @endforelse
