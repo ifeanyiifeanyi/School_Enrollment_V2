@@ -1,8 +1,12 @@
-@extends('student.layouts.studentLayout')
+<!DOCTYPE html>
+<html lang="en">
 
-@section('title', 'Verify Acceptance Fee Payment')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Acceptance Fee Payment</title>
 
-@section('css')
+    <!-- Internal CSS section retained -->
     <style>
         .verification-container {
             max-width: 600px;
@@ -81,59 +85,43 @@
             }
         }
     </style>
-@endsection
+</head>
 
-@section('student')
-    <div class="verification-container">
-        <div class="verification-header">
-            <img src="{{ asset('logo1.png') }}" alt="Shanahan University Logo" class="school-logo">
-            <h2>Shanahan University</h2>
-            <h3>Acceptance Fee Payment Verification</h3>
-        </div>
+<body>
 
-        <div class="verification-status status-{{ $status }}">
-            {{ $message }}
-        </div>
+    <header>
+        <h1>Shanahan University</h1>
+    </header>
 
-        @if ($status === 'verified' || $status === 'pending')
-            <div class="verification-details">
-                <table>
-                    <tr>
-                        <th>Student Name:</th>
-                        <td>{{ $user->full_name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Student ID:</th>
-                        <td>{{ $user->student->application_unique_number }}</td>
-                    </tr>
-                    <tr>
-                        <th>Amount:</th>
-                        <td>₦{{ number_format($acceptanceFee->amount, 2) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Transaction ID:</th>
-                        <td>{{ $acceptanceFee->transaction_id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Payment Date:</th>
-                        <td>{{ $acceptanceFee->paid_at ? $acceptanceFee->paid_at->format('F d, Y H:i:s') : 'N/A' }}</td>
-                    </tr>
-                    <tr>
-                        <th>Status:</th>
-                        <td>{{ ucfirst($acceptanceFee->status) }}</td>
-                    </tr>
-                </table>
-            </div>
+    <main>
+        <section>
+            <h2>Acceptance Fee Payment Verification</h2>
+
+            <p>{{ $message }}</p>
+
+            @if ($status === 'verified' || $status === 'pending')
+                <div class="payment-details">
+                    <p><strong>Student Name:</strong> {{ $user->full_name }}</p>
+                    <p><strong>Student ID:</strong> {{ $user->student->application_unique_number }}</p>
+                    <p><strong>Amount:</strong> ₦{{ number_format($acceptanceFee->amount, 2) }}</p>
+                    <p><strong>Transaction ID:</strong> {{ $acceptanceFee->transaction_id }}</p>
+                    <p><strong>Payment Date:</strong>
+                        {{ $acceptanceFee->paid_at ? $acceptanceFee->paid_at->format('F d, Y H:i:s') : 'N/A' }}</p>
+                    <p><strong>Status:</strong> {{ ucfirst($acceptanceFee->status) }}</p>
+                </div>
+            @endif
 
             @if ($status === 'verified')
-                <button onclick="window.print()" class="print-button">Print Verification</button>
+                <button onclick="window.print()">Print Verification</button>
             @endif
-        @endif
-    </div>
-@endsection
+        </section>
+    </main>
 
-@section('js')
+    <!-- Internal JS section retained if any -->
     <script>
-        // You can add any additional JavaScript here if needed
+        // Add any internal JavaScript or jQuery here
     </script>
-@endsection
+
+</body>
+
+</html>
