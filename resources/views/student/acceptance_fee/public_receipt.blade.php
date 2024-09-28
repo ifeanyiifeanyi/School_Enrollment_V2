@@ -99,7 +99,7 @@
 
             <p>{{ $message }}</p>
 
-            @if ($status === 'verified' || $status === 'pending')
+            @if ($status == 'verified' || $status == 'pending')
                 <div class="payment-details">
                     <p><strong>Student Name:</strong> {{ $user->full_name }}</p>
                     <p><strong>Student ID:</strong> {{ $user->student->application_unique_number }}</p>

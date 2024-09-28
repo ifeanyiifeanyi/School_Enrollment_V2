@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Mail;
 
 class AcceptanceFeeManagerController extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      */

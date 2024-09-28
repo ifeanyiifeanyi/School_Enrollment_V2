@@ -16,14 +16,15 @@ use App\Exports\ApplicationsExport;
 use App\Imports\ApplicationsImport;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Mail\AdmissionStatusUpdated;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Mail\ApplicationRejectedMail;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\AdmissionDeniedStatusEmail;
 use App\Mail\ApplicationApprovedMailAdmin;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
-use App\Mail\AdmissionStatusUpdated;
 
 class StudentManagementController extends Controller
 {
@@ -62,29 +63,6 @@ class StudentManagementController extends Controller
         ));
     }
 
-    // public function search(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         $query = $request->get('query');
-    //         $students = User::with(['applications' => function ($query) {
-    //             $query->select('applications.*', 'departments.name as department_name')
-    //                 ->join('departments', 'applications.department_id', '=', 'departments.id');
-    //         }])
-    //             ->where('role', 'student')
-    //             ->where(function ($q) use ($query) {
-    //                 $q->where('first_name', 'LIKE', "%{$query}%")
-    //                     ->orWhere('last_name', 'LIKE', "%{$query}%")
-    //                     ->orWhere('other_names', 'LIKE', "%{$query}%")
-    //                     ->orWhereHas('student', function ($subQuery) use ($query) {
-    //                         $subQuery->where('phone', 'LIKE', "%{$query}%");
-    //                     });
-    //             })
-    //             ->orderBy('created_at', 'desc')
-    //             ->get();
-
-    //         return response()->json(view('admin.partials.studentTableBody', compact('students'))->render());
-    //     }
-    // }
 
 
     public function search(Request $request)
@@ -304,43 +282,23 @@ class StudentManagementController extends Controller
         $applications = Application::whereIn('id', $ids)->get();
 
         foreach ($applications as $application) {
-            if ($action === 'approve' && $application->admission_status !== 'approved') {
+            if ($action == 'approve' && $application->admission_status != 'approved') {
                 $application->update(['admission_status' => 'approved']);
                 $this->sendStatusUpdateEmail($application);
-            } elseif ($action === 'pending' && $application->admission_status !== 'pending') {
+            } elseif ($action == 'pending' && $application->admission_status != 'pending') {
                 $application->update(['admission_status' => 'pending']);
-                $this->sendStatusUpdateEmail($application);
+                $this->sendStatusDeniedEmail($application);
             }
         }
 
         return response()->json(['message' => 'Applications updated successfully']);
     }
-    // HERE WE DENY APPROVED APPLICATIONS(singular)
-    // public function denyApplication(Application $application)
-    // {
-    //     // dd($application->user->student);
-    //     if ($application->admission_status == 'approved') {
-    //         $application->update(['admission_status' => 'pending']);
-
-
-
-    //         return redirect()->back()->with([
-    //             'message' => 'Application Status has been reset',
-    //             'alert-type' => 'success'
-    //         ]);
-    //     }
-
-    //     return redirect()->back()->with([
-    //         'message' => 'Cannot deny an approved application',
-    //         'alert-type' => 'error'
-    //     ]);
-    // }
 
     public function denyApplication(Application $application)
     {
-        if ($application->admission_status !== 'pending') {
+        if ($application->admission_status != 'pending') {
             $application->update(['admission_status' => 'pending']);
-            $this->sendStatusUpdateEmail($application);
+            $this->sendStatusDeniedEmail($application);
 
             return redirect()->back()->with([
                 'message' => 'Application Status has been reset to Pending',
@@ -357,7 +315,8 @@ class StudentManagementController extends Controller
     // HERE WE SET APPROVED APPLICATIONS(singular)
     public function approveApplicationSingle(Application $application)
     {
-        if ($application->admission_status !== 'approved') {
+        // dd($application);
+        if ($application->admission_status != 'approved') {
             $application->update(['admission_status' => 'approved']);
             $this->sendStatusUpdateEmail($application);
 
@@ -376,6 +335,12 @@ class StudentManagementController extends Controller
     private function sendStatusUpdateEmail(Application $application)
     {
         Mail::to($application->user->email)->send(new AdmissionStatusUpdated($application->user->student, $application));
+    }
+
+    // email handler for student denied admission
+    private function sendStatusDeniedEmail(Application $application)
+    {
+        Mail::to($application->user->email)->send(new AdmissionDeniedStatusEmail($application->user->student, $application));
     }
 
 

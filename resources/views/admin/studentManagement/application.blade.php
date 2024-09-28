@@ -327,10 +327,9 @@
                                             <td class="btn-group" style="display: flex;">
                                                 @if ($ap->admission_status == 'pending')
                                                     <p>
-                                                    <form action="{{ route('admin.approve.application', $ap->id) }}"
-                                                        method="POST">
+                                                    <form action="{{ route('admin.approve.admission', $ap->id) }} method="POST">
                                                         @csrf
-                                                        @method('PUT')
+
                                                         <button type="submit" class="btn btn-sm btn-success"
                                                             onclick="return confirm('Are you sure you want to approve this application?')">Approve</button>
                                                     </form>
