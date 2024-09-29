@@ -26,8 +26,8 @@ class StudentAdmissionApplicationController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $application = $user->applications->first();
-        if ($application && is_null($application->payment_id)) {
+        $application = $user->applications;
+        if (empty($application->payment_id)) {
             // Application form has been filled, but payment is pending
             $notification = [
                 'message' => 'Please complete the payment to finalize your application.',

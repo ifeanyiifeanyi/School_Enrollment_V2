@@ -7,6 +7,7 @@ namespace App\Models;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -21,11 +22,13 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $guarded = [];
 
-    public function admissionAcceptanceManager(){
+    public function admissionAcceptanceManager()
+    {
         return $this->hasOne(AdmissionAcceptanceManager::class);
     }
 
-    public function faculty(){
+    public function faculty()
+    {
         return $this->belongsTo(Faculty::class);
     }
 
@@ -60,16 +63,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Student::class);
     }
 
+
     // public function applications()
     // {
-    //     return $this->hasManyThrough(Application::class, Student::class);
+    //     return $this->hasMany(Application::class);
     // }
 
 
-    public function applications()
+    public function applications(): HasOne
     {
-        return $this->hasMany(Application::class);
+        return $this->hasOne(Application::class);
     }
+
+
 
     public function departments()
     {

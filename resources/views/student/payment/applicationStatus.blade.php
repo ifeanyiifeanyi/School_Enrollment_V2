@@ -26,11 +26,12 @@
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="mb-4 text-center col-md-4">
+                        <div class="mb-4 text-center col-md-4 col-lg-6">
                             <div class="mb-3">
                                 <img width="200" src="{{ asset($user->student->passport_photo) }}"
                                     class="img-fluid" alt="Passport Photo">
                             </div>
+                            <h1>{{ $user->id }}</h1>
                             <!-- Barcode Image -->
                             <div class="mb-4 text-center">
                                 <img src="data:image/png;base64,{{ \DNS2D::getBarcodePNG($barcodeUrl, 'QRCODE',6,6) }}"
@@ -38,12 +39,13 @@
                             </div>
 
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8 col-lg-6">
                             <ul class="list-group">
                                 <li class="list-group-item">Invoice Number: {{ $application->invoice_number }}</li>
                                 <li class="list-group-item">Application Number: {{
                                     $user->student->application_unique_number }}</li>
                                 <li class="list-group-item">Full Name: {{ $user->fullName }}</li>
+                                {{-- @dd($application) --}}
                                 <li class="list-group-item">Application Date: {{ $application->created_at->format('jS F,
                                     Y') }}</li>
                                 <li class="list-group-item">Department: {{ $application->department->name }}</li>

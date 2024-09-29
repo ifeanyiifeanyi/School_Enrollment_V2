@@ -15,7 +15,7 @@ class StudentDashboardController extends Controller
     public function dashboard()
     {
         $user = auth()->user();
-        $application = $user->applications->first();
+        $application = $user->applications;
 
         // Generate URL to the student details page
         $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckPaymentStatusRole
@@ -15,16 +16,12 @@ class CheckPaymentStatusRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = auth()->user();
-        $application = $user->applications->first();
+        $user = Auth::user();
+        $application = $user->applications;
 
-        if ($application && is_null($application->payment_id)) {
-            // Application form has been filled, but payment is pending
-            $notification = [
-                'message' => 'Please complete the payment to finalize your application.',
-                'alert-type' => 'info'
-            ];
-            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])->with($notification);
+        if (empty($application->payment_id)) {
+            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
+                ->with('warning', 'Please complete the payment to finalize your application.');
         }
         return $next($request);
     }

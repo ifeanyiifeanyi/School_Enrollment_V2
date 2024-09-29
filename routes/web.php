@@ -71,7 +71,7 @@ Route::middleware(['cors'])->group(function () {
     // confirm student application registration mail route
     Route::get('/payment', function () {
         return view('student.application.index');
-    })->name('payment.view');
+    })->name('payment.view')->middleware('');
 
     Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -303,7 +303,7 @@ Route::middleware(['cors'])->group(function () {
 
         // NEW ADMISSION APPLICATION ROUTE ********
         Route::controller(StudentAdmissionApplicationController::class)->group(function () {
-            Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.application.status');
+            Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.payment.status');
             Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply');
 
             Route::get('congratulations', 'confirmAcceptanceOffer')->name('student.confirm.admissionStatus');

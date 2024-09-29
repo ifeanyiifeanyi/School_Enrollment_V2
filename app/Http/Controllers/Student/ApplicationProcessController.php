@@ -14,10 +14,13 @@ use Yabacon\Paystack\Paystack;
 use Illuminate\Support\Facades\DB;
 use App\Mail\ApplicationStatusMail;
 
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Yabacon\Paystack\PaystackClient;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 use KingFlamez\Rave\Facades\Rave as Flutterwave;
 use Unicodeveloper\Flutterwave\Facades\Flutterwave as UnicodeveloperFlutterwave;
@@ -26,12 +29,18 @@ use Unicodeveloper\Flutterwave\Facades\Flutterwave as UnicodeveloperFlutterwave;
 
 class ApplicationProcessController extends Controller
 {
+    public function __construct()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login')->withErrors('You must be logged in to access this page.');
+        }
+    }
     public function index()
     {
         $user = auth()->user();
-        $application = $user->applications->first();
+        $application = $user->applications;
         // dd($application);
-        if ($application && is_null($application->payment_id)) {
+        if (empty($application->payment_id)) {
             // Application form has been filled, but payment is pending
             $notification = [
                 'message' => 'Please complete the payment to finalize your application.',
@@ -42,45 +51,20 @@ class ApplicationProcessController extends Controller
         return view('student.application.index');
     }
 
-    // thi view is for the invoice payment
-    public function finalApplicationStep($userSlug)
+
+    public function finalApplicationStep(Request $request, string $userSlug): View|RedirectResponse
     {
-        $user = User::Where('nameSlug', $userSlug)->first();
-        // Check if the user is authenticated
-        if (!auth()->check()) {
-            return redirect()->route('login')->withErrors('You must be logged in to access this page.');
+
+        $user = User::where('nameSlug', $userSlug)->firstOrFail();
+
+        $application = $user->applications;
+
+        if ($application->payment_id) {
+            return redirect()->route('student.dashboard')
+                ->with('info', 'You have already submitted an application!');
         }
-        // Check if the user was found
-        if (!$user) {
-            return redirect()->back()->withErrors('User not found.');
-        }
-        // Check if the authenticated user matches the user found by the slug
-        if (auth()->user()->id !== $user->id) {
-            return redirect()->back()->withErrors('You are not authorized to access this page.');
-        }
-        // Find the application associated with the user
-        $application = Application::where('user_id', $user->id)->first();
-        // Check if the application was found
-        if (!$application) {
-            return redirect()->back()->withErrors('Application not found for this user.');
-        }
+
         $paymentMethods = PaymentMethod::latest()->get();
-        // dd($application->department);
-
-
-        // the user has already complete application
-        if ($user) {
-            $applicant = $user->applications->whereNotNull('payment_id')->first();
-
-            $notification = [
-                'message' => 'You have already submitted an application!',
-                'alert-type' => 'info'
-            ];
-
-            if ($applicant) {
-                return redirect()->route('student.dashboard')->with($notification);
-            }
-        }
 
         return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
     }
@@ -97,10 +81,7 @@ class ApplicationProcessController extends Controller
         ]);
 
         $user = auth()->user();
-        $application = $user->applications->first();
-        // if (!$application || !is_null($application->payment_id)) {
-        //     return redirect()->back()->withErrors('Payment has already been made or no application found.');
-        // }
+
 
         $reference = Flutterwave::generateReference();
 
@@ -126,7 +107,7 @@ class ApplicationProcessController extends Controller
                     ],
                     'customizations' => [
                         'title' => 'Application Payment',
-                        'description' => 'Payment for application #' . $application->invoice_number,
+                        // 'description' => 'Payment for application #' . $application->invoice_number,
                     ],
                 ];
 
@@ -161,12 +142,15 @@ class ApplicationProcessController extends Controller
                     'subaccount' => $subAccountCode,
                     'bearer' => 'subaccount' // Ensures the fee is borne by the sub-account
                 ]);
+                // session(['paystack_reference' => $this->generateUniqueReference()]);
+
 
                 return redirect($transaction->data->authorization_url);
             } catch (\Yabacon\Paystack\Exception\ApiException $e) {
                 Log::error('Paystack API Error: ' . $e->getMessage(), [
                     'exception' => $e
                 ]);
+
                 return redirect()->back()->withErrors('An error occurred while initializing the payment. Please try again later.');
             } catch (\Exception $e) {
                 Log::error('Error in making payment: ' . $e->getMessage(), [
@@ -180,97 +164,30 @@ class ApplicationProcessController extends Controller
     }
 
 
-    // // PAY-STACK CALLBACK
-    // public function handlePaymentCallBackPayStack(Request $request)
-    // {
-    //     $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
-    //     try {
-    //         DB::beginTransaction();
-
-    //         $transaction = $paystack->transaction->verify([
-    //             'reference' => $request->reference,
-    //         ]);
-
-    //         if ($transaction->data->status === 'success') {
-    //             $user = User::where('email', $transaction->data->customer->email)->first();
-
-    //             if ($user) {
-    //                 $application = $user->applications()->first();
-    //                 $paymentMethodId = PaymentMethod::where('name', 'Paystack')->first()->id;
-
-    //                 $paymentData = [
-    //                     'user_id' => $user->id,
-    //                     'amount' => $transaction->data->amount / 100, // Convert kobo to Naira
-    //                     'payment_method' => 'Paystack',
-    //                     'payment_status' => 'Successful',
-    //                     'transaction_id' => $transaction->data->reference,
-    //                     'payment_method_id' => $paymentMethodId,
-    //                 ];
-
-    //                 $payment = Payment::create($paymentData);
-
-    //                 if ($application) {
-    //                     $application->update(['payment_id' => $payment->id]);
-    //                 }
-    //                 Mail::to($user->email)->send(new ApplicationStatusMail($user, $application, $payment));
-    //                 $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
-
-    //                 return view('student.payment.success', [
-    //                     'user' => $user,
-    //                     'application' => $application,
-    //                     'payment' => $payment,
-    //                     'barcodeUrl' => $barcodeUrl
-    //                 ]);
-
-    //                 DB::commit();
-    //             } else {
-    //                 $payment = Payment::where('transaction_id', $$transaction->data->reference)->first();
-    //                 if ($payment) {
-    //                     $payment->update(['payment_status' => 'failed']);
-    //                 }
-    //                 $userSlug = optional(auth()->user())->nameSlug;
-    //                 return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-    //                     ->withErrors('Payment was not successful. Please try again.');
-    //             }
-    //         } else {
-    //             // Handle declined transaction
-    //             $payment = Payment::where('transaction_id', $$transaction->data->reference)->first();
-    //             if ($payment) {
-    //                 $payment->update(['payment_status' => 'failed']);
-    //             }
-
-    //             $userSlug = optional(auth()->user())->nameSlug;
-
-    //             return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-    //                 ->withErrors('Payment was declined: ' . $transaction->data->gateway_response);
-    //         }
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         $userSlug = optional(auth()->user())->nameSlug;
-    //         Log::error('Error processing payment', ['message' => $e->getMessage()]);
-    //         return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-    //             ->withErrors('An error occurred while processing the payment. Please try again.');
-    //     }
-    // }
-
-    // PAY-STACK CALLBACK
     public function handlePaymentCallBackPayStack(Request $request)
     {
         $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
+
         try {
-            DB::beginTransaction();
 
             $transaction = $paystack->transaction->verify([
                 'reference' => $request->reference,
             ]);
 
-            if ($transaction->data->status === 'success') {
-                $user = User::where('email', $transaction->data->customer->email)->firstOrFail();
+            if ($transaction->data->status == 'success') {
+                DB::beginTransaction();
 
-                $application = $user->applications()->firstOrFail();
+                $userEmail = $transaction->data->customer->email;
+
+                $user = User::where('email', $userEmail)->firstOrFail();
+                $application = $user->applications;
+                // dd($application);
+
                 $paymentMethod = PaymentMethod::where('name', 'Paystack')->firstOrFail();
+
+
 
                 $paymentData = [
                     'user_id' => $user->id,
@@ -282,7 +199,9 @@ class ApplicationProcessController extends Controller
                 ];
 
                 $payment = Payment::create($paymentData);
+                // dd($payment);
                 $application->update(['payment_id' => $payment->id]);
+
 
                 DB::commit();
 
@@ -298,33 +217,103 @@ class ApplicationProcessController extends Controller
                     'barcodeUrl' => $barcodeUrl
                 ]);
             } else {
-                // Handle declined transaction
-                DB::rollBack();
-                $userSlug = auth()->user()->nameSlug ?? null;
-                return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-                    ->withErrors('Payment was declined: ' . $transaction->data->gateway_response);
+                throw new \Exception('Payment was not successful: ' . $transaction->data->gateway_response);
             }
-        } catch (\Yabacon\Paystack\Exception\ApiException $e) {
-            DB::rollBack();
-            Log::error('Paystack API Error', ['message' => $e->getMessage()]);
-            return $this->handlePaymentError('An error occurred while verifying the payment.');
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            DB::rollBack();
-            Log::error('Model Not Found', ['message' => $e->getMessage()]);
-            return $this->handlePaymentError('User or application not found.');
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('General Error', ['message' => $e->getMessage()]);
-            return $this->handlePaymentError('An unexpected error occurred. Please try again.');
+            Log::error('Paystack Payment Error', [
+                'message' => $e->getMessage(),
+                // 'user_id' => auth()->id(),
+                'reference' => $request->reference
+            ]);
+            return $this->handlePaymentError($e->getMessage());
         }
     }
 
     private function handlePaymentError($message)
     {
-        $userSlug = auth()->user()->nameSlug ?? null;
+        $userSlug = optional(auth()->user())->nameSlug;
         return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
             ->withErrors($message);
     }
+
+    private function generateUniqueReference()
+    {
+        return uniqid(auth()->id() . '', true);
+    }
+
+
+    // PAY-STACK CALLBACK
+    // public function handlePaymentCallBackPayStack(Request $request)
+    // {
+    //     $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
+
+    //     try {
+    //         DB::beginTransaction();
+
+    //         $transaction = $paystack->transaction->verify([
+    //             'reference' => $request->reference,
+    //         ]);
+
+    //         if ($transaction->data->status === 'success') {
+    //             $user = User::where('email', $transaction->data->customer->email)->firstOrFail();
+
+    //             $application = $user->applications()->firstOrFail();
+    //             $paymentMethod = PaymentMethod::where('name', 'Paystack')->firstOrFail();
+
+    //             $paymentData = [
+    //                 'user_id' => $user->id,
+    //                 'amount' => $transaction->data->amount / 100, // Convert kobo to Naira
+    //                 'payment_method' => 'Paystack',
+    //                 'payment_status' => 'Successful',
+    //                 'transaction_id' => $transaction->data->reference,
+    //                 'payment_method_id' => $paymentMethod->id,
+    //             ];
+
+    //             $payment = Payment::create($paymentData);
+    //             $application->update(['payment_id' => $payment->id]);
+
+    //             DB::commit();
+
+    //             // Send email after transaction is committed
+    //             Mail::to($user->email)->send(new ApplicationStatusMail($user, $application, $payment));
+
+    //             $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
+
+    //             return view('student.payment.success', [
+    //                 'user' => $user,
+    //                 'application' => $application,
+    //                 'payment' => $payment,
+    //                 'barcodeUrl' => $barcodeUrl
+    //             ]);
+    //         } else {
+    //             // Handle declined transaction
+    //             DB::rollBack();
+    //             $userSlug = auth()->user()->nameSlug ?? null;
+    //             return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
+    //                 ->withErrors('Payment was declined: ' . $transaction->data->gateway_response);
+    //         }
+    //     } catch (\Yabacon\Paystack\Exception\ApiException $e) {
+    //         DB::rollBack();
+    //         Log::error('Paystack API Error', ['message' => $e->getMessage()]);
+    //         return $this->handlePaymentError('An error occurred while verifying the payment.');
+    //     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+    //         DB::rollBack();
+    //         Log::error('Model Not Found', ['message' => $e->getMessage()]);
+    //         return $this->handlePaymentError('User or application not found.');
+    //     } catch (\Exception $e) {
+    //         DB::rollBack();
+    //         Log::error('General Error', ['message' => $e->getMessage()]);
+    //         return $this->handlePaymentError('An unexpected error occurred. Please try again.');
+    //     }
+    // }
+
+    // private function handlePaymentError($message)
+    // {
+    //     $userSlug = auth()->user()->nameSlug ?? null;
+    //     return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
+    //         ->withErrors($message);
+    // }
 
 
 
@@ -345,7 +334,7 @@ class ApplicationProcessController extends Controller
                 $user = User::where('email', $data['data']['customer']['email'])->first();
 
                 if ($user) {
-                    $application = $user->applications()->first();
+                    $application = $user->applications;
                     $paymentMethodId = PaymentMethod::where('name', 'Flutterwave')->first()->id;
                     // dd($paymentMethodId);
 
@@ -404,7 +393,7 @@ class ApplicationProcessController extends Controller
     public function showSuccess()
     {
         $user = auth()->user();
-        $application = $user->applications->first();
+        $application = $user->applications;
         $payment = $application ? $application->payment : null;
 
         // Generate URL to the student details page
@@ -420,14 +409,14 @@ class ApplicationProcessController extends Controller
     }
 
 
-    private function generateUniqueReference()
-    {
-        // Generate a unique reference for the transaction
-        // combination of user ID, timestamp, and a random string
+    // private function generateUniqueReference()
+    // {
+    //     // Generate a unique reference for the transaction
+    //     // combination of user ID, timestamp, and a random string
 
-        $userId = auth()->user()->id;
-        $timestamp = time();
-        // $randomString = Str::random(10);
-        return $userId . '' . $timestamp;
-    }
+    //     $userId = auth()->user()->id;
+    //     $timestamp = time();
+    //     // $randomString = Str::random(10);
+    //     return $userId . '' . $timestamp;
+    // }
 }
