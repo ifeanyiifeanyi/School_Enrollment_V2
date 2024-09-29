@@ -91,7 +91,7 @@
                                 <i class="search-icon fas fa-search"></i>
                             </div>
                             <div class="card-body">
-                                
+
                                     <div class="float-right mb-3">
                                         <select class="form-control selectric"
                                             onchange="if (this.value) { this.form.submit(); }">
@@ -105,18 +105,9 @@
                                         <table class="table table-striped" id="">
                                             <thead>
                                                 <tr>
-                                                    <th class="text-center" style="width: 10px !important">
-                                                        <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup"
-                                                                data-checkbox-role="dad" class="custom-control-input"
-                                                                id="checkbox-all">
-                                                            <label for="checkbox-all"
-                                                                class="custom-control-label">&nbsp;</label>
-                                                        </div>
-                                                    </th>
                                                     <th style="width: 10px !important">sn</th>
                                                     <th style="">Student Name</th>
-                                                    <th>Phone</th>
+                    
                                                     <th>Email</th>
                                                     <th>Verify Student Account</th>
                                                     <th>Action</th>
@@ -126,16 +117,6 @@
                                                 @forelse ($students as $student)
                                                     {{-- @dd($student->id) --}}
                                                     <tr>
-                                                        <td>
-                                                            <div class="custom-checkbox custom-control">
-                                                                <input type="checkbox" name="selected_students[]"
-                                                                    value="{{ $student->id }}" data-checkboxes="mygroup"
-                                                                    class="custom-control-input"
-                                                                    id="checkbox-{{ $student->id }}">
-                                                                <label for="checkbox-{{ $student->id }}"
-                                                                    class="custom-control-label">&nbsp;</label>
-                                                            </div>
-                                                        </td>
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td class="align-middle">
                                                             <a href="#" style="text-decoration:none;color:#444"
@@ -147,16 +128,13 @@
                                                             </a>
                                                         </td>
                                                         <td class="align-middle">
-                                                            {{ $student->student->phone }}
-                                                        </td>
-                                                        <td class="align-middle">
                                                            {{ $student->email }}
                                                         </td>
                                                         <td class="align-middle">
                                                             <a onclick="return confirm('Are you sure of this action ?')" href="{{ route('admin.verify.student', $student->nameSlug) }}" class="btn btn-sm btn-primary">Verify Account</a>
                                                         </td>
                                                         <td class="align-middle">
-                                                            @if ($student->applications->contains('payment_id', '!=', null))
+                                                            @if ($student->applications)
                                                                 {{-- Payment exists, hide the delete button --}}
                                                             @else
                                                                 {{-- Payment does not exist, show the delete button --}}

@@ -162,8 +162,8 @@
                                         @if ($student->student->nationality == 'Nigeria')
                                             <b>NIN: </b> {{ $student->student->nin ?? 'N/A' }}
                                         @endif
-                                        @if ($student->applications->isNotEmpty())
-                                            <p><strong>Department <br></strong> <span class="badge badge-pill" style="font-weight: bolder;text-transform:uppercase;font-size:20px">{{ $student->applications->first()->department->name ?? 'INACTIVE APPLICATION' }}</span></p>
+                                        @if ($student->applications)
+                                            <p><strong>Department <br></strong> <span class="badge badge-pill" style="font-weight: bolder;text-transform:uppercase;font-size:20px">{{ $student->applications->department->name ?? 'INACTIVE APPLICATION' }}</span></p>
                                         @endif
                                     </p>
                                 </div>

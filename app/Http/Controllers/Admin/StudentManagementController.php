@@ -39,12 +39,6 @@ class StudentManagementController extends Controller
         })->count();
 
 
-        // $students = User::with(['applications' => function ($query) {
-        //     $query->select('applications.*', 'departments.name as department_name')
-        //         ->join('departments', 'applications.department_id', '=', 'departments.id');
-        // }])
-        //     ->where('role', 'student')
-        //     ->simplePaginate(100);
 
         // Order users by their account creation date
         $students = User::with(['applications' => function ($query) {
@@ -492,7 +486,7 @@ class StudentManagementController extends Controller
     public function update(Request $request, $slug)
     {
         $user = User::where('nameSlug', $slug)->firstOrFail();
-        $application = $user->applications->first();
+        $application = $user->applications;
 
         $request->validate([
             'first_name' => 'required|string',

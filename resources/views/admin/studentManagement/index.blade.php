@@ -147,15 +147,6 @@
                                         <table class="table table-striped" id="">
                                             <thead>
                                                 <tr>
-                                                    {{-- <th class="text-center" style="width: 10px !important">
-                                                        <div class="custom-checkbox custom-control">
-                                                            <input type="checkbox" data-checkboxes="mygroup"
-                                                                data-checkbox-role="dad" class="custom-control-input"
-                                                                id="checkbox-all">
-                                                            <label for="checkbox-all"
-                                                                class="custom-control-label">&nbsp;</label>
-                                                        </div>
-                                                    </th> --}}
                                                     <th style="width: 10px !important">sn</th>
                                                     <th style="">Student Name</th>
                                                     <th>Phone</th>
@@ -166,43 +157,30 @@
                                             </thead>
                                             <tbody id="studentTableBody">
                                                 @forelse ($students as $student)
-                                                    {{-- @dd($student->id) --}}
                                                     <tr>
-                                                        {{-- <td>
-                                                            <div class="custom-checkbox custom-control">
-                                                                <input type="checkbox" name="selected_students[]"
-                                                                    value="{{ $student->id }}" data-checkboxes="mygroup"
-                                                                    class="custom-control-input"
-                                                                    id="checkbox-{{ $student->id }}">
-                                                                <label for="checkbox-{{ $student->id }}"
-                                                                    class="custom-control-label">&nbsp;</label>
-                                                            </div>
-                                                        </td> --}}
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td class="align-middle">
                                                             <a href="#" style="text-decoration:none;color:#444"
                                                                 data-toggle="modal" data-target="#mailModal"
                                                                 data-student-email="{{ $student->email }}">
                                                                 {{ Str::title($student->full_name ?? 'N/A') }}
-
                                                                 <br><code
                                                                     style="font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;color:goldenrod">{{ $student->student->application_unique_number ?? 'N/A' }}</code>
-
                                                             </a>
                                                         </td>
                                                         <td class="align-middle">
                                                             {{ $student->student->phone }}
                                                         </td>
                                                         <td class="align-middle">
-                                                            @if ($student->applications->isNotEmpty())
-                                                                <p>{{ $student->applications->first()->department_name ?? 'N/A' }}
+                                                            @if ($student->applications)
+                                                                <p>{{ $student->applications->department->name ?? 'N/A' }}
                                                                 </p>
                                                             @else
                                                                 <p>N/A</p>
                                                             @endif
                                                         </td>
                                                         <td class="align-middle">
-                                                            @if ($student->applications->contains('payment_id', '!=', null))
+                                                            @if ($student->applications && $student->applications->payment_id)
                                                                 <span style="background: teal !important"
                                                                     class="badge badge-success text-light">Active
                                                                     Application</span>
@@ -212,17 +190,12 @@
                                                             @endif
                                                         </td>
                                                         <td class="align-middle">
-                                                            @if ($student->applications->contains('payment_id', '!=', null))
-                                                                {{-- Payment exists, hide the delete button --}}
-                                                            @else
-                                                                {{-- Payment does not exist, show the delete button --}}
+                                                            @if (!$student->applications || !$student->applications->payment_id)
                                                                 <a href="{{ route('admin.destroy.student', $student->nameSlug) }}"
                                                                     onclick="return confirm('Are you sure of this action?')"
                                                                     class="btn btn-danger btn-sm"><i
                                                                         class="fas fa-trash"></i></a>
                                                             @endif
-
-
                                                             <a href="{{ route('admin.show.student', $student->nameSlug) }}"
                                                                 class="btn btn-sm btn-info">
                                                                 <i class="fas fa-user"></i>
@@ -236,10 +209,12 @@
                                                                 data-student-email="{{ $student->email }}">
                                                                 <i class="fas fa-envelope"></i>
                                                             </a>
-
                                                         </td>
                                                     </tr>
                                                 @empty
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">No students found</td>
+                                                    </tr>
                                                 @endforelse
                                             </tbody>
                                         </table>

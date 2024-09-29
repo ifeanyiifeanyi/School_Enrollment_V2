@@ -29,7 +29,7 @@
                             </div>
                             <div class="mt-3 ml-2 mr-2 section">
                                 <div class="row">
-                                    @if($user->applications->first())
+                                    @if($user->applications)
                                     {{-- @dd($user->applications->first()->admission_status) --}}
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -51,9 +51,9 @@
                                             <select name="admission_status"
                                                 class="form-control @error('admission_status') is-invalid @enderror">
                                                 <option value="" selected disabled>Change Admission Status</option>
-                                                <option {{ $user->applications->first()->admission_status == 'denied' ? 'selected' : '' }} value="denied">Denied</option>
-                                                <option  {{ $user->applications->first()->admission_status == 'pending' ? 'selected' : '' }} value="pending">Pending</option>
-                                                <option {{ $user->applications->first()->admission_status == 'approved' ? 'selected' : '' }} value="approved">Approved</option>
+                                                <option {{ $user->applications->admission_status == 'denied' ? 'selected' : '' }} value="denied">Denied</option>
+                                                <option  {{ $user->applications->admission_status == 'pending' ? 'selected' : '' }} value="pending">Pending</option>
+                                                <option {{ $user->applications->admission_status == 'approved' ? 'selected' : '' }} value="approved">Approved</option>
                                             </select>
                                             @error('admission_status')
                                             <div class="invalid-feedback">
