@@ -34,9 +34,9 @@
                                 <td>{{ $application->department->name }}</td>
                                 <td>{{ $application->payment ? $application->payment->payment_status : 'No Payment Record' }}</td>
                                 <td>
-                                    <form action="" method="POST">
+                                    <form action="{{ route('admin.approve.admission', $application->id) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="btn btn-success">Approve Admission</button>
+                                        <button onclick="return confirm('Are you sure of this action ?')" type="submit" class="btn btn-success">Approve Admission</button>
                                     </form>
                                 </td>
                             </tr>

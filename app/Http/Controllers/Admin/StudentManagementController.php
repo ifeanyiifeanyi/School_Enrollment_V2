@@ -620,6 +620,7 @@ class StudentManagementController extends Controller
     }
 
 
+    // FETCH THIS FOR PROVIDING ADMISSION MANUALLY
     public function pendingAdmissions()
     {
         $pendingApplications = Application::with(['user', 'department', 'payment'])
@@ -627,6 +628,35 @@ class StudentManagementController extends Controller
             ->get();
 
         return view('admin.studentManagement.manual_admission', compact('pendingApplications'));
+    }
+
+    // APPROVE THE ADMISSION MANUALLY
+    public function approveAdmissionManual(Application $application)
+    {
+        // dd($application);
+        DB::transaction(function () use ($application) {
+            // Update application status
+            $application->update(['admission_status' => 'approved']);
+
+            // Check if a payment record exists, if so update it, otherwise create a new one
+            Payment::updateOrCreate(
+                ['user_id' => $application->user_id],
+                [
+                    'amount' => '10000', // Set the appropriate amount
+                    'payment_method' => 'Manual',
+                    'payment_status' => 'successful',
+                    'transaction_id' => 'MANUAL' . Str::random(10),
+                ]
+            );
+
+            // Update the application with the payment_id if it doesn't exist
+            if (!$application->payment_id) {
+                $payment = Payment::where('user_id', $application->user_id)->first();
+                $application->update(['payment_id' => $payment->id]);
+            }
+        });
+
+        return redirect()->back()->with('success', 'Admission approved and payment record updated/created successfully');
     }
 
 
