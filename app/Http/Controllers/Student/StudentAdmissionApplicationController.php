@@ -192,6 +192,7 @@ class StudentAdmissionApplicationController extends Controller
                 ]
             );
 
+            
             Mail::to($user->email)->send(new RegistrationConfirmationMail($user, $application));
             DB::commit();
             return redirect()->route('payment.view.finalStep', ['userSlug' => Str::slug($user->nameSlug)]);

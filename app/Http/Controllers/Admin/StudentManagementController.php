@@ -560,50 +560,6 @@ class StudentManagementController extends Controller
         return redirect()->route('admin.student.management')->with($notification);
     }
 
-    // delete multiple students at once
-    // public function deleteMultipleStudents(Request $request)
-    // {
-    //     $userIds = $request->input('selected_students'); // These are user IDs.
-
-    //     DB::transaction(function () use ($userIds) {
-    //         $students = Student::whereIn('user_id', $userIds)->get();
-
-    //         foreach ($students as $student) {
-    //             // List of document columns to check and potentially delete
-    //             $documentFields = [
-    //                 'document_local_government_identification',
-    //                 'document_medical_report',
-    //                 'document_secondary_school_certificate'
-    //             ];
-
-    //             // Delete passport photo if it exists
-    //             if ($student->passport_photo && file_exists(public_path($student->passport_photo))) {
-    //                 unlink(public_path($student->passport_photo));
-    //             }
-
-    //             // Check and delete each document if it exists
-    //             foreach ($documentFields as $field) {
-    //                 if ($student->$field && file_exists(public_path($student->$field))) {
-    //                     unlink(public_path($student->$field));
-    //                 }
-    //             }
-
-    //             // Delete the student record
-    //             $student->delete();
-    //         }
-
-    //         // Delete users associated with these student records
-    //         User::whereIn('id', $userIds)->delete();
-    //     });
-
-    //     $notification = [
-    //         'message' => 'Students deleted successfully!!',
-    //         'alert-type' => 'success'
-    //     ];
-
-    //     return redirect()->back()->with($notification);
-    // }
-
 
     // delete single student
     public function destroy($slug)
@@ -642,61 +598,6 @@ class StudentManagementController extends Controller
 
         return redirect()->back()->with($notification);
     }
-    // public function deleteMultipleStudents(Request $request)
-    // {
-    //     $userIds = $request->input('selected_students'); // These are user IDs.
-
-    //     DB::transaction(function () use ($userIds) {
-    //         // Get students whose user IDs match the selected ones
-    //         $students = Student::whereIn('user_id', $userIds)->get();
-
-    //         foreach ($students as $student) {
-    //             // Check if the student has an application with a non-null payment_id
-    //             $hasPaidApplication = $student->applications()->whereNotNull('payment_id')->exists();
-
-    //             // Skip deletion if there's a paid application
-    //             if ($hasPaidApplication) {
-    //                 continue;
-    //             }
-
-    //             // List of document columns to check and potentially delete
-    //             $documentFields = [
-    //                 'document_local_government_identification',
-    //                 'document_medical_report',
-    //                 'document_secondary_school_certificate'
-    //             ];
-
-    //             // Delete passport photo if it exists
-    //             if ($student->passport_photo && file_exists(public_path($student->passport_photo))) {
-    //                 unlink(public_path($student->passport_photo));
-    //             }
-
-    //             // Check and delete each document if it exists
-    //             foreach ($documentFields as $field) {
-    //                 if ($student->$field && file_exists(public_path($student->$field))) {
-    //                     unlink(public_path($student->$field));
-    //                 }
-    //             }
-
-    //             // Delete the student record
-    //             $student->delete();
-    //         }
-
-    //         // Delete users associated with these student records if they have no paid applications
-    //         User::whereIn('id', $userIds)
-    //             ->whereDoesntHave('student.applications', function ($query) {
-    //                 $query->whereNotNull('payment_id');
-    //             })
-    //             ->delete();
-    //     });
-
-    //     $notification = [
-    //         'message' => 'Students deleted successfully!',
-    //         'alert-type' => 'success'
-    //     ];
-
-    //     return redirect()->back()->with($notification);
-    // }
 
     public function unverifiedStudents()
     {
@@ -716,6 +617,16 @@ class StudentManagementController extends Controller
             'alert-type' => 'success'
         ];
         return redirect()->back()->with($notification);
+    }
+
+
+    public function pendingAdmissions()
+    {
+        $pendingApplications = Application::with(['user', 'department', 'payment'])
+            ->where('admission_status', '!=', 'approved')
+            ->get();
+
+        return view('admin.studentManagement.manual_admission', compact('pendingApplications'));
     }
 
 

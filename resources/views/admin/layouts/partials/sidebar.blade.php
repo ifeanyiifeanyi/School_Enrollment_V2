@@ -81,6 +81,12 @@
                     </li>
                     <li>
                         <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.pendingAdmissions.manual') ? 'active' : '' }}"
+                            href="{{ route('admin.pendingAdmissions.manual') }}">Appliction Pending
+                        </a>
+                    </li>
+                    <li>
+                        <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.pending.approvals') ? 'active' : '' }}"
                             href="{{ route('admin.pending.approvals') }}">Applicant Errors
                         </a>
