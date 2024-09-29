@@ -277,14 +277,14 @@
                             <table id="" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th><input type="checkbox" id="selectAll"></th>
+                                        {{-- <th><input type="checkbox" id="selectAll"></th> --}}
                                         <th style="width: 20px">s/n</th>
                                         <th style="width: auto !important">Student</th>
                                         <th style="width: auto !important">Phone Number</th>
                                         <th>Application No.</th>
                                         <th>Department</th>
-                                        <th>Session</th>
-                                        <th style="width: 20px">Exam</th>
+                                        {{-- <th>Session</th> --}}
+                                        {{-- <th style="width: 20px">Exam</th> --}}
                                         <th>Admission</th>
                                         <th>Action</th>
                                     </tr>
@@ -293,8 +293,8 @@
                                 <tbody id="applicationTableBody">
                                     @forelse ($applications as $ap)
                                         <tr>
-                                            <td><input type="checkbox" class="application-checkbox"
-                                                    value="{{ $ap->id }}"></td>
+                                            {{-- <td><input type="checkbox" class="application-checkbox"
+                                                    value="{{ $ap->id }}"></td> --}}
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 {{ Str::title($ap->user->full_name) ?? 'N/A' }}
@@ -308,9 +308,9 @@
                                             </td>
                                             <td>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</td>
                                             <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
-                                            <td>{{ $ap->academicSession->session ?? 'N/A' }}</td>
+                                            {{-- <td>{{ $ap->academicSession->session ?? 'N/A' }}</td> --}}
 
-                                            <td>{{ $ap->user->student->exam_score ?? 0 }}</td>
+                                            {{-- <td>{{ $ap->user->student->exam_score ?? 0 }}</td> --}}
                                             <td>
                                                 @if ($ap->admission_status == 'pending')
                                                     <span class="badge bg-warning text-light">Pending <i
@@ -324,13 +324,13 @@
                                                 @endif
                                             </td>
 
-                                            <td class="btn-group" style="display: flex;">
+                                            <td>
                                                 @if ($ap->admission_status == 'pending')
                                                     <p>
-                                                    <form action="{{ route('admin.approve.admission', $ap->id) }} method="POST">
+                                                    <form action="{{ route('admin.approve.admission', $ap->id) }}" method="POST">
                                                         @csrf
 
-                                                        <button type="submit" class="btn btn-sm btn-success"
+                                                        <button title="Approve Pending Student Admission" type="submit" class="btn btn-sm btn-success"
                                                             onclick="return confirm('Are you sure you want to approve this application?')">Approve</button>
                                                     </form>
                                                     </p>
@@ -340,7 +340,7 @@
                                                         method="POST">
                                                         @csrf
                                                         @method('PUT')
-                                                        <button type="submit" class="btn btn-sm btn-warning"
+                                                        <button title="Set Student admission status back to pending" type="submit" class="btn btn-sm btn-warning"
                                                             onclick="return confirm('Are you sure you want to set this application to pending?')">Set
                                                             Pending</button>
                                                     </form>
