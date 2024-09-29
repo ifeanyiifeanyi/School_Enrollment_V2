@@ -59,6 +59,11 @@ class ApplicationProcessController extends Controller
 
         $application = $user->applications;
 
+        if (empty($application)) {
+            return redirect()->route('student.dashboard')
+                ->with('error', 'You have not started an application yet. Please begin your application process.');
+        }
+
         if ($application->payment_id) {
             return redirect()->route('student.dashboard')
                 ->with('info', 'You have already submitted an application!');
