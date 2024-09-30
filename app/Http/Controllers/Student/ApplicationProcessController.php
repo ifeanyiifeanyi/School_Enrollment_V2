@@ -51,28 +51,67 @@ class ApplicationProcessController extends Controller
         return view('student.application.index');
     }
 
+    // public function finalApplicationStep(Request $request, string $userSlug): View
+    // {
+    //     $user = User::where('nameSlug', $userSlug)->firstOrFail();
 
-    public function finalApplicationStep(Request $request, string $userSlug): View|RedirectResponse
+    //     // Get the application or create a new one if it doesn't exist
+    //     $application = $user->applications ?? new Application(['user_id' => $user->id]);
+
+    //     $paymentMethods = PaymentMethod::latest()->get();
+
+    //     return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
+    // }
+
+    public function finalApplicationStep(Request $request, string $userSlug)
     {
-
         $user = User::where('nameSlug', $userSlug)->firstOrFail();
 
+        // Check if the student has already started an application
         $application = $user->applications;
 
-        if (empty($application)) {
-            return redirect()->route('student.admission.application')
-                ->with(['alert-type' => 'success', "message" => 'You have not started an application yet. Please begin your application process.']);
+        if (is_null($application)) {
+            // If no application exists, redirect back to the dashboard
+            return redirect()->route('student.dashboard')
+                ->with('warning', 'You have not started an application yet. Please start your application.');
         }
 
-        // if ($application->payment_id) {
-        //     return redirect()->route('student.dashboard')
-        //         ->with('info', 'You have already submitted an application!');
-        // }
+        // If application exists but payment is pending, allow proceeding to payment
+        if ($application->payment_status === 'pending') {
+            $paymentMethods = PaymentMethod::latest()->get();
 
-        $paymentMethods = PaymentMethod::latest()->get();
+            return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
+        }
 
-        return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
+        // If payment is completed, redirect to success page or next step
+        return redirect()->route('student.dashboard')
+            ->with('success', 'Your application has already been submitted.');
     }
+
+
+
+
+    // public function finalApplicationStep(Request $request, string $userSlug): View|RedirectResponse
+    // {
+
+    //     $user = User::where('nameSlug', $userSlug)->firstOrFail();
+
+    //     $application = $user->applications;
+
+    //     if (empty($application)) {
+    //         return redirect()->route('student.dashboard')
+    //             ->with(['alert-type' => 'success', "message" => 'You have not started an application yet. Please begin your application process.']);
+    //     }
+
+    //     // if ($application->payment_id) {
+    //     //     return redirect()->route('student.dashboard')
+    //     //         ->with('info', 'You have already submitted an application!');
+    //     // }
+
+    //     $paymentMethods = PaymentMethod::latest()->get();
+
+    //     return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
+    // }
 
 
     // process flutterWave

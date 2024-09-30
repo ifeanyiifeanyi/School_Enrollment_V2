@@ -141,7 +141,7 @@
         </div>
 
 
-        @if ($application)
+        @if($application)
 
             @include('student.payment.applicationStatus')
         @else
@@ -205,6 +205,7 @@
                 </div>
             </div>
         @endif
+
 
 
         <!-- /.container-fluid -->

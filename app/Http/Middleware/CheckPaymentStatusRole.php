@@ -18,24 +18,20 @@ class CheckPaymentStatusRole
     {
         $user = Auth::user();
         $application = $user->applications;
-        // dd($user);
 
-        if ($application) {
-
-            if ($application->payment_status === 'pending') {
-                return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
-                    ->with('warning', 'Please complete the payment to finalize your application.');
-            }
+        // Check if the student has started an application
+        if (is_null($application)) {
+            // Redirect back to dashboard with a warning message
+            return redirect()->route('student.dashboard')
+                ->with('warning', 'You have not started an application yet. Please begin your application.');
         }
-        // if (empty($application->payment_id)) {
-        //     return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
-        //         ->with('warning', 'Please complete the payment to finalize your application.');
-        // }
 
-        // if (empty($application->payment_id)) {
-        //     return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
-        //         ->with('warning', 'Please complete the payment to finalize your application.');
-        // }
+        // If the application exists but payment is pending
+        if ($application->payment_status === 'pending') {
+            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
+                ->with('warning', 'Please complete the payment to finalize your application.');
+        }
+
         return $next($request);
     }
 }

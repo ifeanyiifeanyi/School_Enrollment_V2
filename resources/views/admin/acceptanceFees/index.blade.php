@@ -54,7 +54,9 @@
                                             @forelse ($acceptanceFees as $acceptance)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ Str::title($acceptance->user->full_name) }}</td>
+                                                    <td>
+                                                        {{ Str::title($acceptance->user->full_name) }}
+                                                    </td>
                                                     <td>{{ Str::title($acceptance->user->student->phone) }}</td>
                                                     <td>{{ $acceptance->department }}</td>
                                                     <td>{{ $acceptance->transaction_id }}</td>
