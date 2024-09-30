@@ -18,11 +18,24 @@ class CheckPaymentStatusRole
     {
         $user = Auth::user();
         $application = $user->applications;
+        // dd($user);
 
-        if (empty($application->payment_id)) {
-            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
-                ->with('warning', 'Please complete the payment to finalize your application.');
+        if ($application) {
+
+            if ($application->payment_status === 'pending') {
+                return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
+                    ->with('warning', 'Please complete the payment to finalize your application.');
+            }
         }
+        // if (empty($application->payment_id)) {
+        //     return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
+        //         ->with('warning', 'Please complete the payment to finalize your application.');
+        // }
+
+        // if (empty($application->payment_id)) {
+        //     return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
+        //         ->with('warning', 'Please complete the payment to finalize your application.');
+        // }
         return $next($request);
     }
 }

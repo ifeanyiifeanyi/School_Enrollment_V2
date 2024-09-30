@@ -339,7 +339,7 @@
                                                     <form action="{{ route('admin.deny.application', $ap->id) }}"
                                                         method="POST">
                                                         @csrf
-                                                        @method('PUT')
+                                                        {{-- @method('PUT') --}}
                                                         <button title="Set Student admission status back to pending" type="submit" class="btn btn-sm btn-warning"
                                                             onclick="return confirm('Are you sure you want to set this application to pending?')">Set
                                                             Pending</button>

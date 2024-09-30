@@ -199,7 +199,7 @@ Route::middleware(['cors'])->group(function () {
                 Route::post('reject-application/{application}',  'rejectApplication')->name('admin.reject.application');
                 Route::get('search-pending-approvals',  'searchPendingApprovals')->name('admin.search.pending.approvals');
 
-                Route::put('deny-application/{application}/deny', 'denyApplication')->name('admin.deny.application');
+                Route::post('deny-application/{application}/deny', 'denyApplication')->name('admin.deny.application');
                 Route::post('applications/bulk-action', 'bulkAction')->name('admin.bulk.action');
                 Route::post('applications/{application}/approve', 'approveApplicationSingle')->name('admin.approve.admission');
 
@@ -292,7 +292,7 @@ Route::middleware(['cors'])->group(function () {
     Route::prefix('student')->middleware(['auth', 'verified', 'role:student'])->group(function () {
         Route::controller(StudentDashboardController::class)->group(function () {
 
-            Route::get('dashboard', 'dashboard')->name('student.dashboard')->middleware('check.payment.status');
+            Route::get('dashboard', 'dashboard')->name('student.dashboard');
 
             Route::get('logout', 'logout')->name('student.logout');
 
@@ -309,7 +309,7 @@ Route::middleware(['cors'])->group(function () {
 
         // NEW ADMISSION APPLICATION ROUTE ********
         Route::controller(StudentAdmissionApplicationController::class)->group(function () {
-            Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.payment.status');
+            Route::get('application-center', 'index')->name('student.admission.application');
             Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply');
 
             Route::get('congratulations', 'confirmAcceptanceOffer')->name('student.confirm.admissionStatus');

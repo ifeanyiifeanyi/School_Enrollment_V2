@@ -67,7 +67,7 @@
                             </div>
                             <!-- /.col -->
                             <div class="col-sm-4 invoice-col">
-                                <b>Invoice # {{ $application->invoice_number }}</b><br>
+                                <b>Invoice # {{ $application->invoice_number ?? 'NA' }}</b><br>
                                 <br>
                                 <b>Application ID:</b> {{ $user->student->application_unique_number }}<br>
                                 <b>Payment Due:</b> <code>{{ now()->addDays(20)->format('jS, F Y g:i A') }}</code><br>

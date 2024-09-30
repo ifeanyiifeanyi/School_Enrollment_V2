@@ -18,7 +18,7 @@ class StudentProfileController extends Controller
     public function profile()
     {
         $user = auth()->user();
-        $application = $user->applications->first();
+        $application = $user->applications;
 
         $hasPendingApplication = $application ? $application->admission_status === 'pending' : false;
 
