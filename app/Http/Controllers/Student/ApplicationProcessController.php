@@ -76,17 +76,18 @@ class ApplicationProcessController extends Controller
                 ->with('warning', 'You have not started an application yet. Please start your application.');
         }
 
-        // If application exists but payment is pending, allow proceeding to payment
+        // If the application exists but payment is pending
         if ($application->payment_status === 'pending') {
             $paymentMethods = PaymentMethod::latest()->get();
 
             return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
         }
 
-        // If payment is completed, redirect to success page or next step
+        // If payment is completed, redirect to the appropriate next step
         return redirect()->route('student.dashboard')
             ->with('success', 'Your application has already been submitted.');
     }
+
 
 
 
