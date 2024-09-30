@@ -25,7 +25,7 @@
                                 <p><strong>Name:</strong> {{ Str::title($acceptanceFee->user->full_name) }}</p>
                                 <p><strong>Phone Number:</strong> {{ $acceptanceFee->user->student->phone }}</p>
                                 <p><strong>Email:</strong> {{ $acceptanceFee->user->email }}</p>
-                                <p><strong>Department:</strong> {{ $acceptanceFee->department }}</p>
+                                {{-- <p><strong>Department:</strong> {{ $acceptanceFee->department }}</p> --}}
 
                                 <h5 class="card-title mt-4">Payment Information</h5>
                                 <p><strong>Amount:</strong> ₦{{ number_format($acceptanceFee->amount, 2) }}</p>

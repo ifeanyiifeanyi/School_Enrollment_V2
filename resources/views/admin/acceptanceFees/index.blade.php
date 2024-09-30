@@ -74,7 +74,7 @@
                                                 <th>SN</th>
                                                 <th>Student</th>
                                                 <th>Phone Number</th>
-                                                <th>Department</th>
+                                                {{-- <th>Department</th> --}}
                                                 <th>Transaction ID</th>
                                                 <th>Date</th>
                                                 <th>Status</th>

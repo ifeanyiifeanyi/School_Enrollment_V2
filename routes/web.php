@@ -205,7 +205,7 @@ Route::middleware(['cors'])->group(function () {
 
 
                 Route::get('pending-applications', 'pendingAdmissions')->name('admin.pendingAdmissions.manual');
-                Route::post('approve-admission-manual/{application}', 'approveAdmissionManual')->name('admin.approve.admission');
+                Route::post('approve-admission-manual/{application}', 'approveAdmissionManual')->name('admin.approve.manual');
             });
 
             Route::controller(AcceptanceFeeManagerController::class)->group(function () {

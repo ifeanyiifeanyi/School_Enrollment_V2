@@ -81,6 +81,8 @@ class AcceptanceFeeManagerController extends Controller
         }
 
         $acceptanceFees = $query->latest('paid_at')->get();
+        // dd($acceptanceFees);
+
         return view('admin.acceptanceFees.index', compact('acceptanceFees'));
     }
 
