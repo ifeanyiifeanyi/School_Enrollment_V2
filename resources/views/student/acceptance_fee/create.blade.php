@@ -123,7 +123,7 @@
 
                     <form action="{{ route('student.pay.acceptance.fee') }}" method="post" class="mt-4">
                         @csrf
-                        <input type="text" value="{{ auth()->user()->applications->department_id }}" name="department_id">
+                        <input type="hidden" value="{{ auth()->user()->applications->department_id }}" name="department_id">
                         <div class="form-group">
                             <button onclick="return confirm('Click yes to proceed with payment')" type="submit" class="btn btn-primary btn-block">Pay Now</button>
                         </div>
