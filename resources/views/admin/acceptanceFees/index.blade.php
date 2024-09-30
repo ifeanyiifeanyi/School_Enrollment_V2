@@ -34,6 +34,36 @@
                                 </div>
                             </div>
                         </form>
+
+                        <form action="{{ route('admin.acceptance_fees.export') }}" method="POST" class="mb-4">
+                            @csrf
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="start_date">Start Date</label>
+                                        <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="end_date">End Date</label>
+                                        <input type="date" class="form-control" id="end_date" name="end_date" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="department">Department (Optional)</label>
+                                        <input type="text" class="form-control" id="department" name="department">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>&nbsp;</label>
+                                        <button type="submit" class="btn btn-primary btn-block">Export Data</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">

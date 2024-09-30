@@ -206,13 +206,16 @@ Route::middleware(['cors'])->group(function () {
 
                 Route::get('pending-applications', 'pendingAdmissions')->name('admin.pendingAdmissions.manual');
                 Route::post('approve-admission-manual/{application}', 'approveAdmissionManual')->name('admin.approve.admission');
-
-
             });
 
             Route::controller(AcceptanceFeeManagerController::class)->group(function () {
                 Route::get('manage-acceptance-fees', 'index')->name('admin.acceptance_fees.index');
                 Route::get('/acceptance-fees/{acceptanceFee}', 'show')->name('admin.acceptance_fee.show');
+
+
+                Route::post('/acceptance-fees/export', 'export')->name('admin.acceptance_fees.export');
+
+
                 Route::put('/acceptance-fees/{acceptanceFee}/approve', 'approvedManually')->name('admin.acceptance_fee.approved_manually');
                 Route::delete('/acceptance-fees/{acceptanceFee}', 'destroy')->name('admin.acceptance_fee.destroy');
             });
@@ -309,8 +312,8 @@ Route::middleware(['cors'])->group(function () {
 
         // NEW ADMISSION APPLICATION ROUTE ********
         Route::controller(StudentAdmissionApplicationController::class)->group(function () {
-            Route::get('application-center', 'index')->name('student.admission.application');
-            Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply');
+            Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.payment.status');
+            Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply')->middleware('check.payment.status');
 
             Route::get('congratulations', 'confirmAcceptanceOffer')->name('student.confirm.admissionStatus');
             Route::post('congratulations', 'admissionResponse')->name('student.admission.response');

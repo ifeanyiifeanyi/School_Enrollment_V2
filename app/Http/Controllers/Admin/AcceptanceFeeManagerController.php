@@ -10,13 +10,47 @@ use App\Mail\AcceptanceFeePaidMail;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AcceptanceFeesExport;
 
 class AcceptanceFeeManagerController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      */
+
+    public function export(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'department' => 'nullable|string',
+        ]);
+
+        $query = AcceptanceFee::with(['user', 'user.student'])
+            ->where('status', 'paid')
+            ->whereBetween('paid_at', [$request->start_date, $request->end_date]);
+
+        if ($request->filled('department')) {
+            $query->where('department', $request->department);
+        }
+
+        $acceptanceFees = $query->get();
+
+        $exportData = $acceptanceFees->map(function ($fee) {
+            return [
+                'application_number' => $fee->user->student->application_unique_number,
+                'first_name' => $fee->user->first_name,
+                'last_name' => $fee->user->last_name,
+                'other_names' => $fee->user->other_names ?? '',
+            ];
+        });
+
+        $fileName = 'paid_acceptance_fees_' . now()->format('Y-m-d_His') . '.xlsx';
+
+        return Excel::download(new AcceptanceFeesExport($exportData), $fileName);
+    }
 
     public function index(Request $request)
     {
