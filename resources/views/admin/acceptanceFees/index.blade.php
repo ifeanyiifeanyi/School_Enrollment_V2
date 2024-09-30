@@ -35,19 +35,20 @@
                             </div>
                         </form>
 
+                        <!-- Updated Export Form -->
                         <form action="{{ route('admin.acceptance_fees.export') }}" method="POST" class="mb-4">
                             @csrf
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="start_date">Start Date</label>
-                                        <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                        <label for="start_date">Start Date (Optional)</label>
+                                        <input type="date" class="form-control" id="start_date" name="start_date">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label for="end_date">End Date</label>
-                                        <input type="date" class="form-control" id="end_date" name="end_date" required>
+                                        <label for="end_date">End Date (Optional)</label>
+                                        <input type="date" class="form-control" id="end_date" name="end_date">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -94,14 +95,19 @@
                                                     </td>
                                                     <td>
                                                         @if ($acceptance->status == 'paid')
-
                                                             <button class="btn btn-sm btn-success">PAID</button>
                                                         @elseif($acceptance->status == 'pending')
                                                             <button class="btn btn-sm btn-waring">PENDING</button>
                                                             <br>
-                                                            <form action="{{ route('admin.acceptance_fee.approved_manually', $acceptance->id) }}" method="post">
+                                                            <form
+                                                                action="{{ route('admin.acceptance_fee.approved_manually', $acceptance->id) }}"
+                                                                method="post">
                                                                 @csrf
-                                                                <button onclick="return confirm('Are sure of this action ?')" type="submit" class="btn btn-sm" style="background: blueviolet;color:white">Approve Payment</button>
+                                                                <button
+                                                                    onclick="return confirm('Are sure of this action ?')"
+                                                                    type="submit" class="btn btn-sm"
+                                                                    style="background: blueviolet;color:white">Approve
+                                                                    Payment</button>
                                                             </form>
                                                         @elseif($acceptance->status == 'expired')
                                                             <button class="btn btn-sm btn-danger">EXPIRED</button>

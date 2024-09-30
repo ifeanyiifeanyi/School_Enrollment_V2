@@ -23,14 +23,17 @@ class AcceptanceFeeManagerController extends Controller
     public function export(Request $request)
     {
         $request->validate([
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'department' => 'nullable|string',
         ]);
 
         $query = AcceptanceFee::with(['user', 'user.student'])
-            ->where('status', 'paid')
-            ->whereBetween('paid_at', [$request->start_date, $request->end_date]);
+            ->where('status', 'paid');
+
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('paid_at', [$request->start_date, $request->end_date]);
+        }
 
         if ($request->filled('department')) {
             $query->where('department', $request->department);
@@ -40,12 +43,16 @@ class AcceptanceFeeManagerController extends Controller
 
         $exportData = $acceptanceFees->map(function ($fee) {
             return [
-                'application_number' => $fee->user->student->application_unique_number,
-                'first_name' => $fee->user->first_name,
-                'last_name' => $fee->user->last_name,
-                'other_names' => $fee->user->other_names ?? '',
+                'application_number' => $fee->user->student->application_unique_number ?? 'N/A',
+                'first_name' => $fee->user->first_name ?? 'N/A',
+                'last_name' => $fee->user->last_name ?? 'N/A',
+                'other_names' => $fee->user->other_names ?? 'N/A',
             ];
         });
+
+        if ($exportData->isEmpty()) {
+            return redirect()->back()->with('error', 'No data found for the given criteria.');
+        }
 
         $fileName = 'paid_acceptance_fees_' . now()->format('Y-m-d_His') . '.xlsx';
 
