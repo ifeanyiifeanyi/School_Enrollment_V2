@@ -212,7 +212,6 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('manage-acceptance-fees', 'index')->name('admin.acceptance_fees.index');
                 Route::get('/acceptance-fees/{acceptanceFee}', 'show')->name('admin.acceptance_fee.show');
 
-
                 Route::post('/acceptance-fees/export', 'export')->name('admin.acceptance_fees.export');
 
 

@@ -25,7 +25,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <form action="{{ route('admin.acceptance_fees.index') }}" method="GET" class="search-form">
-                            <div class="input-group mb-3">
+                            <div class="mb-3 input-group">
                                 <input type="text" class="form-control"
                                     placeholder="Search by student name or department" name="search"
                                     value="{{ request('search') }}">
@@ -68,13 +68,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered" id="example1">
                                         <thead>
                                             <tr>
                                                 <th>SN</th>
                                                 <th>Student</th>
-                                                <th>Phone Number</th>
-                                                {{-- <th>Department</th> --}}
+                                                <th>Jamb</th>
+                                                <th>Department</th>
                                                 <th>Transaction ID</th>
                                                 <th>Date</th>
                                                 <th>Status</th>
@@ -88,7 +88,8 @@
                                                     <td>
                                                         {{ Str::title($acceptance->user->full_name) }}
                                                     </td>
-                                                    <td>{{ Str::title($acceptance->user->student->phone) }}</td>
+                                                    
+                                                    <td>{{ Str::title($acceptance->user->student->jamb_reg_no) }}</td>
                                                     <td>{{ $acceptance->department }}</td>
                                                     <td>{{ $acceptance->transaction_id }}</td>
                                                     <td>{{ $acceptance->paid_at ? $acceptance->paid_at->format('F d, Y H:i:s') : 'Not paid' }}

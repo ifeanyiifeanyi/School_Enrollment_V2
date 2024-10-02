@@ -51,17 +51,6 @@ class ApplicationProcessController extends Controller
         return view('student.application.index');
     }
 
-    // public function finalApplicationStep(Request $request, string $userSlug): View
-    // {
-    //     $user = User::where('nameSlug', $userSlug)->firstOrFail();
-
-    //     // Get the application or create a new one if it doesn't exist
-    //     $application = $user->applications ?? new Application(['user_id' => $user->id]);
-
-    //     $paymentMethods = PaymentMethod::latest()->get();
-
-    //     return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
-    // }
 
     public function finalApplicationStep(Request $request, string $userSlug)
     {
@@ -77,7 +66,7 @@ class ApplicationProcessController extends Controller
         }
 
         // If the application exists but payment is pending
-        if ($application->payment_status === 'pending') {
+        if ($application->payment_status == 'pending') {
             $paymentMethods = PaymentMethod::latest()->get();
 
             return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
