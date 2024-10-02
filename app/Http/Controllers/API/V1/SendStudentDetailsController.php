@@ -53,6 +53,7 @@ class SendStudentDetailsController extends Controller
     {
         return [
             'jamb_reg_no' => $fee->user->student->jamb_reg_no ?? 'N/A',
+
             'first_name' => $fee->user->first_name ?? 'N/A',
             'last_name' => $fee->user->last_name ?? 'N/A',
             'other_names' => $fee->user->other_names ?? 'N/A',
