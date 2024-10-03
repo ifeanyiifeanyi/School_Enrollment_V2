@@ -6,21 +6,25 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class CheckApplicationStatus
+class CheckApplicationPaymentStatus
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-
     public function handle(Request $request, Closure $next): Response
     {
         $user = auth()->user();
-        if ($user && $user->applications) {
-            return redirect()->route('student.dashboard')->with('warning', 'You have already submitted an application.');
+
+        if (!$user->applications) {
+            return redirect()->route('student.dashboard')->with('error', 'You have not submitted an application yet.');
         }
 
+        if (!$user->applications->payment_id) {
+            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
+                ->with('warning', 'Please complete your payment to access this page.');
+        }
         return $next($request);
     }
 }

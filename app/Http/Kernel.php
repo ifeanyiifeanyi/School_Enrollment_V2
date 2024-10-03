@@ -42,7 +42,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -75,13 +75,19 @@ class Kernel extends HttpKernel
 
         // this line is used to make student most pay after filling the application form
         'check.payment.status' => \App\Http\Middleware\CheckPaymentStatusRole::class,
+
         'check.application.status' => \App\Http\Middleware\CheckApplicationStatus::class,
+        'check.application.payment.status' => \App\Http\Middleware\CheckApplicationPaymentStatus::class,
+        'check.application.started' => \App\Http\Middleware\CheckApplicationStarted::class,
+
+
+
         'cors' => \App\Http\Middleware\CorsMiddleware::class,
 
         // this line is used to protect the receipt success page after payment
         'success.receipt' => \App\Http\Middleware\AcceptanceReceiptSuccessfulPaid::class,
         'public.receipt.view' => \App\Http\Middleware\AcceptanceReceiptPublicViewVerification::class,
-        
+
 
     ];
 }

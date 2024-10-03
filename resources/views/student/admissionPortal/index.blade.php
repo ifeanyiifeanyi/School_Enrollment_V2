@@ -42,9 +42,9 @@
 
         /* Page styles */
         /* body {
-                                                            font-family: 'Montserrat', sans-serif;
-                                                            background: linear-gradient(135deg, #667eea, #764ba2);
-                                                        } */
+                                                                font-family: 'Montserrat', sans-serif;
+                                                                background: linear-gradient(135deg, #667eea, #764ba2);
+                                                            } */
 
         .content {
             background-color: rgba(255, 255, 255, 0.9);
@@ -107,16 +107,12 @@
         <div class="loader"></div>
     </div>
 
-    <!-- Button to open the modal with animation class -->
-    {{-- <button type="button" class="m-3 btn btn-primary animate-btn" data-toggle="modal" data-target="#instructionsModal">
-        View Application Instructions
-    </button> --}}
-
     @if ($errors->has('error'))
         <div class="m-3 alert alert-danger">
             {{ $errors->first('error') }}
         </div>
     @endif
+
 
     <section class="mx-auto content">
         <form method="POST" action="{{ route('student.admission.application.apply') }}" enctype="multipart/form-data"
@@ -463,9 +459,7 @@
                         </div>
                         <hr>
                     </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-primary" onclick="nextStep(1)">Next</button>
-                    </div>
+                    <x-next-button />
                 </div>
             </div>
 
@@ -549,10 +543,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-secondary" onclick="prevStep(0)">Previous</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next</button>
-                    </div>
+                    <x-step-two />
                 </div>
             </div>
 
@@ -633,10 +624,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-secondary" onclick="prevStep(1)">Previous</button>
-                        <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next</button>
-                    </div>
+                    <x-step-three />
                 </div>
             </div>
 
@@ -701,10 +689,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <button type="button" class="btn btn-secondary" onclick="prevStep(2)">Previous</button>
-                        <button type="submit" class="btn btn-success">Submit</button>
-                    </div>
+                    <x-step-four />
                 </div>
             </div>
 

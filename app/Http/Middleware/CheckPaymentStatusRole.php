@@ -9,27 +9,24 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckPaymentStatusRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = Auth::user();
-        $application = $user->applications;
+        $user = auth()->user();
+        $application = $user->applications()->latest()->first(); // Get the most recent application
 
-        // Check if the student has started an application
-        if (is_null($application)) {
-            // Redirect back to dashboard with a warning message
+        if (!$application) {
+            // No application exists, redirect to start a new application
             return redirect()->route('student.dashboard')
-                ->with('warning', 'You have not started an application yet. Please begin your application.');
+                ->with('info', 'You have not started an application yet. Please begin your application.');
         }
 
-        // If the application exists but payment is pending
-        if ($application->payment_status === 'pending') {
-            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
-                ->with('warning', 'Please complete the payment to finalize your application.');
+        if (is_null($application->payment_id)) {
+            // Application exists but payment is pending
+            $notification = [
+                'message' => 'Please complete the payment to finalize your application.',
+                'alert-type' => 'info'
+            ];
+            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])->with($notification);
         }
 
         return $next($request);

@@ -309,13 +309,16 @@ Route::middleware(['cors'])->group(function () {
             Route::patch('profile/update', 'update')->name('student.profile.update');
         });
 
-        // NEW ADMISSION APPLICATION ROUTE ********
+        // // NEW ADMISSION APPLICATION ROUTE ********
         Route::controller(StudentAdmissionApplicationController::class)->group(function () {
-            Route::get('application-center', 'index')->name('student.admission.application')->middleware('check.payment.status');
-            Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply')->middleware('check.payment.status');
 
-            Route::get('congratulations', 'confirmAcceptanceOffer')->name('student.confirm.admissionStatus');
-            Route::post('congratulations', 'admissionResponse')->name('student.admission.response');
+            Route::get('application-center', 'index')->name('student.admission.application')
+                ->middleware('check.application.status');
+
+            Route::post('application-center/apply', 'submitAdmissionApplication')->name('student.admission.application.apply');
+
+            //     Route::get('congratulations', 'confirmAcceptanceOffer')->name('student.confirm.admissionStatus');
+            //     Route::post('congratulations', 'admissionResponse')->name('student.admission.response');
         });
 
 
@@ -332,28 +335,32 @@ Route::middleware(['cors'])->group(function () {
 
 
 
-        //NOTE: remember there is a task to delete application not paid after 20days(DeleteUnpaidApplications)
+        // //NOTE: remember there is a task to delete application not paid after 20days(DeleteUnpaidApplications)
         Route::controller(ApplicationProcessController::class)->group(function () {
-            // Route::get('application-process', 'index')->name('student.application.process')->middleware('check.application.status');
-            Route::get('/payment/{userSlug}', 'finalApplicationStep')->name('payment.view.finalStep');
+            // Route::get('application-process', 'index')->name('student.application.process');
+            Route::get('/payment/{userSlug}', 'finalApplicationStep')->name('payment.view.finalStep')
+                ->middleware('check.application.started');
 
             Route::post('application-process/store', 'processPayment')->name('student.payment.process');
             Route::get('handle/flutter-payment-call', 'handlePaymentCallBack')->name('student.payment.callbackFlutter');
             Route::get('handle/paystack-payment-call', 'handlePaymentCallBackPayStack')->name('student.payment.callbackPaystack');
 
 
-            Route::get('/payment/success', 'showSuccess')->name('student.payment.success');
+            Route::get('/payment/success', 'showSuccess')->name('student.payment.success')
+                ->middleware('check.application.payment.status');
+
+            Route::get('/payment-slip', 'viewPaymentSlip')->name('student.payment.slip');
         });
 
 
-        // student will apply for scholarship section
+        // // student will apply for scholarship section
         Route::controller(ScholarshipApplicationController::class)->group(function () {
             Route::get('scholarship', 'index')->name('student.scholarship.view');
             Route::post('scholarship/apply', 'apply')->name('student.scholarship.apply');
             Route::get('/scholarships/{id}', 'showDetail')->name('scholarships.show.detail');
             Route::get('scholarships/{id}/questions', 'getQuestions')->name('student.getQuestions');
 
-            // application success route
+            //     // application success route
             Route::get('scholarship-status', 'scholarshipStatus')->name('student.scholarships.status')->middleware('scholarship.submitted');
         });
 

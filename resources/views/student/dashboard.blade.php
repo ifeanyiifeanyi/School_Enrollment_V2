@@ -84,14 +84,28 @@
     </style>
 
 @endsection
-
-
-
-
-
 @section('student')
     <section class="content">
         <div class="container mt-5 mb-5">
+            @if ($showPaymentAlert)
+                <div class="alert alert-success">
+                    <h5>Your application has been submitted but payment is <b class="text-warning"> PENDING </b>.</h5>
+                    <p class="lead">
+                        Please <a class="btn btn-primary"
+                            href="{{ route('payment.view.finalStep', ['userSlug' => auth()->user()->nameSlug]) }}"
+                            class="alert-link">complete your payment</a> to finalize your application.
+                    </p>
+                </div>
+            @endif
+            @if (auth()->user()->applications && auth()->user()->applications->payment_id)
+                <div class="card mt-4">
+                    <div class="card-header">Completed Application</div>
+                    <div class="card-body">
+                        <p>Your application has been submitted and payment received.</p>
+                        <a href="{{ route('student.payment.slip') }}" class="btn btn-primary">View/Print Payment Slip</a>
+                    </div>
+                </div>
+            @endif
             <div class="p-4 notice">
                 <h2 class="text-center">Scholarship Eligibility and Conditions</h2>
                 <p><strong>1.</strong> The scholarship fund refers <strong>ONLY</strong> to the tuition cost for the
@@ -141,70 +155,70 @@
         </div>
 
 
-        @if($application)
+        {{-- @if ($application) --}}
 
-            @include('student.payment.applicationStatus')
-        @else
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-md-10">
-                        <div class="shadow-lg card">
-                            <div class="text-white card-header bg-primary">
-                                <h3 class="card-title">Faculties and Associated Departments</h3>
+        {{-- @include('student.payment.applicationStatus') --}}
+        {{-- @else --}}
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="shadow-lg card">
+                        <div class="text-white card-header bg-primary">
+                            <h3 class="card-title">Faculties and Associated Departments</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-4 alert alert-danger">
+                                <strong>IMPORTANT!!!</strong> Before selecting a department to apply to, carefully
+                                review the list below. It outlines each faculty's departments and the programs available
+                                for application. Take your time to explore the diverse academic disciplines within each
+                                faculty, considering the programs' offerings and alignment with your career aspirations.
+                                This comprehensive guide ensures you're well-informed when making this crucial decision.
+                                Delve into the details, assess your interests, and make the choice that best suits your
+                                academic journey and future goals.
                             </div>
-                            <div class="card-body">
-                                <div class="mb-4 alert alert-danger">
-                                    <strong>IMPORTANT!!!</strong> Before selecting a department to apply to, carefully
-                                    review the list below. It outlines each faculty's departments and the programs available
-                                    for application. Take your time to explore the diverse academic disciplines within each
-                                    faculty, considering the programs' offerings and alignment with your career aspirations.
-                                    This comprehensive guide ensures you're well-informed when making this crucial decision.
-                                    Delve into the details, assess your interests, and make the choice that best suits your
-                                    academic journey and future goals.
-                                </div>
-                                <div class="row">
-                                    @forelse ($faculties as $faculty)
-                                        <div class="mb-4 col-md-4">
-                                            <div class="card h-100">
-                                                <div class="text-white card-header bg-secondary">
-                                                    <h5 class="card-title">{{ Str::title($faculty->name) }}</h5>
-                                                </div>
-                                                <div class="card-body">
-                                                    <ul class="list-group list-group-flush">
-                                                        @forelse ($faculty->departments as $department)
-                                                            <li class="list-group-item">
-                                                                <a data-toggle="modal" data-target="#departmentModal"
-                                                                    data-department-id="{{ $department->id }}"
-                                                                    title="Click to view details" class="text-primary"
-                                                                    href="#!">
-                                                                    {{ Str::title($department->name) }}
-                                                                </a>
-                                                            </li>
-                                                        @empty
-                                                            <li class="list-group-item text-danger">
-                                                                Coming soon <i class="fas fa-spinner fa-spin"></i>
-                                                            </li>
-                                                        @endforelse
-                                                    </ul>
-                                                </div>
+                            <div class="row">
+                                @forelse ($faculties as $faculty)
+                                    <div class="mb-4 col-md-4">
+                                        <div class="card h-100">
+                                            <div class="text-white card-header bg-secondary">
+                                                <h5 class="card-title">{{ Str::title($faculty->name) }}</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <ul class="list-group list-group-flush">
+                                                    @forelse ($faculty->departments as $department)
+                                                        <li class="list-group-item">
+                                                            <a data-toggle="modal" data-target="#departmentModal"
+                                                                data-department-id="{{ $department->id }}"
+                                                                title="Click to view details" class="text-primary"
+                                                                href="#!">
+                                                                {{ Str::title($department->name) }}
+                                                            </a>
+                                                        </li>
+                                                    @empty
+                                                        <li class="list-group-item text-danger">
+                                                            Coming soon <i class="fas fa-spinner fa-spin"></i>
+                                                        </li>
+                                                    @endforelse
+                                                </ul>
                                             </div>
                                         </div>
-                                    @empty
-                                        <div class="col-md-12">
-                                            <div class="alert alert-danger">Try again later</div>
-                                        </div>
-                                    @endforelse
-                                </div>
-                                <div class="mt-4 d-flex justify-content-center">
-                                    {{-- {{ $faculties->links() }} --}}
-                                    {!! $faculties->links('pagination::bootstrap-4') !!}
-                                </div>
+                                    </div>
+                                @empty
+                                    <div class="col-md-12">
+                                        <div class="alert alert-danger">Try again later</div>
+                                    </div>
+                                @endforelse
+                            </div>
+                            <div class="mt-4 d-flex justify-content-center">
+                                {{-- {{ $faculties->links() }} --}}
+                                {!! $faculties->links('pagination::bootstrap-4') !!}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        @endif
+        </div>
+        {{-- @endif --}}
 
 
 

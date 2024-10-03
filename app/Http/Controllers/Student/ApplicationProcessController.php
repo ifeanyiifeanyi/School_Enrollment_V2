@@ -29,79 +29,30 @@ use Unicodeveloper\Flutterwave\Facades\Flutterwave as UnicodeveloperFlutterwave;
 
 class ApplicationProcessController extends Controller
 {
-    public function __construct()
-    {
-        if (!Auth::check()) {
-            return redirect()->route('login')->withErrors('You must be logged in to access this page.');
-        }
-    }
-    public function index()
-    {
-        $user = auth()->user();
-        $application = $user->applications;
-        // dd($application);
-        if (empty($application->payment_id)) {
-            // Application form has been filled, but payment is pending
-            $notification = [
-                'message' => 'Please complete the payment to finalize your application.',
-                'alert-type' => 'info'
-            ];
-            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])->with($notification);
-        }
-        return view('student.application.index');
-    }
-
 
     public function finalApplicationStep(Request $request, string $userSlug)
     {
         $user = User::where('nameSlug', $userSlug)->firstOrFail();
-
-        // Check if the student has already started an application
-        $application = $user->applications;
-
-        if (is_null($application)) {
-            // If no application exists, redirect back to the dashboard
-            return redirect()->route('student.dashboard')
-                ->with('warning', 'You have not started an application yet. Please start your application.');
-        }
+        $application = $request->application; // This is passed from the middleware
 
         // If the application exists but payment is pending
-        if ($application->payment_status == 'pending') {
+        if ($application->payment_id == null) {
             $paymentMethods = PaymentMethod::latest()->get();
+            // dd($paymentMethods);
 
-            return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
+            return view('student.payment.index', compact(
+                'user',
+                'application',
+                'paymentMethods'
+            ));
         }
 
         // If payment is completed, redirect to the appropriate next step
         return redirect()->route('student.dashboard')
-            ->with('success', 'Your application has already been submitted.');
+            ->with('info', 'Your application is complete and payment has been received.');
     }
 
 
-
-
-
-    // public function finalApplicationStep(Request $request, string $userSlug): View|RedirectResponse
-    // {
-
-    //     $user = User::where('nameSlug', $userSlug)->firstOrFail();
-
-    //     $application = $user->applications;
-
-    //     if (empty($application)) {
-    //         return redirect()->route('student.dashboard')
-    //             ->with(['alert-type' => 'success', "message" => 'You have not started an application yet. Please begin your application process.']);
-    //     }
-
-    //     // if ($application->payment_id) {
-    //     //     return redirect()->route('student.dashboard')
-    //     //         ->with('info', 'You have already submitted an application!');
-    //     // }
-
-    //     $paymentMethods = PaymentMethod::latest()->get();
-
-    //     return view('student.payment.index', compact('user', 'application', 'paymentMethods'));
-    // }
 
 
     // process flutterWave
@@ -277,77 +228,6 @@ class ApplicationProcessController extends Controller
     }
 
 
-    // PAY-STACK CALLBACK
-    // public function handlePaymentCallBackPayStack(Request $request)
-    // {
-    //     $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
-
-    //     try {
-    //         DB::beginTransaction();
-
-    //         $transaction = $paystack->transaction->verify([
-    //             'reference' => $request->reference,
-    //         ]);
-
-    //         if ($transaction->data->status === 'success') {
-    //             $user = User::where('email', $transaction->data->customer->email)->firstOrFail();
-
-    //             $application = $user->applications()->firstOrFail();
-    //             $paymentMethod = PaymentMethod::where('name', 'Paystack')->firstOrFail();
-
-    //             $paymentData = [
-    //                 'user_id' => $user->id,
-    //                 'amount' => $transaction->data->amount / 100, // Convert kobo to Naira
-    //                 'payment_method' => 'Paystack',
-    //                 'payment_status' => 'Successful',
-    //                 'transaction_id' => $transaction->data->reference,
-    //                 'payment_method_id' => $paymentMethod->id,
-    //             ];
-
-    //             $payment = Payment::create($paymentData);
-    //             $application->update(['payment_id' => $payment->id]);
-
-    //             DB::commit();
-
-    //             // Send email after transaction is committed
-    //             Mail::to($user->email)->send(new ApplicationStatusMail($user, $application, $payment));
-
-    //             $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
-
-    //             return view('student.payment.success', [
-    //                 'user' => $user,
-    //                 'application' => $application,
-    //                 'payment' => $payment,
-    //                 'barcodeUrl' => $barcodeUrl
-    //             ]);
-    //         } else {
-    //             // Handle declined transaction
-    //             DB::rollBack();
-    //             $userSlug = auth()->user()->nameSlug ?? null;
-    //             return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-    //                 ->withErrors('Payment was declined: ' . $transaction->data->gateway_response);
-    //         }
-    //     } catch (\Yabacon\Paystack\Exception\ApiException $e) {
-    //         DB::rollBack();
-    //         Log::error('Paystack API Error', ['message' => $e->getMessage()]);
-    //         return $this->handlePaymentError('An error occurred while verifying the payment.');
-    //     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-    //         DB::rollBack();
-    //         Log::error('Model Not Found', ['message' => $e->getMessage()]);
-    //         return $this->handlePaymentError('User or application not found.');
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         Log::error('General Error', ['message' => $e->getMessage()]);
-    //         return $this->handlePaymentError('An unexpected error occurred. Please try again.');
-    //     }
-    // }
-
-    // private function handlePaymentError($message)
-    // {
-    //     $userSlug = auth()->user()->nameSlug ?? null;
-    //     return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
-    //         ->withErrors($message);
-    // }
 
 
 
@@ -442,15 +322,26 @@ class ApplicationProcessController extends Controller
         return view('student.payment.success', compact('user', 'application', 'payment', 'barcodeUrl'));
     }
 
+    public function viewPaymentSlip()
+    {
+        $user = auth()->user();
+        $application = $user->applications;
 
-    // private function generateUniqueReference()
-    // {
-    //     // Generate a unique reference for the transaction
-    //     // combination of user ID, timestamp, and a random string
+        // Generate URL to the student details page
+        $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
 
-    //     $userId = auth()->user()->id;
-    //     $timestamp = time();
-    //     // $randomString = Str::random(10);
-    //     return $userId . '' . $timestamp;
-    // }
+        if (!$application || !$application->payment_id) {
+            return redirect()->route('student.dashboard')
+                ->with('error', 'No completed application found.');
+        }
+
+        $payment = Payment::find($application->payment_id);
+
+        return view('student.payment.slip', compact(
+            'barcodeUrl',
+            'user',
+            'application',
+            'payment'
+        ));
+    }
 }

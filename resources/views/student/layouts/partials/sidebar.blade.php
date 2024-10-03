@@ -35,6 +35,9 @@
                 @if (!empty(auth()->user()->student->passport_photo))
                     <img src="{{ asset(auth()->user()->student->passport_photo) }}" class="elevation-2"
                         alt="User Image">
+                    <h4 class="text-light">Hi, <span
+                            class="brand-text font-weight-light">{{ Str::title(auth()->user()->first_name) }}</span>
+                    </h4>
                 @else
                     <h4 class="text-light">Hi, <span
                             class="brand-text font-weight-light">{{ Str::title(auth()->user()->first_name) }}</span>

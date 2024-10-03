@@ -25,16 +25,17 @@ class StudentAdmissionApplicationController extends Controller
 {
     public function index()
     {
+        // dd("studentapplications");
         $user = auth()->user();
-        $application = $user->applications;
-        if (empty($application->payment_id)) {
-            // Application form has been filled, but payment is pending
-            $notification = [
-                'message' => 'Please complete the payment to finalize your application.',
-                'alert-type' => 'info'
-            ];
-            return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])->with($notification);
-        }
+        // $application = $user->applications;
+        // if (empty($application->payment_id)) {
+        //     // Application form has been filled, but payment is pending
+        //     $notification = [
+        //         'message' => 'Please complete the payment to finalize your application.',
+        //         'alert-type' => 'info'
+        //     ];
+        //     return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])->with($notification);
+        // }
 
 
         $religions = config('app_data.religions');
@@ -78,6 +79,7 @@ class StudentAdmissionApplicationController extends Controller
     // submit first stage of admission application before payment
     public function submitAdmissionApplication(Request $request)
     {
+        // dd($request);
         $userId = auth()->user()->id;
 
         // General validation rules
@@ -188,13 +190,13 @@ class StudentAdmissionApplicationController extends Controller
                     'user_id' => $user->id,
                     'department_id' => $request->department_id,
                     'academic_session_id' => $request->academic_session_id,
-                    'invoice_number' => mt_rand(100000, 999999)
+                    'invoice_number' => $this->generateInvoiceNumber()
                 ]
             );
-
-            
-            Mail::to($user->email)->send(new RegistrationConfirmationMail($user, $application));
             DB::commit();
+
+
+            Mail::to($user->email)->send(new RegistrationConfirmationMail($user, $application));
             return redirect()->route('payment.view.finalStep', ['userSlug' => Str::slug($user->nameSlug)]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -203,27 +205,6 @@ class StudentAdmissionApplicationController extends Controller
             return redirect()->back()->withInput()->withErrors(['error' => 'An unexpected error occurred. Please try again.']);
         }
     }
-
-
-
-    // protected function storeFile($file, $directory)
-    // {
-    //     if ($file) {
-    //         $filename = Str::random(20) . '.' . $file->getClientOriginalExtension();
-
-    //         // Get the path
-    //         $path = public_path($directory);
-
-    //         // Save the image
-    //         $manager = new ImageManager(Driver::class);
-    //         $image = $manager->read($file->getRealPath());
-    //         $image->save($path . '/' . $filename);
-
-    //         return $directory . '/' . $filename;
-    //     }
-
-    //     return null;
-    // }
 
     protected function storeFile($file, $directory)
     {
@@ -270,5 +251,10 @@ class StudentAdmissionApplicationController extends Controller
             ->first();
         // dd($student);
         return view('student.admissionPortal.congratulations', compact('student'));
+    }
+
+    private function generateInvoiceNumber()
+    {
+        return 'INV' . strtoupper(uniqid());
     }
 }

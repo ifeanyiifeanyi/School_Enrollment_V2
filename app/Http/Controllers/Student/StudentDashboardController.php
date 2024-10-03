@@ -27,7 +27,12 @@ class StudentDashboardController extends Controller
             ->with('departments')
             ->simplePaginate(15);
 
-        return view('student.dashboard', compact('faculties', 'application', 'user', 'barcodeUrl'));
+        $showPaymentAlert = false;
+        if ($application && !$application->payment_id) {
+            $showPaymentAlert = true;
+        }
+
+        return view('student.dashboard', compact('showPaymentAlert','faculties', 'application', 'user', 'barcodeUrl'));
     }
     /**
      * Display a listing of the resource.
