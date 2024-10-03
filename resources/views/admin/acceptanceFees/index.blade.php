@@ -68,7 +68,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="example1">
+                                    <table class="table table-bordered" id="">
                                         <thead>
                                             <tr>
                                                 <th>SN</th>
@@ -88,7 +88,7 @@
                                                     <td>
                                                         {{ Str::title($acceptance->user->full_name) }}
                                                     </td>
-                                                    
+
                                                     <td>{{ Str::title($acceptance->user->student->jamb_reg_no) }}</td>
                                                     <td>{{ $acceptance->department }}</td>
                                                     <td>{{ $acceptance->transaction_id }}</td>
