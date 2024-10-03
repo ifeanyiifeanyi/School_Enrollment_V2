@@ -71,7 +71,6 @@
                                     <table class="table table-bordered" id="">
                                         <thead>
                                             <tr>
-                                                
                                                 <th>SN</th>
                                                 <th>Student</th>
                                                 <th>Jamb</th>
