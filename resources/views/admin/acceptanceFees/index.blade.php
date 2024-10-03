@@ -65,6 +65,11 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="card w-50 shadow">
+                            <div class="card-header">
+                                <h4>Total Acceptance Fees Paid: {{ $acceptanceFeeCount }}</h4>
+                            </div>
+                        </div>
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">

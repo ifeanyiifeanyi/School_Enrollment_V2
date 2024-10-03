@@ -61,6 +61,7 @@ class AcceptanceFeeManagerController extends Controller
 
     public function index(Request $request)
     {
+        $acceptanceFeeCount = AcceptanceFee::where('status', 'paid')->count();
         $query = AcceptanceFee::with(['user', 'user.student']);
 
         if ($request->has('search')) {
@@ -83,7 +84,7 @@ class AcceptanceFeeManagerController extends Controller
         $acceptanceFees = $query->latest('paid_at')->get();
         // dd($acceptanceFees);
 
-        return view('admin.acceptanceFees.index', compact('acceptanceFees'));
+        return view('admin.acceptanceFees.index', compact('acceptanceFees', 'acceptanceFeeCount'));
     }
 
 
