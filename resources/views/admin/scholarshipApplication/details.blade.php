@@ -27,19 +27,19 @@
                             <p>
                                 <img src="{{ asset($application->user->student->passport_photo) }}" alt="passport photo" class="" width="120">
                             </p>
-                            <p><strong>Name:</strong> {{ $application->user->full_name }}</p>
+                            <p><strong>Name:</strong> {{ Str::title($application->user->full_name) }}</p>
                             <p><strong>Email:</strong> {{ $application->user->email }}</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Scholarship:</strong> {{ $application->scholarship->name }}</p>
-                            <p><strong>Status:</strong> {{ $application->status }}</p>
+                            <p><strong>Scholarship:</strong> {{ Str::upper($application->scholarship->name) }}</p>
+                            <p><strong>Status:</strong> {{ Str::upper($application->status) }}</p>
                         </div>
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <p><strong>Department:</strong> {{ $application->department->name ?? 'N/A' }}</p>
 
 
                             <p><strong>Faculty:</strong> {{ $application->department->faculty->name ?? 'N/A' }}</p>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <hr>

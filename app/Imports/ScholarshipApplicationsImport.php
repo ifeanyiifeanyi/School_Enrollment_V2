@@ -33,7 +33,7 @@ class ScholarshipApplicationsImport implements ToCollection, WithHeadingRow, Wit
                 $application->status = $row['status'];
                 $application->save();
 
-                if ($oldStatus !== $row['status']) {
+                if ($oldStatus != $row['status']) {
                     Mail::to($application->user->email)->send(new ScholarshipStatusChanged($application));
                 }
 

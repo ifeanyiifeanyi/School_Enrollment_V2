@@ -282,6 +282,8 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('scholarship-applications/{id}/details', 'show')->name('admin.scholarship.applicantShow');
                 Route::get('admin/scholarships/applications/export', 'export')->name('admin.scholarship.applications.export');
                 Route::post('admin/scholarships/applications/import', 'import')->name('admin.scholarship.applications.import');
+
+                Route::patch('scholarship/applications/{id}/approve','approve')->name('admin.scholarship.approve.single');
             });
         });
     });
