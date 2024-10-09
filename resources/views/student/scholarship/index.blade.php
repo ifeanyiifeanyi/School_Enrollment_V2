@@ -20,7 +20,7 @@
 
                                     <h4>{{ Str::title($scholarship->name) }}</h4>
                                     <p>
-                                        {{ Str::limit($scholarship->description, 200) }}
+                                        {!! Str::limit($scholarship->description, 200) !!}
                                         <br>
                                         <a href="" class="btn btn-sm btn-outline-info mt-3mt-3 show-scholarship-modal"
                                             data-id="{{ $scholarship->id }}">Read more</a>

@@ -134,8 +134,8 @@
                                     <p><strong>Name:</strong> {{ Str::title(auth()->user()->full_name) }}</p>
                                     <p><strong>Student ID:</strong>
                                         {{ auth()->user()->student->application_unique_number ?? 'N/A' }}</p>
-                                    <p><strong>Department:</strong>
-                                        {{ auth()->user()->applications->first()->department->name ?? 'N/A' }}</p>
+                                    {{-- <p><strong>Department:</strong>
+                                        {{ auth()->user()->applications->first()->department->name ?? 'N/A' }}</p> --}}
                                     <p><strong>Email:</strong> {{ Str::lower(auth()->user()->email ?? 'N/A') }}</p>
                                     <p><strong>Phone:</strong> {{ auth()->user()->student->phone ?? 'N/A' }}</p>
                                 </div>
