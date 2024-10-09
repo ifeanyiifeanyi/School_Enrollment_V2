@@ -105,14 +105,14 @@
                 <th>Payment Date:</th>
                 <td>{{ $acceptanceFee->paid_at->format('F d, Y H:i:s') }}</td>
             </tr>
-            <tr>
+            {{-- <tr>
                 <th>Academic Year:</th>
                 <td>{{ $acceptanceFee->academic_year }}</td>
             </tr>
             <tr>
                 <th>Department:</th>
                 <td>{{ $acceptanceFee->department }}</td>
-            </tr>
+            </tr> --}}
         </table>
     </div>
     <div class="qr-code">
