@@ -49,7 +49,7 @@ class StudentAcceptanceFeeController extends Controller
         // Create a new acceptance fee record
         $acceptanceFee = new AcceptanceFee([
             'user_id' => $user->id,
-            'amount' => 40450, // 40,000 Naira + 450 Naira processing fee
+            'amount' => 40000, // 40,000 Naira + 450 Naira processing fee
             'academic_year' => $academic_session->session,
             'department' => $department->name,
             'status' => 'pending',
@@ -68,7 +68,7 @@ class StudentAcceptanceFeeController extends Controller
 
             $transaction = $paystack->transaction->initialize([
                 'email' => $user->email,
-                'amount' => $acceptanceFee->amount * 100, // Convert to kobo
+                'amount' => 41450 * 100, // Convert to kobo
                 'reference' => $reference,
                 'callback_url' => route('student.acceptance_fee.callback'),
                 'subaccount' => $subAccountCode,

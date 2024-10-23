@@ -127,6 +127,7 @@
                         <div class="form-group">
                             <button onclick="return confirm('Click yes to proceed with payment')" type="submit" class="btn btn-primary btn-block">Pay Now</button>
                         </div>
+                        <p class="text-muted">Please note, service charge will be applied to your payment</p>
                     </form>
                 </div>
             </div>
