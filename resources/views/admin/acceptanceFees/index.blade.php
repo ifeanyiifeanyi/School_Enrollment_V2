@@ -54,60 +54,61 @@
 
                         <!-- Main Table -->
 
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>SN</th>
-                                                <th>Student</th>
-                                                <th>Jamb</th>
-                                                {{-- <th>Department</th> --}}
-                                                <th>Amount</th>
-                                                {{-- <th>Transaction ID</th> --}}
-                                                <th>Date</th>
-                                                <th>Status</th>
-                                                {{-- <th class="no-print">Action</th> --}}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @forelse ($acceptanceFees as $acceptance)
-                                                <tr>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ Str::title($acceptance->user->full_name) }}</td>
-                                                    <td>{{ Str::title($acceptance->user->student->jamb_reg_no) }}</td>
-                                                    {{-- <td>{{ $acceptance->department }}</td> --}}
-                                                    <td>₦{{ number_format($acceptance->amount, 2) }}</td>
-                                                    {{-- <td>{{ $acceptance->transaction_id }}</td> --}}
-                                                    <td>{{ $acceptance->paid_at ? $acceptance->paid_at->format('M d, Y H:i') : 'Not paid' }}</td>
-                                                    <td>
-                                                        @if ($acceptance->status == 'paid')
-                                                            <span class="badge badge-success">PAID</span>
-                                                        @elseif($acceptance->status == 'pending')
-                                                            <span class="badge badge-warning">PENDING</span>
-                                                        @elseif($acceptance->status == 'expired')
-                                                            <span class="badge badge-danger">EXPIRED</span>
-                                                        @endif
-                                                    </td>
-                                                    {{-- <td class="no-print">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>SN</th>
+                                        <th>Student</th>
+                                        <th>Jamb</th>
+                                        {{-- <th>Department</th> --}}
+                                        <th>Amount</th>
+                                        {{-- <th>Transaction ID</th> --}}
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        {{-- <th class="no-print">Action</th> --}}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($acceptanceFees as $acceptance)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ Str::title($acceptance->user->full_name) }}</td>
+                                            <td>{{ Str::title($acceptance->user->student->jamb_reg_no) }}</td>
+                                            {{-- <td>{{ $acceptance->department }}</td> --}}
+                                            <td>₦{{ number_format($acceptance->amount, 2) }}</td>
+                                            {{-- <td>{{ $acceptance->transaction_id }}</td> --}}
+                                            <td>{{ $acceptance->paid_at ? $acceptance->paid_at->format('M d, Y H:i') : 'Not paid' }}
+                                            </td>
+                                            <td>
+                                                @if ($acceptance->status == 'paid')
+                                                    <span class="badge badge-success">PAID</span>
+                                                @elseif($acceptance->status == 'pending')
+                                                    <span class="badge badge-warning">PENDING</span>
+                                                @elseif($acceptance->status == 'expired')
+                                                    <span class="badge badge-danger">EXPIRED</span>
+                                                @endif
+                                            </td>
+                                            {{-- <td class="no-print">
                                                         <!-- [Previous action buttons code remains the same] -->
                                                     </td> --}}
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="9">
-                                                        <div class="alert alert-danger">No acceptance fees found</div>
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="4" class="text-right"><strong>Total:</strong></td>
-                                                <td colspan="5"><strong>₦{{ number_format($totalAmount, 2) }}</strong></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="9">
+                                                <div class="alert alert-danger">No acceptance fees found</div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-right"><strong>Total:</strong></td>
+                                        <td colspan="5"><strong>₦{{ number_format($totalAmount, 2) }}</strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
 
 
 

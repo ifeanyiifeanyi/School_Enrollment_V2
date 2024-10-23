@@ -4,36 +4,195 @@
 
 @section('css')
     <style>
+
+    /* Summary Cards Styles */
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card__title {
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card__value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+/* Action Buttons Container */
+.action-buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    clear: both;
+}
+
+/* Search and Filter Container */
+.search-filter-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    align-items: center;
+}
+
+.search-container {
+    flex: 1;
+    position: relative;
+    margin: 0;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px 15px 45px;
+    border-radius: 30px;
+    border: 2px solid #e9ecef;
+}
+
+/* Department Filter */
+.department-filter {
+    width: 300px;
+}
+
+/* Import Form */
+.import-form-container {
+    margin-bottom: 1rem;
+}
+
+/* Print Styles */
+@media print {
+    /* Hide sidebar and other non-printable elements */
+    .main-sidebar,
+    .navbar,
+    .section-header,
+    .non-printable,
+    .search-container,
+    .paginate {
+        display: none !important;
+    }
+
+    /* Adjust main content for printing */
+    .main-content {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Ensure full width for content */
+    .card,
+    .card-body,
+    .table-responsive {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0.5rem !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Optimize stats cards for printing */
+    .stats-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        page-break-inside: avoid;
+    }
+
+    .stat-card {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        margin: 0;
+        box-shadow: none;
+    }
+
+    /* Table styles for print */
+    .table {
+        font-size: 10pt;
+        border-collapse: collapse;
+        width: 100% !important;
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid #ddd;
+        padding: 4px;
+    }
+
+    /* Status badges */
+    .badge {
+        border: 1px solid #000;
+        padding: 2px 5px;
+        font-weight: normal;
+    }
+
+    /* Ensure page breaks don't split rows */
+    tr {
+        page-break-inside: avoid;
+    }
+}
+        /* Summary Cards Styles */
+        /* .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card__title {
+            color: #6c757d;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card__value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Existing Styles */
         .action-buttons {
             display: flex;
             justify-content: space-around;
         }
 
-        card {
+        .card {
             width: 100%;
-        }
-
-        .list-group-item {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .badge {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Media query for smaller screens */
-        @media (max-width: 576px) {
-            .list-group-item {
-                flex-direction: row;
-                align-items: center;
-                flex-wrap: wrap;
-            }
-
-            .badge {
-                margin-bottom: 0;
-                margin-right: 0.5rem;
-            }
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
         }
 
         .loader-overlay {
@@ -44,142 +203,52 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
             background-color: rgba(255, 255, 255, 0.8);
         }
-
-        .loader {
-            border: 8px solid #f3f3f3;
-            /* Light grey */
-            border-top: 8px solid #3498db;
-            /* Blue */
-            border-radius: 50%;
-            width: 10%;
-            /* Percentage-based size for responsiveness */
-            max-width: 120px;
-            /* Max width for larger screens */
-            height: 10%;
-            /* Percentage-based size for responsiveness */
-            max-height: 120px;
-            /* Max height for larger screens */
-            animation: spin 2s linear infinite;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Responsive styles */
-        @media (max-width: 767px) {
-            .loader {
-                width: 20%;
-                /* Adjust size for smaller screens */
-                height: 20%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .loader {
-                width: 30%;
-                /* Adjust size for very small screens */
-                height: 30%;
-            }
-        }
-
-
-        /* Loader Styles */
-        .card {
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .card-header {
-            background: linear-gradient(to right, #007bff, #6610f2);
-            border-top-left-radius: 0.5rem;
-            border-top-right-radius: 0.5rem;
-        }
-
-        .card-title {
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .list-group-item {
-            border: none;
-            background-color: #f8f9fa;
-            transition: all 0.3s ease;
-        }
-
-        .list-group-item:hover {
-            background-color: #e9ecef;
-            transform: translateX(5px);
-        }
-
-        .badge-pill {
-            font-size: 0.875rem;
-            font-weight: 600;
-            padding: 0.375rem 0.75rem;
-        }
-
-        tr {
-            border: 2px solid #ddd !important;
-        }
-
 
         .search-container {
             position: relative;
             width: 100%;
             margin: 20px 0;
-            text-align: center
+            text-align: center;
         }
 
         .search-input {
             width: 80%;
             padding: 15px 20px 15px 45px;
-            font-size: 18px;
-            line-height: 1.5;
-            color: #333;
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
             border-radius: 30px;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e9ecef;
         }
 
-        .search-input:focus {
-            outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-        }
+        /* Print Styles */
+        @media print {
+            .stats-cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1rem;
+                margin-bottom: 2rem;
+                page-break-inside: avoid;
+            }
 
-        .search-input::placeholder {
-            color: #6c757d;
-        }
+            .stat-card {
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
 
-        .search-icon {
-            position: absolute;
-            top: 50%;
-            left: 12%;
-            transform: translateY(-50%);
-            color: #6c757d;
-            font-size: 18px;
-        }
+            .non-printable {
+                display: none !important;
+            }
+
+            .table {
+                font-size: 10pt;
+                width: 100% !important;
+            }
+
+            .badge {
+                border: 1px solid #000;
+                padding: 2px 5px;
+            }
+        } */
     </style>
 @endsection
 
@@ -189,9 +258,41 @@
     </div>
 
     <div class="main-content">
+        <!-- Summary Statistics -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-card__title">Total Applications</div>
+                <div class="stat-card__value">{{ number_format($totalStudents) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__title">Total Amount</div>
+                <div class="stat-card__value">₦{{ number_format($totalAmount, 2) }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__title">Approved Applications</div>
+                <div class="stat-card__value">
+                    {{ number_format($applications->where('admission_status', 'approved')->count()) }}
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__title">Pending Applications</div>
+                <div class="stat-card__value">
+                    {{ number_format($applications->where('admission_status', 'pending')->count()) }}
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card__title">Average Payment</div>
+                <div class="stat-card__value">
+                    ₦{{ $totalStudents > 0 ? number_format($totalAmount / $totalStudents, 2) : '0.00' }}
+                </div>
+            </div>
+        </div>
+
         @include('student.alert')
+        
+        <!-- Import Errors -->
         @if (session('import_errors'))
-            <div class="alert alert-danger">
+            <div class="alert alert-danger non-printable">
                 <h4>Import Errors:</h4>
                 <ul>
                     @foreach (session('import_errors') as $error)
@@ -201,23 +302,28 @@
             </div>
         @endif
 
+        <!-- Success Message -->
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success non-printable">
                 {{ session('success') }}
             </div>
         @endif
+
         <section class="section">
-            <div class="section-header">
+            {{-- <div class="section-header non-printable">
                 <h1>@yield('title')</h1>
-            </div>
-            <div class="search-container">
+            </div> --}}
+
+            <!-- Search Box -->
+            <div class="search-container non-printable">
                 <input type="search" id="search" class="search-input" placeholder="Search Students...">
                 <i class="search-icon fas fa-search"></i>
             </div>
-            <div class="section-body">
 
+            <div class="section-body">
                 <div class="card">
-                    <div class="card-body">
+                    <!-- Status Information -->
+                    <div class="card-body non-printable">
                         <p class="text-muted">ALLOWED APPLICATION STATUS</p>
                         <ul>
                             <li>Pending</li>
@@ -225,243 +331,154 @@
                             <li>Denied</li>
                         </ul>
                     </div>
-                    <!-- /.card-header -->
+
+                    <!-- Main Content -->
                     <div class="card-body">
-                        <div class="float-left">
-                            <form id="import-form" action="{{ route('admin.student.applications.import') }}" method="POST"
-                                enctype="multipart/form-data">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="exampleInputFile">Import File</label>
-                                    <div class="container">
-                                        @error('file')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="custom-file">
-                                        <input type="file" name="file" class="form-control w-100"
-                                            id="exampleInputFile">
-                                        <button type="submit" class="mt-2 btn btn-primary w-100">Import</button>
+                        <!-- Import Form -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="float-right non-printable">
+                                    <form id="import-form" action="{{ route('admin.student.applications.import') }}" method="POST"
+                                        enctype="multipart/form-data">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label for="exampleInputFile">Import File</label>
+                                            <div class="container">
+                                                @error('file')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="custom-file">
+                                                <input type="file" name="file" class="form-control w-100" id="exampleInputFile">
+                                                <button type="submit" class="mt-2 btn btn-primary w-100">Import</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Department Filter -->
+                                <div class="float-right non-printable">
+                                    <form id="departmentForm" action="{{ route('admin.student.application') }}" method="GET">
+                                        <select class="form-control selectric" name="department_id"
+                                            onchange="updateExportLink(); this.form.submit();">
+                                            <option value="">Select by Department (Show All)</option>
+                                            @foreach ($departments as $department)
+                                                <option value="{{ $department->id }}"
+                                                    {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                                                    {{ Str::title($department->name) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </form>
+                                </div>
+
+
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- Action Buttons -->
+                                        <div class="float-right pb-1 non-printable">
+                                            <button onclick="printApplications()" class="btn btn-secondary">
+                                                <i class="fas fa-print"></i> Print
+                                            </button>
+                                            <button onclick="return confirm('Are you sure of this APPROVE action ?')" id="bulkApprove"
+                                                class="btn" style="background: blueviolet; color: white">
+                                                Approve Selected
+                                            </button>
+                                            <button onclick="return confirm('Are you sure of this PENDING action ?')" id="bulkPending"
+                                                class="btn" style="background: rgb(213, 45, 3); color:white">
+                                                Set Selected to Pending
+                                            </button>
+                                            <a href="{{ route('admin.student.applications.export') }}" class="btn"
+                                                style="background: rgb(227, 6, 150);color:white" id="exportButton">
+                                                Export to Excel
+                                            </a>
+                                        </div>     
                                     </div>
                                 </div>
-                            </form>
-                        </div>
-                        <div class="clearfix mb-3"></div>
+                            </div>
+                       </div>
 
-                        <div class="float-left">
-                            <form id="departmentForm" action="{{ route('admin.student.application') }}" method="GET">
-                                <select class="form-control selectric" name="department_id"
-                                    onchange="updateExportLink(); this.form.submit();">
-                                    <option value="">Select by Department (Show All)</option>
-                                    @foreach ($departments as $department)
-                                        <option value="{{ $department->id }}"
-                                            {{ request('department_id') == $department->id ? 'selected' : '' }}>
-                                            {{ Str::title($department->name) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </form>
-                        </div>
-
-                        <div class="float-right pb-1">
-                            <button onclick="return confirm('Are you sure of this APPROVE action ?')" id="bulkApprove"
-                                class="btn" style="background: blueviolet; color: white">Approve
-                                Selected</button>
-                            <button onclick="return confirm('Are you sure of this PENDING action ?')" id="bulkPending"
-                                class="btn" style="background: rgb(213, 45, 3); color:white">Set
-                                Selected to Pending</button>
-                            <a href="{{ route('admin.student.applications.export') }}" class="btn"
-                                style="background: rgb(227, 6, 150);color:white" id="exportButton">Export to Excel</a>
-                        </div>
+                        <!-- Applications Table -->
                         <div class="table-responsive">
-                            <table id="" class="table table-bordered table-striped">
+                            <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        {{-- <th><input type="checkbox" id="selectAll"></th> --}}
-                                        <th style="width: 20px">s/n</th>
-                                        <th style="width: auto !important">Student</th>
-                                        <th style="width: auto !important">Phone Number</th>
+                                        <th style="width: 20px">S/N</th>
+                                        <th>Student</th>
+                                        <th>Phone Number</th>
                                         <th>Application No.</th>
                                         <th>Department</th>
-                                        {{-- <th>Session</th> --}}
-                                        {{-- <th style="width: 20px">Exam</th> --}}
                                         <th>Admission</th>
-                                        <th>Action</th>
+                                        <th class="non-printable">Action</th>
                                     </tr>
                                 </thead>
-                                {{-- @dd($applications) --}}
                                 <tbody id="applicationTableBody">
                                     @forelse ($applications as $ap)
                                         <tr>
-                                            {{-- <td><input type="checkbox" class="application-checkbox"
-                                                    value="{{ $ap->id }}"></td> --}}
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
                                                 {{ Str::title($ap->user->full_name) ?? 'N/A' }}
-                                                <p>
+                                                <p class="non-printable">
                                                     <a href="{{ route('admin.show.student', $ap->user->nameSlug) }}"
                                                         class="mt-2 link">Details</a>
                                                 </p>
                                             </td>
-                                            <td>
-                                                <p>{{ $ap->user->student->phone }}</p>
-                                            </td>
+                                            <td>{{ $ap->user->student->phone }}</td>
                                             <td>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</td>
                                             <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
-                                            {{-- <td>{{ $ap->academicSession->session ?? 'N/A' }}</td> --}}
-
-                                            {{-- <td>{{ $ap->user->student->exam_score ?? 0 }}</td> --}}
                                             <td>
                                                 @if ($ap->admission_status == 'pending')
-                                                    <span class="badge bg-warning text-light">Pending <i
-                                                            class="fa fa-spinner fa-spin"></i></span>
+                                                    <span class="badge bg-warning text-light">Pending</span>
                                                 @elseif ($ap->admission_status == 'denied')
-                                                    <span class="badge bg-danger text-light">Denied <i
-                                                            class="fa fa-times"></i></span>
+                                                    <span class="badge bg-danger text-light">Denied</span>
                                                 @elseif ($ap->admission_status == 'approved')
-                                                    <span class="badge bg-success text-light">Approved <i
-                                                            class="fa fa-check"></i></span>
+                                                    <span class="badge bg-success text-light">Approved</span>
                                                 @endif
                                             </td>
-
-                                            <td>
+                                            <td class="non-printable">
                                                 @if ($ap->admission_status == 'pending')
-                                                    <p>
                                                     <form action="{{ route('admin.approve.admission', $ap->id) }}" method="POST">
                                                         @csrf
-
-                                                        <button title="Approve Pending Student Admission" type="submit" class="btn btn-sm btn-success"
-                                                            onclick="return confirm('Are you sure you want to approve this application?')">Approve</button>
+                                                        <button type="submit" class="btn btn-sm btn-success"
+                                                            onclick="return confirm('Are you sure you want to approve this application?')">
+                                                            Approve
+                                                        </button>
                                                     </form>
-                                                    </p>
                                                 @elseif ($ap->admission_status == 'approved')
-                                                    <p>
-                                                    <form action="{{ route('admin.deny.application', $ap->id) }}"
-                                                        method="POST">
+                                                    <form action="{{ route('admin.deny.application', $ap->id) }}" method="POST">
                                                         @csrf
-                                                        {{-- @method('PUT') --}}
-                                                        <button title="Set Student admission status back to pending" type="submit" class="btn btn-sm btn-warning"
-                                                            onclick="return confirm('Are you sure you want to set this application to pending?')">Set
-                                                            Pending</button>
+                                                        <button type="submit" class="btn btn-sm btn-warning"
+                                                            onclick="return confirm('Are you sure you want to set this application to pending?')">
+                                                            Set Pending
+                                                        </button>
                                                     </form>
-                                                    </p>
                                                 @endif
                                             </td>
                                         </tr>
                                     @empty
-                                        <div class="text-center alert alert-danger">Not available</div>
+                                        <tr>
+                                            <td colspan="7" class="text-center">No applications available</td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
-
                             </table>
                         </div>
-                        <div class="text-center paginate">
-                            {{-- {{ $applications->links() }} --}}
+
+                        <!-- Pagination -->
+                        <div class="text-center paginate non-printable">
                             {!! $applications->links('pagination::bootstrap-4') !!}
                         </div>
                     </div>
-
-                    <div class="mt-5 shadow-sm card">
-                        <div class="text-white card-header bg-primary">
-                            <h4 class="mb-0 card-title">Available Options for Students</h4>
-                        </div>
-                        <div class="card-body">
-                            <p class="text-danger font-weight-bold">JAMB STATUS:</p>
-                            <ul class="mb-4 list-group">
-                                <span class="mr-2 badge badge-info badge-pill" style="width: 290px">CHANGE_OF_SCHOOL</span>
-                                <li class="flex-wrap list-group-item d-flex ">
-                                    Students who changed to our school from JAMB after they had already applied to other
-                                    universities but later made the switch to us.
-                                </li>
-                                <span class="float-left mt-5 mr-2 badge badge-info badge-pill"
-                                    style="width: 290px">SELECTED_IN_JAMB</span>
-                                <li class="flex-wrap list-group-item d-flex ">
-                                    Students who selected our university as their choice when writing JAMB.
-                                </li>
-                                <span class="mt-5 mr-2 badge badge-info badge-pill"
-                                    style="width: 290px">DIRECT_ENTRY</span>
-                                <li class="flex-wrap list-group-item d-flex ">
-                                    Students who came to the school to purchase admission but did not add us in JAMB or
-                                    change their institution.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <!-- /.card-body -->
                 </div>
-
             </div>
-    </div>
-    </section>
+        </section>
     </div>
 @endsection
 
-
-
 @section('js')
-    {{-- <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script> --}}
-
-
     <script>
-        $(document).ready(function() {
-            // Select All checkbox
-            $('#selectAll').click(function() {
-                $('.application-checkbox').prop('checked', this.checked);
-            });
-
-            // Bulk Approve
-            $('#bulkApprove').click(function() {
-                bulkAction('approve');
-
-            });
-
-            // Bulk Set to Pending
-            $('#bulkPending').click(function() {
-                bulkAction('pending');
-            });
-
-            function bulkAction(action) {
-                var selectedIds = $('.application-checkbox:checked').map(function() {
-                    return this.value;
-                }).get();
-
-                if (selectedIds.length === 0) {
-                    alert('Please select at least one application.');
-                    return;
-                }
-
-                $.ajax({
-                    url: "{{ route('admin.bulk.action') }}",
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        ids: selectedIds,
-                        action: action
-                    },
-                    success: function(response) {
-                        console.log
-                        alert(response.message);
-                        location.reload();
-                    },
-                    error: function(xhr) {
-                        alert('An error occurred. Please try again.');
-                    }
-                });
-            }
-        });
-    </script>
-
-
-
-
-
-
-
-
-
-
-
-    <script>
+        // Search functionality
         $(document).ready(function() {
             $('#search').on('keyup', function() {
                 var query = $(this).val();
@@ -472,17 +489,15 @@
                 $.ajax({
                     url: "{{ route('admin.student.applications.search') }}",
                     method: 'GET',
-                    data: {
-                        query: query
-                    },
+                    data: { query: query },
                     success: function(data) {
                         $('#applicationTableBody').html(data);
                     }
                 });
             }
         });
-    </script>
-    <script>
+
+        // Department filter
         document.addEventListener('DOMContentLoaded', function() {
             const selectElement = document.querySelector('.selectric');
             selectElement.addEventListener('change', function(event) {
@@ -490,9 +505,8 @@
                 form.submit();
             });
         });
-    </script>
 
-    <script>
+        // Export link update
         function updateExportLink() {
             const departmentId = document.querySelector('[name="department_id"]').value;
             const exportButton = document.getElementById('exportButton');
@@ -500,21 +514,20 @@
             url += departmentId ? '?department_id=' + departmentId : '';
             exportButton.href = url;
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            updateExportLink(); // Update on load in case there's an initial department selected
-        });
-    </script>
 
-    <script>
+        // Import loader
         document.addEventListener('DOMContentLoaded', function() {
             const importForm = document.getElementById('import-form');
             const loaderOverlay = document.getElementById('loader-overlay');
-
+            
             importForm.addEventListener('submit', function() {
                 loaderOverlay.style.display = 'block';
             });
         });
+
+        // Print function
+        function printApplications() {
+            window.print();
+        }
     </script>
-
-
 @endsection

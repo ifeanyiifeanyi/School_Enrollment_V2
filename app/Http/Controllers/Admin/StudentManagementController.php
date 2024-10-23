@@ -144,30 +144,61 @@ class StudentManagementController extends Controller
 
 
     // HANDLE STUDENTS THAT HAS APPLIED FOR ADMISSION (successfully)
+    // public function application(Request $request)
+    // {
+    //     $departments = Department::latest()->get();
+    //     $departmentId = $request->input('department_id');
+
+    //     if ($departmentId) {
+    //         $applications = Application::with(['user.student', 'department', 'academicSession'])
+    //             ->where('department_id', $departmentId)
+    //             ->whereNotNull('payment_id')
+    //             ->where('payment_id', '!=', '')
+    //             ->orderBy('created_at', 'desc')
+    //             ->distinct() // Ensure only distinct records are fetched
+    //             ->paginate(100); // Use pagination
+    //     } else {
+    //         $applications = Application::with(['user.student', 'department', 'academicSession'])
+    //             ->whereNotNull('payment_id')
+    //             ->where('payment_id', '!=', '')
+    //             ->orderBy('created_at', 'desc')
+    //             ->distinct() // Ensure only distinct records are fetched
+    //             ->paginate(100); // Use pagination
+    //     }
+
+    //     return view('admin.studentManagement.application', compact('applications', 'departments'));
+    // }
     public function application(Request $request)
     {
         $departments = Department::latest()->get();
         $departmentId = $request->input('department_id');
-
+    
+        $query = Application::with(['user.student', 'department', 'academicSession', 'payment'])
+            ->whereNotNull('payment_id')
+            ->where('payment_id', '!=', '');
+    
         if ($departmentId) {
-            $applications = Application::with(['user.student', 'department', 'academicSession'])
-                ->where('department_id', $departmentId)
-                ->whereNotNull('payment_id')
-                ->where('payment_id', '!=', '')
-                ->orderBy('created_at', 'desc')
-                ->distinct() // Ensure only distinct records are fetched
-                ->paginate(100); // Use pagination
-        } else {
-            $applications = Application::with(['user.student', 'department', 'academicSession'])
-                ->whereNotNull('payment_id')
-                ->where('payment_id', '!=', '')
-                ->orderBy('created_at', 'desc')
-                ->distinct() // Ensure only distinct records are fetched
-                ->paginate(100); // Use pagination
+            $query->where('department_id', $departmentId);
         }
-
-        return view('admin.studentManagement.application', compact('applications', 'departments'));
+    
+        // Calculate totals before pagination
+        $totalStudents = $query->count();
+        $totalAmount = Payment::whereIn('id', $query->pluck('payment_id'))
+            ->sum('amount');
+    
+        $applications = $query->orderBy('created_at', 'desc')
+            ->distinct()
+            ->paginate(100);
+    
+        return view('admin.studentManagement.application', compact(
+            'applications', 
+            'departments',
+            'totalStudents',
+            'totalAmount'
+        ));
     }
+
+
 
     // this function is used for managing students that their application
     // needs to be processed manually
