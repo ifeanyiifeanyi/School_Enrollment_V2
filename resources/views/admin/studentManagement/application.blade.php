@@ -3,154 +3,57 @@
 @section('title', 'Active Applications')
 
 @section('css')
+
     <style>
+        .admin-actions-container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
 
-    /* Summary Cards Styles */
-.stats-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
+        .import-section,
+        .filter-section {
+            padding: 1rem;
+        }
 
-.stat-card {
-    background: white;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-}
+        .action-buttons .btn {
+            transition: all 0.3s ease;
+        }
 
-.stat-card:hover {
-    transform: translateY(-2px);
-}
+        .action-buttons .btn:hover {
+            transform: translateY(-1px);
+        }
 
-.stat-card__title {
-    color: #6c757d;
-    font-size: 0.875rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 0.5rem;
-}
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
 
-.stat-card__value {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2d3748;
-}
+        .input-group .form-control {
+            border-radius: 4px;
+        }
 
-/* Action Buttons Container */
-.action-buttons-container {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    clear: both;
-}
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
 
-/* Search and Filter Container */
-.search-filter-container {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    align-items: center;
-}
+            .action-buttons .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+        }
 
-.search-container {
-    flex: 1;
-    position: relative;
-    margin: 0;
-}
-
-.search-input {
-    width: 100%;
-    padding: 15px 20px 15px 45px;
-    border-radius: 30px;
-    border: 2px solid #e9ecef;
-}
-
-/* Department Filter */
-.department-filter {
-    width: 300px;
-}
-
-/* Import Form */
-.import-form-container {
-    margin-bottom: 1rem;
-}
-
-/* Print Styles */
-@media print {
-    /* Hide sidebar and other non-printable elements */
-    .main-sidebar,
-    .navbar,
-    .section-header,
-    .non-printable,
-    .search-container,
-    .paginate {
-        display: none !important;
-    }
-
-    /* Adjust main content for printing */
-    .main-content {
-        margin-left: 0 !important;
-        padding: 0 !important;
-    }
-
-    /* Ensure full width for content */
-    .card,
-    .card-body,
-    .table-responsive {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0.5rem !important;
-        border: none !important;
-        box-shadow: none !important;
-    }
-
-    /* Optimize stats cards for printing */
-    .stats-cards {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-        page-break-inside: avoid;
-    }
-
-    .stat-card {
-        border: 1px solid #ddd;
-        padding: 0.5rem;
-        margin: 0;
-        box-shadow: none;
-    }
-
-    /* Table styles for print */
-    .table {
-        font-size: 10pt;
-        border-collapse: collapse;
-        width: 100% !important;
-    }
-
-    .table th,
-    .table td {
-        border: 1px solid #ddd;
-        padding: 4px;
-    }
-
-    /* Status badges */
-    .badge {
-        border: 1px solid #000;
-        padding: 2px 5px;
-        font-weight: normal;
-    }
-
-    /* Ensure page breaks don't split rows */
-    tr {
-        page-break-inside: avoid;
-    }
-}
+        /* Print styles */
+        @media print {
+            .admin-actions-container {
+                display: none;
+            }
+        }
+    </style>
+    <style>
         /* Summary Cards Styles */
-        /* .stats-cards {
+        .stats-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1rem;
@@ -183,7 +86,153 @@
             color: #2d3748;
         }
 
-        /* Existing Styles */
+        /* Action Buttons Container */
+        .action-buttons-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            clear: both;
+        }
+
+        /* Search and Filter Container */
+        .search-filter-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            align-items: center;
+        }
+
+        .search-container {
+            flex: 1;
+            position: relative;
+            margin: 0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px 15px 45px;
+            border-radius: 30px;
+            border: 2px solid #e9ecef;
+        }
+
+        /* Department Filter */
+        .department-filter {
+            width: 300px;
+        }
+
+        /* Import Form */
+        .import-form-container {
+            margin-bottom: 1rem;
+        }
+
+        /* Print Styles */
+        @media print {
+
+            /* Hide sidebar and other non-printable elements */
+            .main-sidebar,
+            .navbar,
+            .section-header,
+            .non-printable,
+            .search-container,
+            .paginate {
+                display: none !important;
+            }
+
+            /* Adjust main content for printing */
+            .main-content {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Ensure full width for content */
+            .card,
+            .card-body,
+            .table-responsive {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0.5rem !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            /* Optimize stats cards for printing */
+            .stats-cards {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.5rem;
+                margin-bottom: 1rem;
+                page-break-inside: avoid;
+            }
+
+            .stat-card {
+                border: 1px solid #ddd;
+                padding: 0.5rem;
+                margin: 0;
+                box-shadow: none;
+            }
+
+            /* Table styles for print */
+            .table {
+                font-size: 10pt;
+                border-collapse: collapse;
+                width: 100% !important;
+            }
+
+            .table th,
+            .table td {
+                border: 1px solid #ddd;
+                padding: 4px;
+            }
+
+            /* Status badges */
+            .badge {
+                border: 1px solid #000;
+                padding: 2px 5px;
+                font-weight: normal;
+            }
+
+            /* Ensure page breaks don't split rows */
+            tr {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Summary Cards Styles */
+        /* .stats-cards {
+                                display: grid;
+                                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                                gap: 1rem;
+                                margin-bottom: 2rem;
+                            }
+
+                            .stat-card {
+                                background: white;
+                                border-radius: 8px;
+                                padding: 1.5rem;
+                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                transition: transform 0.2s;
+                            }
+
+                            .stat-card:hover {
+                                transform: translateY(-2px);
+                            }
+
+                            .stat-card__title {
+                                color: #6c757d;
+                                font-size: 0.875rem;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                margin-bottom: 0.5rem;
+                            }
+
+                            .stat-card__value {
+                                font-size: 1.5rem;
+                                font-weight: 600;
+                                color: #2d3748;
+                            }
+
+                            /* Existing Styles */
         .action-buttons {
             display: flex;
             justify-content: space-around;
@@ -248,7 +297,9 @@
                 border: 1px solid #000;
                 padding: 2px 5px;
             }
-        } */
+        }
+
+        */
     </style>
 @endsection
 
@@ -258,6 +309,43 @@
     </div>
 
     <div class="main-content">
+        <!-- Import Errors -->
+        @if (session('import_errors'))
+            <div class="alert alert-danger non-printable">
+                <h4>Import Errors:</h4>
+                <ul>
+                    @foreach (session('import_errors') as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach <!-- Import Errors -->
+                    @if (session('import_errors'))
+                        <div class="alert alert-danger non-printable">
+                            <h4>Import Errors:</h4>
+                            <ul>
+                                @foreach (session('import_errors') as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <!-- Success Message -->
+                    @if (session('success'))
+                        <div class="alert alert-success non-printable">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                </ul>
+            </div>
+        @endif
+
+        <!-- Success Message -->
+        @if (session('success'))
+            <div class="alert alert-success non-printable">
+                {{ session('success') }}
+            </div>
+        @endif
+
         <!-- Summary Statistics -->
         <div class="stats-cards">
             <div class="stat-card">
@@ -289,25 +377,7 @@
         </div>
 
         @include('student.alert')
-        
-        <!-- Import Errors -->
-        @if (session('import_errors'))
-            <div class="alert alert-danger non-printable">
-                <h4>Import Errors:</h4>
-                <ul>
-                    @foreach (session('import_errors') as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
 
-        <!-- Success Message -->
-        @if (session('success'))
-            <div class="alert alert-success non-printable">
-                {{ session('success') }}
-            </div>
-        @endif
 
         <section class="section">
             {{-- <div class="section-header non-printable">
@@ -335,33 +405,44 @@
                     <!-- Main Content -->
                     <div class="card-body">
                         <!-- Import Form -->
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="float-right non-printable">
-                                    <form id="import-form" action="{{ route('admin.student.applications.import') }}" method="POST"
-                                        enctype="multipart/form-data">
+                        <!-- Admin Actions Section -->
+                        <div class="p-4 mb-4 bg-white rounded-lg shadow-sm admin-actions-container">
+                            <div class="grid gap-4 md:grid-cols-2">
+                                <!-- Left Column: Import Form -->
+                                <div class="import-section">
+                                    <form id="import-form" action="{{ route('admin.student.applications.import') }}"
+                                        method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-group">
-                                            <label for="exampleInputFile">Import File</label>
-                                            <div class="container">
-                                                @error('file')
+                                            <label for="exampleInputFile" class="mb-2 form-label fw-bold">
+                                                Import Applications File
+                                            </label>
+
+                                            @error('file')
+                                                <div class="p-2 mb-2 alert alert-danger">
                                                     <span class="text-danger">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-                                            <div class="custom-file">
-                                                <input type="file" name="file" class="form-control w-100" id="exampleInputFile">
-                                                <button type="submit" class="mt-2 btn btn-primary w-100">Import</button>
+                                                </div>
+                                            @enderror
+
+                                            <div class="input-group">
+                                                <input type="file" name="file" class="form-control"
+                                                    id="exampleInputFile">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-upload me-1"></i> Import
+                                                </button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
 
-                                <!-- Department Filter -->
-                                <div class="float-right non-printable">
-                                    <form id="departmentForm" action="{{ route('admin.student.application') }}" method="GET">
-                                        <select class="form-control selectric" name="department_id"
+                                <!-- Right Column: Department Filter -->
+                                <div class="filter-section">
+                                    <form id="departmentForm" action="{{ route('admin.student.application') }}"
+                                        method="GET" class="mb-3">
+                                        <label class="mb-2 form-label fw-bold">Filter by Department</label>
+                                        <select class="form-select" name="department_id"
                                             onchange="updateExportLink(); this.form.submit();">
-                                            <option value="">Select by Department (Show All)</option>
+                                            <option value="">All Departments</option>
                                             @foreach ($departments as $department)
                                                 <option value="{{ $department->id }}"
                                                     {{ request('department_id') == $department->id ? 'selected' : '' }}>
@@ -371,33 +452,31 @@
                                         </select>
                                     </form>
                                 </div>
-
-
-
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <!-- Action Buttons -->
-                                        <div class="float-right pb-1 non-printable">
-                                            <button onclick="printApplications()" class="btn btn-secondary">
-                                                <i class="fas fa-print"></i> Print
-                                            </button>
-                                            <button onclick="return confirm('Are you sure of this APPROVE action ?')" id="bulkApprove"
-                                                class="btn" style="background: blueviolet; color: white">
-                                                Approve Selected
-                                            </button>
-                                            <button onclick="return confirm('Are you sure of this PENDING action ?')" id="bulkPending"
-                                                class="btn" style="background: rgb(213, 45, 3); color:white">
-                                                Set Selected to Pending
-                                            </button>
-                                            <a href="{{ route('admin.student.applications.export') }}" class="btn"
-                                                style="background: rgb(227, 6, 150);color:white" id="exportButton">
-                                                Export to Excel
-                                            </a>
-                                        </div>     
-                                    </div>
-                                </div>
                             </div>
-                       </div>
+
+                            <!-- Bottom Action Buttons -->
+                            <div class="gap-2 mt-4 action-buttons d-flex justify-content-end">
+                                <button onclick="printApplications()" class="btn btn-secondary">
+                                    <i class="fas fa-print"></i> Print
+                                </button>
+
+                                <button onclick="return confirm('Are you sure of this APPROVE action?')" id="bulkApprove"
+                                    class="btn btn-success">
+                                    <i class="fas fa-check"></i> Approve Selected
+                                </button>
+
+                                <button onclick="return confirm('Are you sure of this PENDING action?')" id="bulkPending"
+                                    class="btn btn-warning">
+                                    <i class="fas fa-clock"></i> Set Selected to Pending
+                                </button>
+
+                                <a href="{{ route('admin.student.applications.export') }}" class="btn btn-info"
+                                    id="exportButton">
+                                    <i class="fas fa-file-export"></i> Export to Excel
+                                </a>
+                            </div>
+                        </div>
+
 
                         <!-- Applications Table -->
                         <div class="table-responsive">
@@ -438,7 +517,8 @@
                                             </td>
                                             <td class="non-printable">
                                                 @if ($ap->admission_status == 'pending')
-                                                    <form action="{{ route('admin.approve.admission', $ap->id) }}" method="POST">
+                                                    <form action="{{ route('admin.approve.admission', $ap->id) }}"
+                                                        method="POST">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-success"
                                                             onclick="return confirm('Are you sure you want to approve this application?')">
@@ -446,7 +526,8 @@
                                                         </button>
                                                     </form>
                                                 @elseif ($ap->admission_status == 'approved')
-                                                    <form action="{{ route('admin.deny.application', $ap->id) }}" method="POST">
+                                                    <form action="{{ route('admin.deny.application', $ap->id) }}"
+                                                        method="POST">
                                                         @csrf
                                                         <button type="submit" class="btn btn-sm btn-warning"
                                                             onclick="return confirm('Are you sure you want to set this application to pending?')">
@@ -489,7 +570,9 @@
                 $.ajax({
                     url: "{{ route('admin.student.applications.search') }}",
                     method: 'GET',
-                    data: { query: query },
+                    data: {
+                        query: query
+                    },
                     success: function(data) {
                         $('#applicationTableBody').html(data);
                     }
@@ -519,7 +602,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const importForm = document.getElementById('import-form');
             const loaderOverlay = document.getElementById('loader-overlay');
-            
+
             importForm.addEventListener('submit', function() {
                 loaderOverlay.style.display = 'block';
             });
