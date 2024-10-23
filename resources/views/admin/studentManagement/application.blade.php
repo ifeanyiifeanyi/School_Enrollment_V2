@@ -487,6 +487,7 @@
                                         <th>Student</th>
                                         <th>Phone Number</th>
                                         <th>Application No.</th>
+                                        <th>Amount</th>
                                         <th>Department</th>
                                         <th>Admission</th>
                                         <th class="non-printable">Action</th>
@@ -494,6 +495,7 @@
                                 </thead>
                                 <tbody id="applicationTableBody">
                                     @forelse ($applications as $ap)
+
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
@@ -505,6 +507,7 @@
                                             </td>
                                             <td>{{ $ap->user->student->phone }}</td>
                                             <td>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</td>
+                                            <td>{{ $ap->payment->amount }}</td>
                                             <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
                                             <td>
                                                 @if ($ap->admission_status == 'pending')
