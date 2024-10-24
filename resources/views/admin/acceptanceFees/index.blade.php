@@ -76,7 +76,7 @@
                                             <td>{{ Str::title($acceptance->user->full_name) }}</td>
                                             <td>{{ Str::title($acceptance->user->student->jamb_reg_no) }}</td>
                                             {{-- <td>{{ $acceptance->department }}</td> --}}
-                                            <td>₦{{ number_format($acceptance->amount, 2) }}</td>
+                                            <td>₦{{ number_format(40000, 2) }}</td>
                                             {{-- <td>{{ $acceptance->transaction_id }}</td> --}}
                                             <td>{{ $acceptance->paid_at ? $acceptance->paid_at->format('M d, Y H:i') : 'Not paid' }}
                                             </td>
