@@ -64,7 +64,7 @@ class AcceptanceFeeManagerController extends Controller
         $acceptanceFeeCount = AcceptanceFee::where('status', 'paid')->count();
         $totalAmount = AcceptanceFee::where('status', 'paid')->sum('amount');
 
-        $query = AcceptanceFee::with(['user', 'user.student']);
+        $query = AcceptanceFee::with(['user', 'user.student'])->where('status', 'paid');
 
         if ($request->has('search')) {
             $search = $request->input('search');

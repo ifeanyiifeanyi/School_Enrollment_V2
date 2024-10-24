@@ -172,26 +172,26 @@ class StudentManagementController extends Controller
     {
         $departments = Department::latest()->get();
         $departmentId = $request->input('department_id');
-    
+
         $query = Application::with(['user.student', 'department', 'academicSession', 'payment'])
             ->whereNotNull('payment_id')
             ->where('payment_id', '!=', '');
-    
+
         if ($departmentId) {
             $query->where('department_id', $departmentId);
         }
-    
+
         // Calculate totals before pagination
         $totalStudents = $query->count();
         $totalAmount = Payment::whereIn('id', $query->pluck('payment_id'))
             ->sum('amount');
-    
+
         $applications = $query->orderBy('created_at', 'desc')
             ->distinct()
             ->paginate(100);
-    
+
         return view('admin.studentManagement.application', compact(
-            'applications', 
+            'applications',
             'departments',
             'totalStudents',
             'totalAmount'
