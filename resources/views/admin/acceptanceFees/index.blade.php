@@ -43,7 +43,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <h5>Total Amount Collected</h5>
-                                        <h2>₦{{ number_format($totalAmount, 2) }}</h2>
+                                        <h2>₦{{ number_format($acceptanceFeeCount * 40000, 2) }}</h2>
                                     </div>
                                 </div>
                             </div>
