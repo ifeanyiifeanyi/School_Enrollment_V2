@@ -354,7 +354,7 @@
             </div>
             <div class="stat-card">
                 <div class="stat-card__title">Total Amount</div>
-                <div class="stat-card__value">₦{{ number_format($totalAmount, 2) }}</div>
+                <div class="stat-card__value">₦{{ number_format($totalStudents * 10000, 2) }}</div>
             </div>
             <div class="stat-card">
                 <div class="stat-card__title">Approved Applications</div>
