@@ -507,7 +507,7 @@
                                             </td>
                                             <td>{{ $ap->user->student->phone }}</td>
                                             <td>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</td>
-                                            <td>₦{{ number_format($ap->payment->amount, 2) }}</td>
+                                            <td>₦{{ number_format(10000, 2) }}</td>
                                             <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
                                             <td>
                                                 @if ($ap->admission_status == 'pending')
