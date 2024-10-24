@@ -368,12 +368,12 @@
                     {{ number_format($applications->where('admission_status', 'pending')->count()) }}
                 </div>
             </div>
-            <div class="stat-card">
+            {{-- <div class="stat-card">
                 <div class="stat-card__title">Average Payment</div>
                 <div class="stat-card__value">
                     ₦{{ $totalStudents > 0 ? number_format($totalAmount / $totalStudents, 2) : '0.00' }}
                 </div>
-            </div>
+            </div> --}}
         </div>
 
         @include('student.alert')
