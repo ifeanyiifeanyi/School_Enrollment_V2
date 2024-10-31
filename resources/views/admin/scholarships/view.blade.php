@@ -21,7 +21,7 @@
                         <div class="p-3 shadow card-body">
                             <h3>{{ Str::title($scholarship->name) }}</h3>
                             <hr>
-                            <p style="font-weight: normal !important">{!! e($scholarship->description ?? 'N/A') !!}</p>
+                            <p style="font-weight: normal !important">{!! $scholarship->description ?? 'N/A' !!}</p>
                         </div>
                     </div>
                     @if ($scholarship->questions->isNotEmpty())
