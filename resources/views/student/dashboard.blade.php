@@ -108,34 +108,15 @@
             @endif
             <div class="p-4 notice">
                 <h2 class="text-center">Scholarship Eligibility and Conditions</h2>
-                <p><strong>1.</strong> The scholarship fund refers <strong>ONLY</strong> to the tuition cost for the
-                    University
-                    for the period of two years at a time but renewable every year based on other conditions now stated
-                    below.
-                </p>
-                <p><strong>2.</strong> The beneficiary should undertake to cover the accommodation and feeding costs for
-                    his/her
-                    studies. SEF does not include accommodation and feeding.</p>
-                <p><strong>3.</strong> The beneficiary of the SEF scholarship should maintain a minimum of 2.4 CGPA. If not,
-                    the
-                    scholarship will be reduced to between 30% - 50% as the case may be.</p>
-                <p><strong>4.</strong> The scholarship covers <strong>ONLY</strong> regular courses under the normal course
-                    of
-                    studies and not for carry overs or repeats. In case of carry-overs, the student covers those personally.
-                </p>
-                <p><strong>5.</strong> The scholarship is not transferable from one course to another except with the
-                    written
-                    approval of the SEF Management.</p>
-                <p><strong>6.</strong> The beneficiary should be of good behaviour and not be under any major sanctions or
-                    censure by the University. In case of censures or major sanctions, the scholarship is revoked as the
-                    sanction or censure sets in. Such sanctions are to be found in the University Code of Conduct.</p>
-                <p><strong>7.</strong> The SEF has the right to compute data from the personal information given above but
-                    will
-                    not share personal details with a Third Party.</p>
-                <p><strong>8.</strong> The SEF reserves the right to ask for further information from applicants to enable
-                    her
-                    to discharge her duties effectively.</p>
+                <p><strong>1.</strong> The scholarship fund covers <strong>ONLY</strong> 50% of the tuition cost for the University.</p>
+                <p><strong>2.</strong> The scholarship does not cover accommodation, feeding, or other study-related expenses. The beneficiary must cover all additional costs independently.</p>
+                <p><strong>4.</strong> The scholarship applies <strong>ONLY</strong> to regular courses within the standard course schedule and does not cover courses for carry-overs or repeats. Any such courses must be funded by the student.</p>
+                <p><strong>5.</strong> The scholarship is not transferable to other programs or courses unless approved in writing by SEF Management.</p>
+                <p><strong>6.</strong> The beneficiary must maintain good behavior and avoid any major sanctions or censure by the University. In the event of such issues, the scholarship will be revoked.</p>
+                <p><strong>7.</strong> SEF reserves the right to use information provided by applicants for internal purposes and will not share personal information with third parties without permission.</p>
+                <p><strong>8.</strong> SEF reserves the right to request additional information from applicants to ensure compliance with these conditions.</p>
             </div>
+
         </div>
         <div class="row">
             <div class="mx-auto col-md-4 col-sm-12">
