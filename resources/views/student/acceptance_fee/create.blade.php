@@ -59,7 +59,7 @@
 @section('student')
     <section class="content">
         <div class="row">
-            <div class="col-md-8 mx-auto">
+            <div class="mx-auto col-md-8">
                 @include('student.alert')
                 <div class="invoice-box">
                     <table cellpadding="0" cellspacing="0">
@@ -68,13 +68,13 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <h2>Shanahan University</h2>
+                                            <h2>COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL</h2>
                                             <strong>Acceptance Fee Invoice</strong><br>
                                             Invoice #: {{ date('YmdHis') }}<br>
                                             Created: {{ date('F d, Y') }}<br>
                                         </td>
                                         <td>
-                                            <img src="{{ asset('logo1.png') }}" alt="Logo" class="w-25 img-responsive img-fluid">
+                                            <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="w-25 img-responsive img-fluid">
                                         </td>
                                     </tr>
                                 </table>
@@ -92,15 +92,13 @@
                                             Email: {{ auth()->user()->email }}
                                         </td>
                                         <td>
-                                            Shanahan University<br>
-                                            Basilica Of The Holy Trinity, Onitsha<br>
+                                            St.Charles Borromeo Specialist Hospital, Limca Rd,<br>
                                             Anambra State, NG
                                         </td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
-
                         <tr class="heading">
                             <td>Item</td>
                             <td>Price</td>

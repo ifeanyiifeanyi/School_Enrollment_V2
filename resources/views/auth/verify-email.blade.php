@@ -46,7 +46,7 @@
     }
 
     .card-title {
-        color: var(--primary-color);
+        color: #305544;
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 1rem;
@@ -71,9 +71,9 @@
     }
 
     .btn-primary:hover {
-        background-color: #2980b9;
+        background-color: #305544;
         transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+        box-shadow: 0 3px 10px #305544c5;
     }
 
     .btn-secondary {
@@ -86,7 +86,7 @@
         background-color: var(--accent-color);
         color: var(--secondary-color);
         transform: translateY(-2px);
-        box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+        box-shadow: 0 3px 10px #305544bb;
     }
 
     .success-message {
@@ -124,7 +124,7 @@
 <div class="verification-container">
     <div class="verification-card">
         <div class="logo-container">
-            <img src="{{ asset('logo1.png') }}" alt="School Logo" class="school-logo">
+            <img src="{{ asset('nursinglogo.webp') }}" alt="School Logo" class="school-logo">
         </div>
 
         <h2 class="card-title">Verify Your Email</h2>

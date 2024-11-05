@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application Status Update - Shanahan University</title>
+    <title>Application Status Update - COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL, ONITSHA.</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -64,7 +64,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="{{ asset('logo1.png') }}" alt="Shanahan University Logo" class="logo">
+            <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="logo">
         </div>
 
         <h1>Application Denied</h1>
@@ -72,7 +72,7 @@
         <div class="content">
             <p>Dear {{ $student->user->first_name ?? '' }} {{ $student->user->last_name ?? '' }},</p>
 
-            <p>Thank you for your interest in Shanahan University .After careful consideration of your application and all supporting materials, we regret to inform you
+            <p>After careful consideration of your application and all supporting materials, we regret to inform you
                 that we are unable to offer you admission at this time.</p>
 
             <p>Please understand that this decision does not reflect negatively on your abilities or potential. We
@@ -83,7 +83,7 @@
                 helpful.</p>
 
 
-            <p>We sincerely appreciate your interest in Shanahan University and wish you the very best in your future
+            <p>We and wish you the very best in your future
                 academic endeavors.</p>
 
             <p>If you have any questions about this decision or would like to discuss your options, please feel free to

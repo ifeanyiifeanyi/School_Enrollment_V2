@@ -127,10 +127,10 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="offer-document">
-                        <img src="{{ asset('logo.png') }}" alt="Watermark" class="watermark  pt-5">
+                        <img src="{{ asset('nursinglogo.webp') }}" alt="Watermark" class="pt-5 watermark">
 
-                        <div class="logo-placeholder mt-3 mb-5">
-                            <img src="{{ asset('logo1.png') }}" width="120px" alt="">
+                        <div class="mt-3 mb-5 logo-placeholder">
+                            <img src="{{ asset('nursinglogo.webp') }}" width="120px" alt="">
                         </div>
                         <h1 class="text-center">Admission Offer</h1>
                         <p class="lead">
@@ -157,14 +157,14 @@
                                 this offer to accept or decline the admission. Failure to respond within this period will
                                 result in the automatic cancellation of this offer.</p>
                         </div>
-                        <div class="text-center mt-5">
+                        <div class="mt-5 text-center">
                             <form action="{{ route('student.admission.response') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="student_id" value="{{ $student->user_id }}">
                                 <button type="submit" name="decision" value="accept"
-                                    class="btn btn-accept btn-lg me-3 mb-3">Accept Offer</button>
+                                    class="mb-3 btn btn-accept btn-lg me-3">Accept Offer</button>
                                 <button type="button"  name="decision" value="decline"
-                                    class="btn btn-decline btn-lg mb-3">Decline Offer</button>
+                                    class="mb-3 btn btn-decline btn-lg">Decline Offer</button>
                             </form>
                         </div>
                     </div>

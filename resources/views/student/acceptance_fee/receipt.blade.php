@@ -79,8 +79,11 @@
 <div class="receipt">
 
     <div class="receipt-header">
-        <img src="{{ asset('logo1.png') }}" alt="Shanahan University Logo" class="school-logo">
-        <h2>Shanahan University</h2>
+        <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="school-logo">
+        <h4>
+            COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL.
+
+        </h4>
         <h3>Acceptance Fee Payment Receipt</h3>
     </div>
     <div class="receipt-body">

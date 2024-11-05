@@ -119,12 +119,12 @@
             @endif
             <div class="container">
                 <div class="row">
-                    <div class="col-md-7 mx-auto">
+                    <div class="mx-auto col-md-7">
                         <div class="document">
-                            <img src="{{ asset('logo.png') }}" alt="Watermark" class="watermark  mt-5">
+                            <img src="{{ asset('nursinglogo.webp') }}" alt="Watermark" class="mt-5 watermark">
 
                             <div class="header">
-                                <img src="{{ asset('logo1.png') }}" alt="University Logo" class="logo">
+                                <img src="{{ asset('nursinglogo.webp') }}" alt="University Logo" class="logo">
                                 <h2>Scholarship Application Details</h2>
                             </div>
 
@@ -173,7 +173,7 @@
                                 </p>
                             @endif
                             @if ($application->status == 'pending')
-                                <div class="notice mb-3">
+                                <div class="mb-3 notice">
                                     <h5><i class="fas fa-exclamation-triangle"></i> Important Notice</h5>
                                     <p>Please be aware that the scholarship only covers tuition fees. Other expenses such as
                                         accommodation, books, and living costs are not included.</p>

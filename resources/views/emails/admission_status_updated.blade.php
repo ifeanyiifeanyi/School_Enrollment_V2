@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admission Status Updated - Shanahan University</title>
+    <title>Admission Status Updated - COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL, ONITSHA.</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,7 +77,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="{{ asset('logo1.png') }}" alt="Shanahan University Logo" class="logo">
+            <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="logo">
         </div>
 
         <h1>Admission Status Updated</h1>
@@ -88,7 +88,7 @@
             <p>We are pleased to inform you that your admission status has been updated to
                 <strong>{{ $application->admission_status }}</strong>.</p>
 
-            <p>Congratulations on your admission to Shanahan University! We are thrilled to welcome you to our academic
+            <p>Congratulations! We are thrilled to welcome you to our academic
                 community.</p>
 
             <div class="important-notice">
@@ -100,7 +100,7 @@
                         joining our official WhatsApp group for new students.</li>
                 </ol>
 
-                <a href="https://chat.whatsapp.com/DoOo49swB7r2EzRuxbZXAn" class="whatsapp-link" target="_blank">Join
+                <a href="" class="whatsapp-link" target="_blank">Join
                     WhatsApp Group</a>
             </div>
 

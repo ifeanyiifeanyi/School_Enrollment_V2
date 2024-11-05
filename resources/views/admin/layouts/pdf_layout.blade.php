@@ -37,7 +37,7 @@
     <meta property="og:title" content="{{ $siteSetting->site_description ?? '' }}">
     <meta property="og:type" content="website" />
     <meta property="og:image" content="{{ asset($siteSetting->site_color ?? '') }}">
-    <meta property="og:url" content="https://apply.shanahanuni.edu.ng">
+    <meta property="og:url" content="https://stcharlesborromeocon.com/">
     <meta name="twitter:card" content="summary_large_image" />
 
     <!--  Non-Essential, But Recommended -->

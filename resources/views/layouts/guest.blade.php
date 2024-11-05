@@ -30,7 +30,7 @@
     <meta property="og:title" content="{{ $siteSetting->site_description ?? '' }}">
     <meta property="og:type" content="website" />
     <meta property="og:image" content="{{ asset($siteSetting->site_color ?? '') }}">
-    <meta property="og:url" content="https://apply.shanahanuni.edu.ng">
+    <meta property="og:url" content="">
     <meta name="twitter:card" content="summary_large_image" />
 
     <!--  Non-Essential, But Recommended -->
@@ -43,7 +43,7 @@
     @yield('css')
 </head>
 
-<body>
+<body style="background: linear-gradient(210deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 244, 0.9), rgba(255,255,255,0.9)), url('/nursebg.webp');background-repeat: no-repeat;background-position:center;background-size:cover">
     <div id="app">
         @yield('guest')
     </div>

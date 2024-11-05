@@ -22,7 +22,7 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4 no-print">
     <!-- Brand Logo -->
     <a href="{{ route('student.dashboard') }}" class="brand-link" wire:navigate>
-        <img src="{{ asset($siteSetting->site_icon ?? '') }}" alt="Logo" class="brand-image img-circle elevation-3"
+        <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8">
         <span class="brand-text font-weight-light">Manager</span>
     </a>
@@ -87,7 +87,7 @@
                     @if ($paidReceipt)
                         <li class="nav-item">
                             <a href="{{ route('student.acceptance_fee.viewReceipt') }}" class="nav-link text-info">
-                                <i class="nav-icon fas fas fa-receipt text-light"></i>
+                                <i class="nav-icon fas fa-receipt text-light"></i>
                                 <p>Acceptance Receipt</p>
                             </a>
                         </li>
@@ -96,7 +96,7 @@
                 @endif
 
 
-                @if ($userHasApplication)
+                {{-- @if ($userHasApplication)
                     <li class="nav-item">
                         <a wire:navigate href="{{ route('student.scholarship.view') }}" class="nav-link">
                             <i class="nav-icon fas fa-graduation-cap" aria-hidden="true"></i>
@@ -109,7 +109,7 @@
                             <p>Scholarships status</p>
                         </a>
                     </li>
-                @endif
+                @endif --}}
 
 
                 <li class="nav-item menu-close">

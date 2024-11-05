@@ -22,11 +22,11 @@
 <body>
     <div class="container">
         <p style="text-align: center">
-            <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="logo">
+            <img src="{{ asset('nursinglogo.webp') }}" width="150" height="150" alt="logo">
         </p>
         <hr>
 
-        <h3 class="text-center mb-4">Exams Notification</h3>
+        <h3 class="mb-4 text-center">Exams Notification</h3>
         <p>Department: <span style="color: rgb(197, 10, 10)">{{ $department}}</span>,</p>
         <p>Date: {{ $exam_date }}</p>
         <p class="text-muted">Venue: {{ $venue }}</p>

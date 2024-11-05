@@ -22,7 +22,7 @@
             <!-- Print-specific header -->
             <div class="print-header print-only" style="display: none;">
                 <div class="text-center">
-                    <img src="{{ asset('logo1.png') }}" alt="School Logo" style="height: 80px;">
+                    <img src="{{ asset('nursinglogo.webp') }}" alt="School Logo" style="height: 80px;">
                     <h2>YOUR INSTITUTION NAME</h2>
                     <h3>Acceptance Fee Payment Report</h3>
                     <p>Generated on: {{ now()->format('F d, Y h:i A') }}</p>

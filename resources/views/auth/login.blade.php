@@ -1,6 +1,6 @@
 @extends('layouts.guest')
 
-@section('title', 'Shanahan University Admission Portal')
+@section('title', 'COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL, ONITSHA.')
 
 @section('css')
     <style>
@@ -8,6 +8,7 @@
             background-color: #f8f9fa;
             padding: 2rem;
             border-radius: 0.5rem;
+            box-shadow: #cccccc 2px 2px 5px;
         }
 
         .instruction-section h2 {
@@ -18,6 +19,10 @@
         .instruction-section ol {
             font-size: 1.1rem;
         }
+        h5{
+            color: #305544;
+            line-height: 1.6
+        }
     </style>
 @endsection
 
@@ -27,9 +32,9 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="instruction-section">
-                        <h2 class="mb-4">Welcome to Shanahan University Admission Portal</h2>
-                        <img src="{{ asset('st001.webp') }}" alt="University Image" class="mb-4 img-fluid">
-                        <p>To apply for admission at Shanahan University, please follow these steps:</p>
+                        <h5 class="mb-4">WELCOME TO COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL, ONITSHA. ADMISSION PORTAL</h5>
+                        <img src="{{ asset('nursing1000.webp') }}" alt="University Image" class="mb-4 img-fluid">
+                        <p>To apply for admission, please follow these steps:</p>
                         <ol>
                             <li>If you already have an account, log in using the form on the right.</li>
                             <li>If you don't have an account yet, click the "Create One" link below the form to register.
@@ -43,10 +48,10 @@
                             or need assistance, please contact our admissions office.</p>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="mx-auto col-lg-6">
                     @include('layouts.logo')
-                    <div class="card" style="border-top: 4px solid #961f31;">
-                        <div class="card-header" style="background-color: #961f31; color: #fff;">
+                    <div class="shadow-lg card" style="border-top: 4px solid #143e30;">
+                        <div class="card-header" style="background-color: #143e30; color: #fff;">
                             <h4>Login</h4>
                         </div>
                         @if (session('status'))
@@ -122,15 +127,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-danger btn-lg btn-block"
-                                        style="background: #ef2e4b" tabindex="4">
+                                    <button type="submit" class="btn btn-lg btn-block"
+                                        style="background: #dbe0d7;color: #111;font-size:18px" tabindex="4">
                                         Login
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <div class="mt-5 text-center text-muted">
+                    <div class="mt-5 text-center text-muted" style="font-weight: 900; font-size:18px">
                         Don't have an account? <a href="{{ route('register') }}">Register Now</a>
                     </div>
                     @include('layouts.footer')

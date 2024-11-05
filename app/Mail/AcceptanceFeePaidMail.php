@@ -33,7 +33,7 @@ class AcceptanceFeePaidMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Congratulations on Your Admission to Shanahan University',
+            subject: 'Congratulations on Your Admission',
         );
     }
 

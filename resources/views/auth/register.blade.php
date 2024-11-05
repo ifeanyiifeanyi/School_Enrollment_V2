@@ -12,7 +12,7 @@
         }
 
         .registration-card .card-header {
-            background-color: #961f31;
+            background-color: #143e30;
             color: #fff;
             text-align: center;
             padding: 1.5rem;
@@ -29,15 +29,15 @@
         }
 
         .registration-card .btn-primary {
-            background-color: #961f31;
-            border-color: #961f31;
+            background-color: #305544;
+            border-color: #305544;
             border-radius: 5px;
             font-weight: bold;
         }
 
         .registration-card .btn-primary:hover {
-            background-color: #7b1a29;
-            border-color: #7b1a29;
+            background-color: #dbe0d7;
+            border-color: #dbe0d7;
         }
 
         .registration-card .writeup {
@@ -46,7 +46,7 @@
         }
 
         .registration-card .writeup h5 {
-            color: #961f31;
+            color: #1f967c;
             font-weight: bold;
         }
 
@@ -63,7 +63,7 @@
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     @include('layouts.logo')
 
-                    <div class="registration-card card card-danger">
+                    <div class="registration-card card">
                         <div class="card-header">
                             <h4>Sign Up</h4>
                         </div>
@@ -77,19 +77,33 @@
                                     </div>
 
                                     <div class="writeup">
-                                        <h5>Accuracy Matters</h5>
-                                        <p>Please ensure that all the information you provide during the registration
-                                            process is accurate and up-to-date. This will help us assess your application
-                                            properly and potentially unlock wonderful scholarship opportunities.</p>
+                                        <h5>Unlock Your Potential</h5>
+                                        <p>Our institution offers a unique blend of academic excellence, real-world
+                                            experiences, and a supportive community.
+                                            By signing up, you are beginning a journey that will shape your future, open
+                                            doors to new opportunities, and equip you with the skills needed to thrive in
+                                            today’s world.</p>
                                     </div>
 
                                     <div class="writeup">
-                                        <h5>Scholarships Await</h5>
-                                        <p>Students who are offered admission have a chance to receive prestigious
-                                            scholarships based on academic excellence, extracurricular achievements, or
-                                            financial need. Register now and take the first step towards securing your
-                                            future!</p>
+                                        <h5>A Dedicated Community</h5>
+                                        <p>Join a diverse and inspiring community where students, faculty, and staff work
+                                            together to bring out the best in each individual.
+                                            Our campus is a place where your ideas are valued, your voice is heard, and your
+                                            goals are supported. We look forward to seeing the unique contributions you will
+                                            bring.</p>
                                     </div>
+
+
+
+                                    <div class="writeup">
+                                        <h5>Stay Connected and Informed</h5>
+                                        <p>Once registered, you’ll gain access to our student portal where you can keep up
+                                            with important updates, events, and announcements. Stay connected with your
+                                            peers, professors,
+                                            and the university community as you progress through your academic journey.</p>
+                                    </div>
+
                                 </div>
 
                                 <div class="col-lg-6">
@@ -193,7 +207,8 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                            <button type="submit" style="color: #fff;font-size:18px"
+                                                class="btn btn-primary btn-lg btn-block">
                                                 Register
                                             </button>
                                         </div>

@@ -105,8 +105,9 @@
                         <a href="{{ route('student.payment.slip') }}" class="btn btn-primary">View/Print Payment Slip</a>
                     </div>
                 </div>
+
             @endif
-            <div class="p-4 notice">
+            {{-- <div class="p-4 notice">
                 <h2 class="text-center">Scholarship Eligibility and Conditions</h2>
                 <p><strong>1.</strong> The scholarship fund covers <strong>ONLY</strong> 50% of the tuition cost for the University.</p>
                 <p><strong>2.</strong> The scholarship does not cover accommodation, feeding, or other study-related expenses. The beneficiary must cover all additional costs independently.</p>
@@ -115,7 +116,7 @@
                 <p><strong>6.</strong> The beneficiary must maintain good behavior and avoid any major sanctions or censure by the University. In the event of such issues, the scholarship will be revoked.</p>
                 <p><strong>7.</strong> SEF reserves the right to use information provided by applicants for internal purposes and will not share personal information with third parties without permission.</p>
                 <p><strong>8.</strong> SEF reserves the right to request additional information from applicants to ensure compliance with these conditions.</p>
-            </div>
+            </div> --}}
 
         </div>
         <div class="row">

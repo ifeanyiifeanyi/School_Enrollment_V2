@@ -130,8 +130,8 @@ class DashboardController extends Controller
                 'email' => 'required|email',
                 'address' => 'nullable|string',
                 'about' => 'nullable|string',
-                'site_logo' => 'required|image|mimes:jpeg,png,jpg,svg|max:10000',
-                'site_favicon' => 'required|image|mimes:jpeg,png,jpg,svg|max:10000',
+                'site_logo' => 'required|image|mimes:jpeg,png,jpg,svg|webp|max:10000',
+                'site_favicon' => 'required|image|mimes:jpeg,png,jpg,svg|webp|max:10000',
             ]);
 
             $site = SiteSetting::firstOrNew([]);

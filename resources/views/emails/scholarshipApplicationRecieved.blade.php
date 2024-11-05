@@ -21,10 +21,10 @@
 <body>
     <div class="container">
         <p style="text-align: center">
-            <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="">
+            <img src="{{ asset('nursinglogo.webp') }}" width="150" height="150" alt="">
         </p>
         <hr>
-        <h1 class="text-center mb-4">Scholarship Application Received</h1>
+        <h1 class="mb-4 text-center">Scholarship Application Received</h1>
         <p>Dear {{ $application->user->full_name }},</p>
         <p>We have received your application for the <strong>{{ $application->scholarship->name }}</strong> scholarship. Your application is currently under review, and we will notify you once a decision has been made.</p>
         <p>Thank you for applying.</p>

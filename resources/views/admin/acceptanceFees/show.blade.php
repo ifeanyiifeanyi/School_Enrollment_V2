@@ -17,7 +17,7 @@
                                 <div class="card-img">
                                     <img src="{{ $acceptanceFee->user->student->passport_photo ?
                                     asset($acceptanceFee->user->student->passport_photo) :
-                                    asset('logo1.png')
+                                    asset('nursinglogo.webp')
                                      }}" alt="" class="fluid thumbnail" width="80">
                                 </div>
                                 <h5 class="card-title">Student Information</h5>
@@ -27,7 +27,7 @@
                                 <p><strong>Email:</strong> {{ $acceptanceFee->user->email }}</p>
                                 {{-- <p><strong>Department:</strong> {{ $acceptanceFee->department }}</p> --}}
 
-                                <h5 class="card-title mt-4">Payment Information</h5>
+                                <h5 class="mt-4 card-title">Payment Information</h5>
                                 <p><strong>Amount:</strong> ₦{{ number_format($acceptanceFee->amount, 2) }}</p>
                                 <p><strong>Status:</strong> {{ $acceptanceFee->status }}</p>
                                 <p><strong>Transaction ID:</strong> {{ $acceptanceFee->transaction_id }}</p>
