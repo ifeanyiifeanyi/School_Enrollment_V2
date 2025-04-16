@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admission Status Updated - COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL, ONITSHA.</title>
+    <title>Admission Status Updated - {{ config('app.name') }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,7 +77,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="logo">
+            <img src="{{ asset('logo1.png') }}" alt="Logo" class="logo">
         </div>
 
         <h1>Admission Status Updated</h1>

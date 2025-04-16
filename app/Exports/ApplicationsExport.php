@@ -41,7 +41,8 @@ class ApplicationsExport implements FromCollection, WithHeadings, ShouldAutoSize
             return [
                 'Student Name' => $application->user->full_name,
                 'Phone Number' => $application->user->student->phone, // Add this line
-                'Application No' => $application->user->student->application_unique_number,
+                'Jamb No.' => $application->user->student->jamb_reg_no,
+                'Guardian No.'  => $application->user->student->guardian_phone_number,
                 'Department' => $application->department->name,
                 'Exam Score' => $application->user->student->exam_score,
                 'Admission Status' => $application->admission_status
@@ -52,6 +53,6 @@ class ApplicationsExport implements FromCollection, WithHeadings, ShouldAutoSize
 
     public function headings(): array
     {
-        return ['Student Name', 'Phone Number',  'Application No', 'Department', 'Exam Score', 'Admission Status'];
+        return ['Student Name', 'Phone Number',  'Jamb No.', 'Guardian No.', 'Department', 'Exam Score', 'Admission Status'];
     }
 }

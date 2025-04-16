@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Congratulations on Your Admission to COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL, ONITSHA.</title>
+    <title>Congratulations on Your Admission to {{ config('app.name') }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,11 +61,11 @@
 </head>
 <body>
     <div class="header">
-        <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="logo">
+        <img src="{{ asset('logo1.png') }}" alt="Logo" class="logo">
     </div>
 
     <div class="content">
-        <h1>CONGRATULATIONS ON YOUR ADMISSION TO OUR COLLEGE</h1>
+        <h1>CONGRATULATIONS ON YOUR ADMISSION TO OUR UNIVERSITY</h1>
 
         <p>Dear {{ $user->name }},</p>
 
@@ -79,7 +79,7 @@
 
             <ol>
                 <li><strong>Online Registration:</strong><br>
-                Online registration for newly admitted students will commence on 30th September 2024. Detailed guidelines on how to complete the registration process will be shared with you via our official platforms.</li>
+                Detailed guidelines on how to complete the registration process will be shared with you via our official platforms.</li>
 
                 <li><strong>WhatsApp Group for Real-Time Updates:</strong><br>
                 To keep you informed and updated on the registration process and other important matters, we have created a dedicated WhatsApp group for all admitted students. You can join the group by clicking the link below:</li>

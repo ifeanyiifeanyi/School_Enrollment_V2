@@ -116,17 +116,21 @@ class ApplicationProcessController extends Controller
             try {
                 $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
-                // Define subaccount details
-                $subAccountCode = config('paystack.subAccount');
+                $baseAmount = $paymentAmount; // Amount to go to subaccount (in Naira)
+                $additionalCharges = 1450; // Additional charges (in Naira)
+                $totalAmount = $baseAmount + $additionalCharges; // Total to charge customer
+
 
                 $transaction = $paystack->transaction->initialize([
                     'email' => $user->email,
-                    'amount' => $paymentAmount * 100, // Convert amount to kobo
+                    'amount' => $totalAmount * 100, // Convert total to kobo (₦11,450)
                     'reference' => $this->generateUniqueReference(),
                     'callback_url' => route('student.payment.callbackPaystack'),
-                    'subaccount' => $subAccountCode,
-                    'bearer' => 'subaccount' // Ensures the fee is borne by the sub-account
+                    'subaccount' => 'ACCT_nkrw09lc3hnnlrg',
+                    'transaction_charge' => $additionalCharges * 100, // Set to 0 to ensure subaccount gets full amount
+                    'bearer' => 'account' // Main account bears all transaction fees
                 ]);
+                dd($transaction);
                 // session(['paystack_reference' => $this->generateUniqueReference()]);
 
 

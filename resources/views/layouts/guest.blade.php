@@ -43,7 +43,7 @@
     @yield('css')
 </head>
 
-<body style="background: linear-gradient(210deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 244, 0.9), rgba(255,255,255,0.9)), url('/nursebg.webp');background-repeat: no-repeat;background-position:center;background-size:cover">
+<body style="background: linear-gradient(210deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 244, 0.9), rgba(255,255,255,0.9)), url('bg.jpg');background-repeat: no-repeat;background-position:center;background-size:cover;height: 100vh;object-fit:cover">
     <div id="app">
         @yield('guest')
     </div>

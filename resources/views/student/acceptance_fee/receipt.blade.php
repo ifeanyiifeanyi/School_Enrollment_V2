@@ -79,9 +79,9 @@
 <div class="receipt">
 
     <div class="receipt-header">
-        <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="school-logo">
+        <img src="{{ asset('logo1.png') }}" alt="Logo" class="school-logo">
         <h4>
-            COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL.
+            {{ config('app.name') }}
 
         </h4>
         <h3>Acceptance Fee Payment Receipt</h3>
@@ -106,7 +106,7 @@
             </tr>
             <tr>
                 <th>Payment Date:</th>
-                <td>{{ $acceptanceFee->paid_at->format('F d, Y H:i:s') }}</td>
+                <td>{{ $acceptanceFee->paid_at?->format('F d, Y H:i:s') ?? 'N/A' }}</td>
             </tr>
             {{-- <tr>
                 <th>Academic Year:</th>

@@ -21,7 +21,7 @@
 <body>
     <div class="container">
         <p style="text-align: center">
-            <img src="{{ asset('nursinglogo.webp') }}" width="150" height="150" alt="">
+            <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="">
         </p>
         <hr>
         <h1 class="mb-4 text-center">Scholarship Application Received</h1>

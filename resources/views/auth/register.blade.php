@@ -12,7 +12,7 @@
         }
 
         .registration-card .card-header {
-            background-color: #143e30;
+            background-color: #9d2236;
             color: #fff;
             text-align: center;
             padding: 1.5rem;
@@ -29,8 +29,8 @@
         }
 
         .registration-card .btn-primary {
-            background-color: #305544;
-            border-color: #305544;
+            background-color: #9d2236;
+            border-color: #db1144;
             border-radius: 5px;
             font-weight: bold;
         }
@@ -46,12 +46,12 @@
         }
 
         .registration-card .writeup h5 {
-            color: #1f967c;
+            color: #70092b;
             font-weight: bold;
         }
 
         .registration-card .writeup p {
-            color: #666;
+            color: #444;
         }
     </style>
 @endsection

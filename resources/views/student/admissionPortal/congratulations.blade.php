@@ -127,10 +127,10 @@
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="offer-document">
-                        <img src="{{ asset('nursinglogo.webp') }}" alt="Watermark" class="pt-5 watermark">
+                        <img src="{{ asset('logo1.png') }}" alt="Watermark" class="pt-5 watermark">
 
                         <div class="mt-3 mb-5 logo-placeholder">
-                            <img src="{{ asset('nursinglogo.webp') }}" width="120px" alt="">
+                            <img src="{{ asset('logo1.png') }}" width="120px" alt="">
                         </div>
                         <h1 class="text-center">Admission Offer</h1>
                         <p class="lead">

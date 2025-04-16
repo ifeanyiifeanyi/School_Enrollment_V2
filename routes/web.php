@@ -43,12 +43,31 @@ use Illuminate\Support\Facades\Artisan;
 |
 */
 
-// Route::get('/run-migrations', function () {
-//     Artisan::call('optimize:clear');
-//     Artisan::call('migrate:fresh');
+Route::get('/migrate', function () {
+    try {
+        // Run database migrations
+        Artisan::call('migrate');
+        $migrationOutput = Artisan::output();
 
-//     return "migration was successful";
-// });
+        // Run storage link seeder
+        Artisan::call('storage:link');
+        $storageLinkOutput = Artisan::output();
+
+        // Run roles and permissions seeder
+        Artisan::call('db:seed', ['--class' => 'RolesAndPermissionsSeeder']);
+        $rolesAndPermissionsOutput = Artisan::output();
+
+        return response()->json([
+            'migration_output' => $migrationOutput,
+            'storage_link_output' => $storageLinkOutput,
+            'roles_and_permissions_output' => $rolesAndPermissionsOutput
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage()
+        ], 500);
+    }
+});
 
 
 Route::middleware(['cors'])->group(function () {
@@ -71,7 +90,7 @@ Route::middleware(['cors'])->group(function () {
     // confirm student application registration mail route
     Route::get('/payment', function () {
         return view('student.application.index');
-    })->name('payment.view')->middleware('');
+    })->name('payment.view')->middleware('auth');
 
     Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -283,7 +302,7 @@ Route::middleware(['cors'])->group(function () {
                 Route::get('admin/scholarships/applications/export', 'export')->name('admin.scholarship.applications.export');
                 Route::post('admin/scholarships/applications/import', 'import')->name('admin.scholarship.applications.import');
 
-                Route::patch('scholarship/applications/{id}/approve','approve')->name('admin.scholarship.approve.single');
+                Route::patch('scholarship/applications/{id}/approve', 'approve')->name('admin.scholarship.approve.single');
             });
         });
     });

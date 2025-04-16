@@ -5,7 +5,7 @@
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
             <a navigate:wire href="{{ route('admin.dashboard') }}" class="">
-                <img src="{{ asset('nursinglogo.webp') }}" width="40" alt=""></a>
+                <img src="{{ asset('logo1.png') }}" width="40" alt=""></a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a navigate:wire href="{{ route('admin.dashboard') }}"

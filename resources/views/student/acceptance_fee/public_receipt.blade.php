@@ -91,7 +91,7 @@
 
     <header>
         <h4>
-            COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL.
+            {{ config('app.name') }}
 
         </h4>
     </header>

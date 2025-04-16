@@ -46,7 +46,7 @@
 <body>
     <div class="container mb-3 shadow">
         <p style="text-align: center">
-            <img src="{{ asset('nursinglogo.webp') }}" width="150" height="150" alt="">
+            <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="">
         </p>
         <hr>
         <h4 class="mt-3 mb-3 heading">{{ Str::title($subject) }}</h4>

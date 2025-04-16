@@ -117,7 +117,7 @@
                         @endforeach
                     </ul>
                 {{-- {{ $roles->links() }} --}}
-                {!! $roles->links('pagination::bootstrap-4') !!}
+                {{-- {!! $roles->links('pagination::bootstrap-4') !!} --}}
                 </div>
             </div>
 

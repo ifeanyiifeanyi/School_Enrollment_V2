@@ -22,7 +22,7 @@
 <body>
     <div class="container">
         <p style="text-align: center">
-            <img src="{{ asset('nursinglogo.webp') }}" width="150" height="150" alt="logo">
+            <img src="{{ asset('logo1.png') }}" width="150" height="150" alt="logo">
         </p>
         <hr>
 

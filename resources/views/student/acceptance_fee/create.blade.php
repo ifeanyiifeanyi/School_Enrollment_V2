@@ -68,13 +68,13 @@
                                 <table>
                                     <tr>
                                         <td>
-                                            <h2>COLLEGE OF NURSING SCIENCES, ST CHARLES BORROMEO SPECIALIST HOSPITAL</h2>
+                                            <h2>{{ config('app.name') }}</h2>
                                             <strong>Acceptance Fee Invoice</strong><br>
                                             Invoice #: {{ date('YmdHis') }}<br>
                                             Created: {{ date('F d, Y') }}<br>
                                         </td>
                                         <td>
-                                            <img src="{{ asset('nursinglogo.webp') }}" alt="Logo" class="w-25 img-responsive img-fluid">
+                                            <img src="{{ asset('logo1.png') }}" alt="Logo" class="w-25 img-responsive img-fluid">
                                         </td>
                                     </tr>
                                 </table>
@@ -92,8 +92,7 @@
                                             Email: {{ auth()->user()->email }}
                                         </td>
                                         <td>
-                                            St.Charles Borromeo Specialist Hospital, Limca Rd,<br>
-                                            Anambra State, NG
+                                            {{ env('APP_ADDRESS') }}
                                         </td>
                                     </tr>
                                 </table>

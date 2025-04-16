@@ -46,7 +46,7 @@
     }
 
     .card-title {
-        color: #305544;
+        color: #74040e;
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 1rem;
@@ -71,9 +71,9 @@
     }
 
     .btn-primary:hover {
-        background-color: #305544;
+        background-color: #6d0729;
         transform: translateY(-2px);
-        box-shadow: 0 3px 10px #305544c5;
+        box-shadow: 0 3px 10px #553035a4;
     }
 
     .btn-secondary {
@@ -86,7 +86,7 @@
         background-color: var(--accent-color);
         color: var(--secondary-color);
         transform: translateY(-2px);
-        box-shadow: 0 3px 10px #305544bb;
+        box-shadow: 0 3px 10px #55303ca2;
     }
 
     .success-message {
@@ -124,7 +124,7 @@
 <div class="verification-container">
     <div class="verification-card">
         <div class="logo-container">
-            <img src="{{ asset('nursinglogo.webp') }}" alt="School Logo" class="school-logo">
+            <img src="{{ asset('logo1.png') }}" alt="School Logo" class="school-logo">
         </div>
 
         <h2 class="card-title">Verify Your Email</h2>
@@ -142,7 +142,7 @@
 
         <form method="POST" action="{{ route('verification.send') }}" class="mb-3">
             @csrf
-            <button type="submit" class="btn btn-primary btn-block">
+            <button type="submit" class="btn  btn-block" style="background: #660000; color: #fff;">
                 Resend Verification Email
             </button>
         </form>

@@ -121,10 +121,10 @@
                 <div class="row">
                     <div class="mx-auto col-md-7">
                         <div class="document">
-                            <img src="{{ asset('nursinglogo.webp') }}" alt="Watermark" class="mt-5 watermark">
+                            <img src="{{ asset('logo1.png') }}" alt="Watermark" class="mt-5 watermark">
 
                             <div class="header">
-                                <img src="{{ asset('nursinglogo.webp') }}" alt="University Logo" class="logo">
+                                <img src="{{ asset('logo1.png') }}" alt="University Logo" class="logo">
                                 <h2>Scholarship Application Details</h2>
                             </div>
 

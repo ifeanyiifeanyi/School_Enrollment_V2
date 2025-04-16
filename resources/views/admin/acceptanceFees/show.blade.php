@@ -17,7 +17,7 @@
                                 <div class="card-img">
                                     <img src="{{ $acceptanceFee->user->student->passport_photo ?
                                     asset($acceptanceFee->user->student->passport_photo) :
-                                    asset('nursinglogo.webp')
+                                    asset('logo1.png')
                                      }}" alt="" class="fluid thumbnail" width="80">
                                 </div>
                                 <h5 class="card-title">Student Information</h5>

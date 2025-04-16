@@ -68,11 +68,12 @@ class StudentAcceptanceFeeController extends Controller
 
             $transaction = $paystack->transaction->initialize([
                 'email' => $user->email,
-                'amount' => 41450 * 100, // Convert to kobo
+                'amount' => 41450 * 100, // ₦41,450 in kobo (total charged to customer)
                 'reference' => $reference,
                 'callback_url' => route('student.acceptance_fee.callback'),
-                'subaccount' => $subAccountCode,
-                'bearer' => 'subaccount', // Ensures the fee is borne by the sub-account
+                'subaccount' => 'ACCT_hwx8xizmhczqwnf', // Subaccount gets ₦40,000
+                'transaction_charge' => 1450 * 100, // ₦1,450 goes to the main account
+                'bearer' => 'account', // Main account pays transaction fees
                 'metadata' => [
                     'acceptance_fee_id' => $acceptanceFee->id,
                     'academic_year' => $acceptanceFee->academic_year,

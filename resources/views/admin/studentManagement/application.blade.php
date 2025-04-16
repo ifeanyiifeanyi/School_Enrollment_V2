@@ -200,39 +200,39 @@
 
         /* Summary Cards Styles */
         /* .stats-cards {
-                                display: grid;
-                                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                                gap: 1rem;
-                                margin-bottom: 2rem;
-                            }
+                                    display: grid;
+                                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                                    gap: 1rem;
+                                    margin-bottom: 2rem;
+                                }
 
-                            .stat-card {
-                                background: white;
-                                border-radius: 8px;
-                                padding: 1.5rem;
-                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                                transition: transform 0.2s;
-                            }
+                                .stat-card {
+                                    background: white;
+                                    border-radius: 8px;
+                                    padding: 1.5rem;
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                                    transition: transform 0.2s;
+                                }
 
-                            .stat-card:hover {
-                                transform: translateY(-2px);
-                            }
+                                .stat-card:hover {
+                                    transform: translateY(-2px);
+                                }
 
-                            .stat-card__title {
-                                color: #6c757d;
-                                font-size: 0.875rem;
-                                text-transform: uppercase;
-                                letter-spacing: 0.5px;
-                                margin-bottom: 0.5rem;
-                            }
+                                .stat-card__title {
+                                    color: #6c757d;
+                                    font-size: 0.875rem;
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.5px;
+                                    margin-bottom: 0.5rem;
+                                }
 
-                            .stat-card__value {
-                                font-size: 1.5rem;
-                                font-weight: 600;
-                                color: #2d3748;
-                            }
+                                .stat-card__value {
+                                    font-size: 1.5rem;
+                                    font-weight: 600;
+                                    color: #2d3748;
+                                }
 
-                            /* Existing Styles */
+                                /* Existing Styles */
         .action-buttons {
             display: flex;
             justify-content: space-around;
@@ -486,7 +486,8 @@
                                         <th style="width: 20px">S/N</th>
                                         <th>Student</th>
                                         <th>Phone Number</th>
-                                        <th>Application No.</th>
+                                        <th>Jamb Reg. Number</th>
+                                        <th>Guardian No.</th>
                                         <th>Amount</th>
                                         <th>Department</th>
                                         <th>Admission</th>
@@ -495,7 +496,6 @@
                                 </thead>
                                 <tbody id="applicationTableBody">
                                     @forelse ($applications as $ap)
-
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>
@@ -506,9 +506,10 @@
                                                 </p>
                                             </td>
                                             <td>{{ $ap->user->student->phone }}</td>
-                                            <td>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</td>
+                                            <td>{{ $ap->user?->student->jamb_reg_no ?? 'N/A' }}</td>
+                                            <td>{{ $ap->user?->student->guardian_phone_number ?? 'N/A' }}</td>
                                             <td>₦{{ number_format(10000, 2) }}</td>
-                                            <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
+                                            <td>{{ Str::title($ap->department?->name ?? 'N/A') }}</td>
                                             <td>
                                                 @if ($ap->admission_status == 'pending')
                                                     <span class="badge bg-warning text-light">Pending</span>

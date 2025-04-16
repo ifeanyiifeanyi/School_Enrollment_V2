@@ -27,7 +27,7 @@ class AdminProfileController extends Controller
             'address' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|string',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:10000',
+            'photo' => 'nullable|image|max:10000',
         ]);
 
         if ($request->hasFile('photo')) {
