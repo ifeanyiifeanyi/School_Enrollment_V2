@@ -27,15 +27,7 @@ class StudentAdmissionApplicationController extends Controller
     {
         // dd("studentapplications");
         $user = auth()->user();
-        // $application = $user->applications;
-        // if (empty($application->payment_id)) {
-        //     // Application form has been filled, but payment is pending
-        //     $notification = [
-        //         'message' => 'Please complete the payment to finalize your application.',
-        //         'alert-type' => 'info'
-        //     ];
-        //     return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])->with($notification);
-        // }
+       
 
 
         $religions = config('app_data.religions');

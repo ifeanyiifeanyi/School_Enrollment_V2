@@ -1,6 +1,6 @@
 @extends('admin.layouts.adminLayout')
 
-@section('title', 'Active Applications')
+@section('title', 'Applications Fee Manager')
 
 @section('css')
 
@@ -198,41 +198,7 @@
             }
         }
 
-        /* Summary Cards Styles */
-        /* .stats-cards {
-                                            display: grid;
-                                            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                                            gap: 1rem;
-                                            margin-bottom: 2rem;
-                                        }
 
-                                        .stat-card {
-                                            background: white;
-                                            border-radius: 8px;
-                                            padding: 1.5rem;
-                                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                                            transition: transform 0.2s;
-                                        }
-
-                                        .stat-card:hover {
-                                            transform: translateY(-2px);
-                                        }
-
-                                        .stat-card__title {
-                                            color: #6c757d;
-                                            font-size: 0.875rem;
-                                            text-transform: uppercase;
-                                            letter-spacing: 0.5px;
-                                            margin-bottom: 0.5rem;
-                                        }
-
-                                        .stat-card__value {
-                                            font-size: 1.5rem;
-                                            font-weight: 600;
-                                            color: #2d3748;
-                                        }
-
-                                        /* Existing Styles */
         .action-buttons {
             display: flex;
             justify-content: space-around;
@@ -368,104 +334,34 @@
                     {{ number_format($applications->where('admission_status', 'pending')->count()) }}
                 </div>
             </div>
-            {{-- <div class="stat-card">
-                <div class="stat-card__title">Average Payment</div>
-                <div class="stat-card__value">
-                    ₦{{ $totalStudents > 0 ? number_format($totalAmount / $totalStudents, 2) : '0.00' }}
-                </div>
-            </div> --}}
+          
         </div>
 
         @include('student.alert')
 
 
         <section class="section">
-            {{-- <div class="section-header non-printable">
-                <h1>@yield('title')</h1>
-            </div> --}}
-
-            <!-- Search Box -->
-            <div class="search-container non-printable">
-                <input type="search" id="search" class="search-input" placeholder="Search Students...">
-                <i class="search-icon fas fa-search"></i>
-            </div>
+           
+           
 
             <div class="section-body">
                 <div class="card">
-                    <!-- Status Information -->
-                    <div class="card-body non-printable">
-                        <p class="text-muted">ALLOWED APPLICATION STATUS</p>
-                        <ul>
-                            <li>Pending</li>
-                            <li>Approved</li>
-                            <li>Denied</li>
-                        </ul>
-                    </div>
-
+                   
                     <!-- Main Content -->
                     <div class="card-body">
-                        <!-- Import Form -->
+                        <div class="search-container non-printable">
+                            <input type="search" id="search" class="search-input" placeholder="Search Students...">
+                            <i class="search-icon fas fa-search"></i>
+                        </div>
                         <!-- Admin Actions Section -->
-                        <!-- Updated Filter Section in the Blade Template -->
-                        <div class="p-4 mb-4 bg-white rounded-lg shadow-sm admin-actions-container">
-                            <div class="grid gap-4 md:grid-cols-3">
-                                <!-- Left Column: Import Form -->
-                                <div class="import-section">
-                                    <form id="import-form" action="{{ route('admin.student.applications.import') }}"
-                                        method="POST" enctype="multipart/form-data">
-                                        @csrf
-                                        <div class="form-group">
-                                            <label for="exampleInputFile" class="mb-2 form-label fw-bold">
-                                                Import Applications File
-                                            </label>
-
-                                            @error('file')
-                                                <div class="p-2 mb-2 alert alert-danger">
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                </div>
-                                            @enderror
-
-                                            <div class="input-group">
-                                                <input type="file" name="file" class="form-control"
-                                                    id="exampleInputFile">
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i class="fas fa-upload me-1"></i> Import
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <!-- Middle Column: Academic Session Filter -->
-                                <div class="filter-section">
-                                    <form id="sessionForm" action="{{ route('admin.student.application') }}" method="GET"
-                                        class="mb-3">
-                                        <input type="hidden" name="department_id" value="{{ request('department_id') }}">
-                                        <label class="mb-2 form-label fw-bold">Academic Session</label>
-                                        <select class="form-select" name="academic_session_id"
-                                            onchange="updateFilters(); this.form.submit();">
-                                            @foreach ($academicSessions as $session)
-                                                <option value="{{ $session->id }}"
-                                                    {{ request('academic_session_id') == $session->id || (!request('academic_session_id') && $session->status == 'current') ? 'selected' : '' }}>
-                                                    {{ $session->session }}
-                                                    @if ($session->status == 'current')
-                                                        (Current)
-                                                    @endif
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </form>
-                                </div>
-
-                                <!-- Right Column: Department Filter -->
-                                <div class="filter-section">
+                        <div class="row mt-3 mb-4 p-4 rounded-lg shadow-sm admin-actions-container">
+                            <div class="col-md-6">
+                              
                                     <form id="departmentForm" action="{{ route('admin.student.application') }}"
                                         method="GET" class="mb-3">
-                                        <input type="hidden" name="academic_session_id"
-                                            value="{{ request('academic_session_id') }}">
                                         <label class="mb-2 form-label fw-bold">Filter by Department</label>
-                                        <select class="form-select" name="department_id"
-                                            onchange="updateFilters(); this.form.submit();">
+                                        <select class="form-control" name="department_id"
+                                            onchange="updateExportLink(); this.form.submit();">
                                             <option value="">All Departments</option>
                                             @foreach ($departments as $department)
                                                 <option value="{{ $department->id }}"
@@ -475,24 +371,17 @@
                                             @endforeach
                                         </select>
                                     </form>
-                                </div>
+                                
                             </div>
 
                             <!-- Bottom Action Buttons -->
-                            <div class="gap-2 mt-4 action-buttons d-flex justify-content-end">
+                            <div class="col-md-6 mt-4">
                                 <button onclick="printApplications()" class="btn btn-secondary">
                                     <i class="fas fa-print"></i> Print
                                 </button>
 
-                                <button onclick="return confirm('Are you sure of this APPROVE action?')" id="bulkApprove"
-                                    class="btn btn-success">
-                                    <i class="fas fa-check"></i> Approve Selected
-                                </button>
-
-                                <button onclick="return confirm('Are you sure of this PENDING action?')" id="bulkPending"
-                                    class="btn btn-warning">
-                                    <i class="fas fa-clock"></i> Set Selected to Pending
-                                </button>
+                               
+                               
 
                                 <a href="{{ route('admin.student.applications.export') }}" class="btn btn-info"
                                     id="exportButton">
@@ -506,7 +395,7 @@
 
                         <!-- Applications Table -->
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
+                            <table class="table table-striped" id="datatable">
                                 <thead>
                                     <tr>
                                         <th style="width: 20px">S/N</th>
@@ -514,10 +403,8 @@
                                         <th>Phone Number</th>
                                         <th>Jamb Reg. Number</th>
                                         <th>Guardian No.</th>
-
+                                        <th>Amount</th>
                                         <th>Department</th>
-                                        <th>Admission</th>
-                                        <th class="non-printable">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="applicationTableBody">
@@ -534,38 +421,10 @@
                                             <td>{{ $ap->user->student->phone }}</td>
                                             <td>{{ $ap->user?->student->jamb_reg_no ?? 'N/A' }}</td>
                                             <td>{{ $ap->user?->student->guardian_phone_number ?? 'N/A' }}</td>
-
+                                            <td>₦{{ number_format(10000, 2) }}</td>
                                             <td>{{ Str::title($ap->department?->name ?? 'N/A') }}</td>
-                                            <td>
-                                                @if ($ap->admission_status == 'pending')
-                                                    <span class="badge bg-warning text-light">Pending</span>
-                                                @elseif ($ap->admission_status == 'denied')
-                                                    <span class="badge bg-danger text-light">Denied</span>
-                                                @elseif ($ap->admission_status == 'approved')
-                                                    <span class="badge bg-success text-light">Approved</span>
-                                                @endif
-                                            </td>
-                                            <td class="non-printable">
-                                                @if ($ap->admission_status == 'pending')
-                                                    <form action="{{ route('admin.approve.admission', $ap->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-sm btn-success"
-                                                            onclick="return confirm('Are you sure you want to approve this application?')">
-                                                            Approve
-                                                        </button>
-                                                    </form>
-                                                @elseif ($ap->admission_status == 'approved')
-                                                    <form action="{{ route('admin.deny.application', $ap->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-sm btn-warning"
-                                                            onclick="return confirm('Are you sure you want to set this application to pending?')">
-                                                            Set Pending
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                            </td>
+                                           
+                                            
                                         </tr>
                                     @empty
                                         <tr>

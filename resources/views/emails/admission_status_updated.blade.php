@@ -52,6 +52,14 @@
             border-radius: 5px;
         }
 
+        .jamb-notice {
+            background-color: #ffe6e6;
+            border: 1px solid #ffb3b3;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+
         .whatsapp-link {
             display: inline-block;
             background-color: #d3257c;
@@ -72,6 +80,7 @@
             color: #660000
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.0/css/all.min.css" integrity="sha512-3PN6gfRNZEX4YFyz+sIyTF6pGlQiryJu9NlGhu9LrLMQ7eDjNgudQoFDK3WSNAayeIKc6B8WXXpo4a7HqxjKwg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -91,17 +100,31 @@
             <p>Congratulations! We are thrilled to welcome you to our academic
                 community.</p>
 
+            <div class="jamb-notice">
+                <h3><i class="fas fa-exclamation-triangle"></i> IMPORTANT: JAMB CAPS Acceptance Required</h3>
+                <p>You <strong>MUST</strong> accept your admission on the JAMB Central Admission Processing System (CAPS) portal to validate your admission. Please:</p>
+                <ol>
+                    <li>Log in to the JAMB CAPS portal at <a href="https://portal.jamb.gov.ng" target="_blank">https://portal.jamb.gov.ng</a></li>
+                    <li>Check your admission status</li>
+                    <li>Click on the "Accept Admission" button</li>
+                    <li>Print your admission letter after acceptance</li>
+                </ol>
+                <p><strong>Note:</strong> Failure to accept your admission on JAMB CAPS will render your admission invalid, regardless of payment of acceptance fee.</p>
+            </div>
+
             <div class="important-notice">
                 <h3>Next Steps:</h3>
                 <ol>
                     <li><strong>Pay Acceptance Fee:</strong> To secure your place, you need to pay the acceptance fee
-                        through your student portal. This is a crucial step in confirming your enrollment.</li>
+                        through your student portal. This is a crucial step in confirming your enrollment.
+                        <a href="https://apply.shanahanuni.edu.ng" target="_blank" style="color: #d3257c; font-weight: bold;">Click here to pay your acceptance fee</a>
+                    </li>
                     <li><strong>Join Our WhatsApp Group:</strong> Stay connected and receive important updates by
                         joining our official WhatsApp group for new students.</li>
                 </ol>
 
-                <a href="" class="whatsapp-link" target="_blank">Join
-                    WhatsApp Group</a>
+                <a href="https://chat.whatsapp.com/BkL4HVYHunW2weT8SvZdWd" class="whatsapp-link" target="_blank">Join
+                    <i class="fab fa-whatsapp"></i> WhatsApp Group</a>
             </div>
 
             <p>Please check your student portal for more details, including the exact amount of the acceptance fee and
@@ -118,6 +141,10 @@
     <div class="footer">
         <p>This is an automated message. Please do not reply to this email.</p>
     </div>
+    <div class="footer">
+        <p>&copy; {{ date('Y') }} {{ config('app.name') }}. All rights reserved.</p>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.0/js/all.min.js" integrity="sha512-ISfdo0dGmoT6xQiYhsCuBXNy982/TMgk9WnSeFiLoBVffcwXCWMyfYtmobfJuBvSQZVpjPvEJtGEPdTH9XKpvw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 
 </html>

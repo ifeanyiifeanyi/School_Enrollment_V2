@@ -119,25 +119,22 @@
                             </div>
                             <!-- /.col -->
                             <div class="col-md-6 col-sm-12">
-                                <p class="lead">Amount Due <b>{{ now()->addDays(20)->format('jS, F Y g:i A') }}</b></p>
+                                <p class="lead">Amount Due <b>{{ now()->addDays(5)->format('jS, F Y g:i A') }}</b></p>
 
                                 <div class="table-responsive">
                                     <table class="table">
                                         <tr>
-                                            <th style="width:50%">Subtotal:</th>
-                                            {{-- <td>N{{ number_format($siteSetting->form_price, 2, '.', ',') }}</td> --}}
-                                            <td>N{{ number_format($siteSetting->form_price - 450, 2, '.', ',') }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Tax </th>
-                                            <td>N{{ number_format(450, 2, '.', ',') }}</td>
-                                        </tr>
-                                        <tr>
                                             <th>Total:</th>
                                             <td>N{{ number_format($siteSetting->form_price, 2, '.', ',') }}</td>
                                         </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                Please note that a small transfer or processing fee will be added at checkout. The final payable amount may be slightly higher.
+                                            </td>
+                                        </tr>
                                     </table>
                                 </div>
+
 
                                 <form action="{{ route('student.payment.process') }}" method="POST">
                                     @csrf

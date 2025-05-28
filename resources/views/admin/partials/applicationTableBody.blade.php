@@ -13,11 +13,10 @@
     <td>
         <p>{{ $ap->user->student->phone }}</p>
     </td>
-    <td>{{ $ap->user->student->application_unique_number ?? 'N/A' }}</td>
+    <td>{{ $ap->user->student->jamb_reg_no ?? 'N/A' }}</td>
     <td>{{ Str::title($ap->department->name ?? 'N/A') }}</td>
-    {{-- <td>{{ $ap->academicSession->session ?? 'N/A' }}</td> --}}
+    <td>{{  $ap->user?->student?->guardian_phone_number }}</td>
 
-    {{-- <td>{{ $ap->user->student->exam_score ?? 0 }}</td> --}}
     <td>
         @if ($ap->admission_status == 'pending')
             <span class="badge bg-warning text-light">Pending <i

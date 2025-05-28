@@ -71,7 +71,7 @@ class StudentAcceptanceFeeController extends Controller
                 'amount' => 41450 * 100, // ₦41,450 in kobo (total charged to customer)
                 'reference' => $reference,
                 'callback_url' => route('student.acceptance_fee.callback'),
-                'subaccount' => 'ACCT_hwx8xizmhczqwnf', // Subaccount gets ₦40,000
+                'subaccount' => 'ACCT_h4y2wag4i4e8jfl', // Subaccount gets ₦40,000
                 'transaction_charge' => 1450 * 100, // ₦1,450 goes to the main account
                 'bearer' => 'account', // Main account pays transaction fees
                 'metadata' => [

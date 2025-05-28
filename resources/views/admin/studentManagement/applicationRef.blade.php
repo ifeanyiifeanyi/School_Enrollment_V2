@@ -53,7 +53,7 @@
                                         <th style="width: 20px">s/n</th>
                                         <th style="width: auto !important">Student</th>
                                         <th>profile</th>
-                                        <th style="width: 40px">Invoice</th>
+                                        <th style="width: 40px">Jamb No.</th>
                                         <th>Department</th>
                                         <th>Decision</th>
                                     </tr>
@@ -69,10 +69,10 @@
                                             </td>
                                             <td class="align-middle">
                                                 <img src="{{ empty($ap->user->student->passport_photo) ? asset('student.png') : asset($ap->user->student->passport_photo) }}"
-                                                    alt="" class="img-fluid" width="90">
+                                                    alt="" class="img-fluid img-thumbnail" style="width:80px !important;height: 70px !important>
                                             </td>
                                             <td class="align-middle">
-                                                <p>{{ $ap->invoice_number ?? 'N/A' }}</p>
+                                                <p>{{ $ap->user->student->jamb_reg_no ?? 'N/A' }}</p>
 
                                             </td>
                                             <td class="align-middle">{{ Str::title($ap->department->name) ?? 'N/A' }}</td>
@@ -88,7 +88,7 @@
                             </table>
                         </div>
                         <div class="text-center paginate">
-                            {{ $applications->links() }} 
+                            {{ $applications->links() }}
                             {{-- {!! $applications->links('pagination::bootstrap-4') !!} --}}
                         </div>
                     </div>

@@ -12,28 +12,28 @@
 
 
     <!-- General CSS Files -->
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/modules/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/modules/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/fontawesome/css/all.min.css') }}">
     <!-- DataTables -->
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('') }}student/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('student/plugins/fontawesome-free/css/all.min.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('') }}student/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('student/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('') }}student/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-    <link rel="stylesheet" href="{{ asset('') }}student/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+        href="{{ asset('student/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('student/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
 
     <!-- CSS Libraries -->
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/modules/summernote/summernote-bs4.css">
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/modules/codemirror/lib/codemirror.css">
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/modules/codemirror/theme/duotone-dark.css">
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/modules/jquery-selectric/selectric.css">
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/modules/datatables/datatables.min.css">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/summernote/summernote-bs4.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/codemirror/lib/codemirror.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/codemirror/theme/duotone-dark.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/jquery-selectric/selectric.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/modules/datatables/datatables.min.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('') }}admin/assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css">
+        href="{{ asset('admin/assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('') }}admin/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css">
+        href="{{ asset('admin/assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css') }}">
 
     <link rel="shortcut icon" href="{{ asset($siteSetting->site_favicon ?? '') }}">
     <meta name="theme-color" content="{{ asset($siteSetting->site_color ?? '') }}" />
@@ -51,15 +51,10 @@
     <meta property="og:site_name" content="{{ $siteSetting->site_title ?? '' }}">
     <meta name="twitter:image:alt" content="{{ $siteSetting->site_title ?? '' }}">
 
-    <style>
-        /* * {
-            font-weight: bold !important;
-        } */
-    </style>
-
+   
     <!-- Template CSS -->
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/css/style.css">
-    <link rel="stylesheet" href="{{ asset('') }}admin/assets/css/components.css">
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/assets/css/components.css') }}">
 
     <link rel="icon" href="{{ asset($siteSetting->site_favicon ?? '') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
@@ -69,7 +64,7 @@
         }
 
         .active {
-            background: url({{ asset('active.jpg') }}) !important;
+            background-color: #6777f0 !important;
             background-size: cover;
             background-position: center;
             color: #fff !important;
@@ -107,18 +102,18 @@
 
     <!-- DataTables  & Plugins -->
     {{-- <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script> --}}
-    <script src="{{ asset('') }}student/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/jszip/jszip.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/pdfmake/vfs_fonts.js"></script>
-    <script src="{{ asset('') }}student/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-    <script src="{{ asset('') }}student/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="{{ asset('student/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('student/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('student/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
 
     <script>

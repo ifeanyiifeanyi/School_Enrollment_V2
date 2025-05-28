@@ -1,36 +1,37 @@
 <?php
 
-use App\Http\Controllers\Admin\AcademicSessionController;
-use App\Http\Controllers\Admin\AcceptanceFeeManagerController;
-use App\Http\Controllers\Student\BarcodeViewController;
+use FontLib\Table\Type\name;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use App\Models\AdmissionAcceptanceManager;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Admin\FacultyController;
 use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\ExamManagerController;
+use App\Http\Controllers\Admin\ManageAdminController;
+use App\Http\Controllers\Admin\ScholarshipController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use League\CommonMark\Extension\SmartPunct\DashParser;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\ExamManagerController;
-use App\Http\Controllers\Admin\ExamNotificationController;
-use App\Http\Controllers\Admin\ManageAdminController;
-use App\Http\Controllers\Admin\ManageRolePermissionController;
 use App\Http\Controllers\Admin\PaymentMethodController;
-use App\Http\Controllers\Admin\ScholarshipController;
-use App\Http\Controllers\Admin\ScholarshipQuestionController;
-use App\Http\Controllers\Admin\StudentManagementController;
-use App\Http\Controllers\Admin\StudentScholarshipApplicationController;
 use App\Http\Controllers\Installer\InstallerController;
-use App\Http\Controllers\Student\ApplicationProcessController;
-use App\Http\Controllers\Student\ScholarshipApplicationController;
-use App\Http\Controllers\Student\StudentAcceptanceFeeController;
-use App\Http\Controllers\Student\StudentAdmissionApplicationController;
-use App\Http\Controllers\Student\StudentDashboardController;
+use App\Http\Controllers\Student\BarcodeViewController;
+use App\Http\Controllers\Admin\AcademicSessionController;
+use App\Http\Controllers\Admin\ExamNotificationController;
 use App\Http\Controllers\Student\StudentProfileController;
-use App\Models\AdmissionAcceptanceManager;
-use FontLib\Table\Type\name;
-use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\Admin\StudentManagementController;
+use App\Http\Controllers\Student\StudentDashboardController;
+use App\Http\Controllers\Admin\ScholarshipQuestionController;
+use App\Http\Controllers\Admin\AcceptanceFeeManagerController;
+use App\Http\Controllers\Admin\ManageRolePermissionController;
+use App\Http\Controllers\Student\ApplicationProcessController;
+use App\Http\Controllers\Admin\ApplicationFeeManagerController;
+use App\Http\Controllers\Student\StudentAcceptanceFeeController;
+use App\Http\Controllers\Student\ScholarshipApplicationController;
+use App\Http\Controllers\Admin\StudentScholarshipApplicationController;
+use App\Http\Controllers\Student\StudentAdmissionApplicationController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -115,6 +116,10 @@ Route::middleware(['cors'])->group(function () {
 
                 Route::post('send-mail', 'sendMail')->name('admin.send.mail');
             });
+        });
+
+        Route::controller(ApplicationFeeManagerController::class)->group(function(){
+            Route::get('application-fees', 'index')->name('admin.application.fee.index');
         });
 
         Route::middleware(['permission:manage-site-settings'])->group(function () {

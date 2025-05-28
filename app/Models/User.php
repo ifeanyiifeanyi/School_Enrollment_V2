@@ -142,4 +142,62 @@ class User extends Authenticatable implements MustVerifyEmail
         'last_login_at' => 'datetime',
 
     ];
+
+
+     /**
+     * Check if user can apply for current academic session
+     */
+    public function canApplyForCurrentSession()
+    {
+        // Get current academic session
+        $currentSession = \App\Models\AcademicSession::where('status', 'current')->first();
+
+        // Check if user has been approved in any session
+        $hasBeenAdmitted = $this->applications()
+            ->where('admission_status', 'approved')
+            ->exists();
+
+        if ($hasBeenAdmitted) {
+            return false;
+        }
+
+        // Check if user has application for current session
+        $hasCurrentSessionApplication = $this->applications()
+            ->where('academic_session_id', $currentSession->id ?? null)
+            ->exists();
+
+        return !$hasCurrentSessionApplication;
+    }
+
+     /**
+     * Get application status message for display
+     */
+    public function getApplicationStatusMessage()
+    {
+        $currentSession = \App\Models\AcademicSession::where('status', 'current')->first();
+
+        // Check if approved in any session
+        $approvedApplication = $this->applications()
+            ->where('admission_status', 'approved')
+            ->first();
+
+        if ($approvedApplication) {
+            return 'You have already been admitted and cannot submit another application.';
+        }
+
+        // Check current session application
+        $currentApplication = $this->applications()
+            ->where('academic_session_id', $currentSession->id ?? null)
+            ->first();
+
+        if ($currentApplication) {
+            if ($currentApplication->payment_id) {
+                return 'You have already completed your application for the current academic session.';
+            } else {
+                return 'Please complete your payment to finish your application.';
+            }
+        }
+
+        return null; // Can apply
+    }
 }

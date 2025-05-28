@@ -67,52 +67,54 @@
 
             <li
                 class="dropdown {{ request()->routeIs('admin.unverified.student') || request()->routeIs('admin.student.management') || request()->routeIs('admin.student.application') || request()->routeIs('admin.student.applicationRef') ? 'parent' : '' }}">
-                <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i><span>Student
-                        Management</span></a>
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-users"></i><span>Students
+                        Application</span></a>
                 <ul class="dropdown-menu">
-                    <li><a navigate:wire
+                    {{-- <li>
+                        <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.student.management') ? 'active' : '' }}"
-                            href="{{ route('admin.student.management') }}">All Students</a></li>
+                            href="{{ route('admin.student.management') }}">All Students</a>
+                    </li> --}}
                     <li>
                         <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.student.application') ? 'active' : '' }}"
                             href="{{ route('admin.student.application') }}">Active Applications
                         </a>
                     </li>
-                    <li>
-                        <a navigate:wire
-                            class="nav-link {{ request()->routeIs('admin.pendingAdmissions.manual') ? 'active' : '' }}"
-                            href="{{ route('admin.pendingAdmissions.manual') }}">Appliction Pending
-                        </a>
-                    </li>
-                    <li>
-                        <a navigate:wire
-                            class="nav-link {{ request()->routeIs('admin.pending.approvals') ? 'active' : '' }}"
-                            href="{{ route('admin.pending.approvals') }}">Applicant Errors
-                        </a>
-                    </li>
-                    <li>
-                        <a navigate:wire
-                            class="nav-link {{ request()->routeIs('admin.unverified.student') ? 'active' : '' }}"
-                            href="{{ route('admin.unverified.student') }}">Unverified Student Emails
-                        </a>
-                    </li>
+
                     <li>
                         <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.student.applicationRef') ? 'active' : '' }}"
                             href="{{ route('admin.student.applicationRef') }}">Application REF
                         </a>
                     </li>
+
+
+
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="#" class="nav-link has-dropdown"><i class="far fa-money-bill-alt"></i><span>Payment
+                        Details</span></a>
+                <ul class="dropdown-menu">
+
                     <li>
                         <a navigate:wire
                             class="nav-link {{ request()->routeIs('admin.acceptance_fees.index') ? 'active' : '' }}"
                             href="{{ route('admin.acceptance_fees.index') }}">Acceptance Fee Manager
                         </a>
                     </li>
+                    <li>
+                        <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.application.fee.index') ? 'active' : '' }}"
+                            href="{{ route('admin.application.fee.index') }}">Application Fee Manager</a>
+                    </li>
                 </ul>
             </li>
 
-            <li
+
+            {{-- <li
                 class="dropdown {{ request()->routeIs('admin.payment.manage') || request()->routeIs('admin.studentApplication.payment') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="far fa-money-bill-alt"></i><span>Payment
                         Management</span></a>
@@ -123,11 +125,12 @@
                             href="{{ route('admin.payment.manage') }}">Create Payment</a>
                     </li>
                     <li>
-<a navigate:wire class="nav-link {{ request()->routeIs('admin.studentApplication.payment') ? 'active' : '' }}"
-    href="{{ route("admin.studentApplication.payment") }}">Payments</a>
+                        <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.studentApplication.payment') ? 'active' : '' }}"
+                            href="{{ route('admin.studentApplication.payment') }}">Payments</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
             <li class="dropdown {{ request()->routeIs('admin.manage.admin') ? 'parent' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-cogs"></i><span>Admin
@@ -184,6 +187,38 @@
                     <span>Site Settings</span>
                 </a>
             </li>
+
+
+
+            <li>
+                <a href="#" class="nav-link has-dropdown"><i class="fas fa-arhive"></i><span>Archive
+                        Manager</span></a>
+                <ul class="dropdown-menu">
+
+                    <li>
+                        <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.pendingAdmissions.manual') ? 'active' : '' }}"
+                            href="{{ route('admin.pendingAdmissions.manual') }}">Appliction Pending
+                        </a>
+                    </li>
+                    <li>
+                        <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.pending.approvals') ? 'active' : '' }}"
+                            href="{{ route('admin.pending.approvals') }}">Applicant Errors
+                        </a>
+                    </li>
+                    <li>
+                        <a navigate:wire
+                            class="nav-link {{ request()->routeIs('admin.unverified.student') ? 'active' : '' }}"
+                            href="{{ route('admin.unverified.student') }}">Unverified Student Emails
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+
+
+
 
             <li
                 class="dropdown {{ request()->routeIs('admin.create.permission') || request()->routeIs('admin.create.role') || request()->routeIs('admin.view.role') || request()->routeIs('admin.permissions.view') ? 'parent' : '' }}">

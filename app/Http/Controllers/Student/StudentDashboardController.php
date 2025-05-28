@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Student;
 
 use App\Models\Faculty;
 use App\Models\Department;
+use App\Models\AcademicSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
@@ -15,25 +16,80 @@ class StudentDashboardController extends Controller
     public function dashboard()
     {
         $user = auth()->user();
-        $application = $user->applications;
+
+        // Get current academic session
+        $currentSession = AcademicSession::where('status', 'current')->first();
+
+        // Get application for CURRENT session only
+        $application = $user->applications()
+            ->where('academic_session_id', $currentSession->id ?? null)
+            ->first();
 
         // Generate URL to the student details page
         $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
-        // dd($user->nameSlug);
-
-
 
         $faculties = Faculty::has('departments')
             ->with('departments')
             ->simplePaginate(15);
 
         $showPaymentAlert = false;
-        if ($application && !$application->payment_id) {
-            $showPaymentAlert = true;
+        $showApplicationForm = true;
+        $hasCompletedApplication = false;
+
+        // Check if user has completed application for current session
+        if ($application) {
+            if ($application->payment_id) {
+                // Application is complete for current session
+                $hasCompletedApplication = true;
+                $showApplicationForm = false;
+            } else {
+                // Application exists but payment is pending for current session
+                $showPaymentAlert = true;
+                $showApplicationForm = false;
+            }
         }
 
-        return view('student.dashboard', compact('showPaymentAlert','faculties', 'application', 'user', 'barcodeUrl'));
+        // Check if user has been APPROVED (admitted) in any previous session
+        $hasBeenAdmitted = $user->applications()
+            ->where('admission_status', 'approved')
+            ->where('academic_session_id', '!=', $currentSession->id ?? null)
+            ->exists();
+
+        // If user has been admitted before, they shouldn't see application form
+        if ($hasBeenAdmitted && !$application) {
+            $showApplicationForm = false;
+        }
+
+        // Additional check: If user has pending application from previous session that was denied
+        // they should be able to apply again in the current session
+        // $hasDeniedApplication = $user->applications()
+        //     ->where('admission_status', 'denied')
+        //     ->where('academic_session_id', '!=', $currentSession->id ?? null)
+        //     ->exists();
+        $hasDeniedApplication = $user->applications()
+            ->whereIn('admission_status', ['denied', 'pending'])
+            ->where('academic_session_id', '!=', $currentSession->id ?? null)
+            ->exists();
+
+        // If user was denied in previous session and has no application in current session,
+        // they can apply again
+        if ($hasDeniedApplication && !$application) {
+            $showApplicationForm = true;
+        }
+
+        return view('student.dashboard', compact(
+            'showPaymentAlert',
+            'showApplicationForm',
+            'hasCompletedApplication',
+            'hasBeenAdmitted',
+            'faculties',
+            'application',
+            'user',
+            'barcodeUrl',
+            'currentSession'
+        ));
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -56,48 +112,7 @@ class StudentDashboardController extends Controller
             // Add other department details you want to return
         ];
 
-
         return response()->json($departmentData);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**
@@ -106,8 +121,6 @@ class StudentDashboardController extends Controller
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();
-
-
 
         return redirect('/');
     }

@@ -24,6 +24,7 @@ use App\Mail\ApplicationRejectedMail;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\AdmissionDeniedStatusEmail;
 use App\Mail\ApplicationApprovedMailAdmin;
+use App\Models\AcademicSession;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class StudentManagementController extends Controller
@@ -144,16 +145,65 @@ class StudentManagementController extends Controller
 
 
     // HANDLE STUDENTS THAT HAS APPLIED FOR ADMISSION (successfully)
-    
+
+    // public function application(Request $request)
+    // {
+    //     $departments = Department::latest()->get();
+    //     $departmentId = $request->input('department_id');
+    //     $academicSessions = AcademicSession::orderBy('id', 'desc')->get();
+
+    //     $query = Application::with(['user.student', 'department', 'academicSession', 'payment'])
+    //         ->whereNotNull('payment_id')
+    //         ->where('payment_id', '!=', '');
+
+    //     if ($departmentId) {
+    //         $query->where('department_id', $departmentId);
+    //     }
+
+    //     // Calculate totals before pagination
+    //     $totalStudents = $query->count();
+    //     $totalAmount = Payment::whereIn('id', $query->pluck('payment_id'))
+    //         ->sum('amount');
+
+    //     $applications = $query->orderBy('created_at', 'desc')
+    //         ->distinct()
+    //         ->paginate(100);
+
+    //     return view('admin.studentManagement.application', compact(
+    //         'applications',
+    //         'departments',
+    //         'totalStudents',
+    //         'totalAmount'
+    //     ));
+    // }
+
+    // Updated application() method in StudentManagementController
     public function application(Request $request)
     {
         $departments = Department::latest()->get();
+        $academicSessions = AcademicSession::orderBy('session', 'desc')->get();
+
         $departmentId = $request->input('department_id');
+        $academicSessionId = $request->input('academic_session_id');
+
+        // Get current academic session as default
+        $currentSession = AcademicSession::where('status', 'current')->first();
+
+        // If no session is selected, use current session
+        if (!$academicSessionId && $currentSession) {
+            $academicSessionId = $currentSession->id;
+        }
 
         $query = Application::with(['user.student', 'department', 'academicSession', 'payment'])
             ->whereNotNull('payment_id')
             ->where('payment_id', '!=', '');
 
+        // Filter by academic session
+        if ($academicSessionId) {
+            $query->where('academic_session_id', $academicSessionId);
+        }
+
+        // Filter by department
         if ($departmentId) {
             $query->where('department_id', $departmentId);
         }
@@ -170,8 +220,10 @@ class StudentManagementController extends Controller
         return view('admin.studentManagement.application', compact(
             'applications',
             'departments',
+            'academicSessions',
             'totalStudents',
-            'totalAmount'
+            'totalAmount',
+            'currentSession'
         ));
     }
 
@@ -289,7 +341,7 @@ class StudentManagementController extends Controller
                 $this->sendStatusUpdateEmail($application);
             } elseif ($action == 'pending' && $application->admission_status != 'pending') {
                 $application->update(['admission_status' => 'pending']);
-                $this->sendStatusDeniedEmail($application);
+                // $this->sendStatusDeniedEmail($application);
             }
         }
 
@@ -300,7 +352,7 @@ class StudentManagementController extends Controller
     {
         if ($application->admission_status != 'pending') {
             $application->update(['admission_status' => 'pending']);
-            $this->sendStatusDeniedEmail($application);
+            // $this->sendStatusDeniedEmail($application);
 
             return redirect()->back()->with([
                 'message' => 'Application Status has been reset to Pending',
@@ -347,11 +399,47 @@ class StudentManagementController extends Controller
 
 
 
+    // public function ApplicationSearch(Request $request)
+    // {
+    //     if ($request->ajax()) {
+    //         $query = $request->get('query');
+    //         $applications = Application::with(['user.student', 'department', 'academicSession'])
+    //             ->where(function ($q) use ($query) {
+    //                 $q->whereHas('user', function ($subQ) use ($query) {
+    //                     $subQ->where('first_name', 'LIKE', "%{$query}%")
+    //                         ->orWhere('last_name', 'LIKE', "%{$query}%")
+    //                         ->orWhere('other_names', 'LIKE', "%{$query}%")
+    //                         ->orWhereRaw("CONCAT(IFNULL(first_name, ''), ' ', IFNULL(last_name, ''), ' ', IFNULL(other_names, '')) LIKE ?", ["%{$query}%"]);
+    //                 })
+    //                     ->orWhereHas('user.student', function ($subQ) use ($query) {
+    //                         $subQ->where('phone', 'LIKE', "%{$query}%")
+    //                             ->orWhere('application_unique_number', 'LIKE', "%{$query}%");
+    //                     });
+    //             })
+    //             ->whereNotNull('payment_id')
+    //             ->where('payment_id', '!=', '')
+    //             ->orderBy('created_at', 'desc')
+    //             ->paginate(100);
+
+    //         return response()->json(view('admin.partials.applicationTableBody', compact('applications'))->render());
+    //     }
+    // }
+
+    // Updated ApplicationSearch method in StudentManagementController
     public function ApplicationSearch(Request $request)
     {
         if ($request->ajax()) {
             $query = $request->get('query');
-            $applications = Application::with(['user.student', 'department', 'academicSession'])
+            $academicSessionId = $request->get('academic_session_id');
+            $departmentId = $request->get('department_id');
+
+            // Get current session as default
+            $currentSession = AcademicSession::where('status', 'current')->first();
+            if (!$academicSessionId && $currentSession) {
+                $academicSessionId = $currentSession->id;
+            }
+
+            $applicationsQuery = Application::with(['user.student', 'department', 'academicSession'])
                 ->where(function ($q) use ($query) {
                     $q->whereHas('user', function ($subQ) use ($query) {
                         $subQ->where('first_name', 'LIKE', "%{$query}%")
@@ -365,8 +453,19 @@ class StudentManagementController extends Controller
                         });
                 })
                 ->whereNotNull('payment_id')
-                ->where('payment_id', '!=', '')
-                ->orderBy('created_at', 'desc')
+                ->where('payment_id', '!=', '');
+
+            // Apply session filter
+            if ($academicSessionId) {
+                $applicationsQuery->where('academic_session_id', $academicSessionId);
+            }
+
+            // Apply department filter
+            if ($departmentId) {
+                $applicationsQuery->where('department_id', $departmentId);
+            }
+
+            $applications = $applicationsQuery->orderBy('created_at', 'desc')
                 ->paginate(100);
 
             return response()->json(view('admin.partials.applicationTableBody', compact('applications'))->render());

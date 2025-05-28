@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Payment;
 use App\Models\Department;
 use App\Models\Application;
+use App\Models\AcademicSession;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
@@ -25,20 +26,36 @@ use Illuminate\Support\Facades\Storage;
 use KingFlamez\Rave\Facades\Rave as Flutterwave;
 use Unicodeveloper\Flutterwave\Facades\Flutterwave as UnicodeveloperFlutterwave;
 
-
-
 class ApplicationProcessController extends Controller
 {
 
     public function finalApplicationStep(Request $request, string $userSlug)
     {
         $user = User::where('nameSlug', $userSlug)->firstOrFail();
-        $application = $request->application; // This is passed from the middleware
 
-        // If the application exists but payment is pending
-        if ($application->payment_id == null) {
+        // Get current academic session
+        $currentSession = AcademicSession::where('status', 'current')->first();
+
+        // Get application for CURRENT session only
+        $application = $user->applications()
+            ->where('academic_session_id', $currentSession->id ?? null)
+            ->first();
+
+        // Check if user has been APPROVED/ADMITTED in any PREVIOUS session (not current session)
+        // Students can reapply if they were denied or pending in previous sessions, regardless of payment
+        $hasBeenApprovedInPreviousSession = $user->applications()
+            ->where('admission_status', 'approved')
+            ->where('academic_session_id', '!=', $currentSession->id ?? null)
+            ->exists();
+
+        if ($hasBeenApprovedInPreviousSession) {
+            return redirect()->route('student.dashboard')
+                ->with('info', 'You have already been admitted in a previous session and cannot apply again.');
+        }
+
+        // Check if application exists for current session and payment is pending
+        if ($application && $application->payment_id == null) {
             $paymentMethods = PaymentMethod::latest()->get();
-            // dd($paymentMethods);
 
             return view('student.payment.index', compact(
                 'user',
@@ -47,18 +64,21 @@ class ApplicationProcessController extends Controller
             ));
         }
 
-        // If payment is completed, redirect to the appropriate next step
+        // If payment is completed for current session, redirect to dashboard
+        if ($application && $application->payment_id != null) {
+            return redirect()->route('student.dashboard')
+                ->with('info', 'Your application is complete and payment has been received.');
+        }
+
+        // If no application exists for current session, redirect to dashboard
         return redirect()->route('student.dashboard')
-            ->with('info', 'Your application is complete and payment has been received.');
+            ->with('error', 'No application found for current session.');
     }
-
-
 
 
     // process flutterWave
     public function processPayment(Request $request)
     {
-        // dd($request);
         $request->validate([
             'payment_method_id' => 'required'
         ], [
@@ -67,6 +87,15 @@ class ApplicationProcessController extends Controller
 
         $user = auth()->user();
 
+        // Additional check to prevent approved students from making payments
+        $hasBeenApproved = $user->applications()
+            ->where('admission_status', 'approved')
+            ->exists();
+
+        if ($hasBeenApproved) {
+            return redirect()->route('student.dashboard')
+                ->with('info', 'You have already been admitted and cannot make another payment.');
+        }
 
         $reference = Flutterwave::generateReference();
 
@@ -74,7 +103,6 @@ class ApplicationProcessController extends Controller
         $paymentMethodId = $request->payment_method_id;
 
         $paymentMethod = PaymentMethod::find($paymentMethodId);
-
 
         if ($paymentMethod->name == "Flutterwave") {
             try {
@@ -92,10 +120,8 @@ class ApplicationProcessController extends Controller
                     ],
                     'customizations' => [
                         'title' => 'Application Payment',
-                        // 'description' => 'Payment for application #' . $application->invoice_number,
                     ],
                 ];
-
 
                 $payment = Flutterwave::initializePayment($data);
 
@@ -103,36 +129,29 @@ class ApplicationProcessController extends Controller
                     return redirect()->back()->withErrors('An error occurred while processing the payment.');
                 }
 
-                // $transactionId = $payment;
-                // dd($transactionId);
-
                 return redirect($payment['data']['link']);
             } catch (\Exception $e) {
                 dd($e->getMessage());
-
                 return redirect()->back()->withErrors('An error occurred: ' . $e->getMessage());
             }
         } else if ($paymentMethod->name == "Paystack") {
             try {
                 $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
-                $baseAmount = $paymentAmount; // Amount to go to subaccount (in Naira)
-                $additionalCharges = 1450; // Additional charges (in Naira)
-                $totalAmount = $baseAmount + $additionalCharges; // Total to charge customer
-
+                $baseAmount = $paymentAmount;
+                $additionalCharges = 1450; // This goes to your main account
+                $totalAmount = $baseAmount + $additionalCharges;
 
                 $transaction = $paystack->transaction->initialize([
                     'email' => $user->email,
-                    'amount' => $totalAmount * 100, // Convert total to kobo (₦11,450)
+                    'amount' => $totalAmount * 100, // Total amount customer pays (including charges)
                     'reference' => $this->generateUniqueReference(),
                     'callback_url' => route('student.payment.callbackPaystack'),
-                    'subaccount' => 'ACCT_nkrw09lc3hnnlrg',
-                    'transaction_charge' => $additionalCharges * 100, // Set to 0 to ensure subaccount gets full amount
-                    'bearer' => 'account' // Main account bears all transaction fees
+                    'channels' => ['card'], // Restrict to card payments only
+                    'subaccount' => 'ACCT_nkrw09lc3hnnlrg', // Subaccount receives the base amount
+                    'transaction_charge' => $additionalCharges * 100, // Your charges (goes to main account)
+                    'bearer' => 'account' // Subaccount bears the Paystack fees
                 ]);
-                dd($transaction);
-                // session(['paystack_reference' => $this->generateUniqueReference()]);
-
 
                 return redirect($transaction->data->authorization_url);
             } catch (\Yabacon\Paystack\Exception\ApiException $e) {
@@ -152,15 +171,11 @@ class ApplicationProcessController extends Controller
         }
     }
 
-
-
     public function handlePaymentCallBackPayStack(Request $request)
     {
         $paystack = new \Yabacon\Paystack(config('paystack.secretKey'));
 
-
         try {
-
             $transaction = $paystack->transaction->verify([
                 'reference' => $request->reference,
             ]);
@@ -169,18 +184,19 @@ class ApplicationProcessController extends Controller
                 DB::beginTransaction();
 
                 $userEmail = $transaction->data->customer->email;
-
                 $user = User::where('email', $userEmail)->firstOrFail();
-                $application = $user->applications;
-                // dd($application);
+
+                // Get current session application
+                $currentSession = AcademicSession::where('status', 'current')->first();
+                $application = $user->applications()
+                    ->where('academic_session_id', $currentSession->id)
+                    ->first();
 
                 $paymentMethod = PaymentMethod::where('name', 'Paystack')->firstOrFail();
 
-
-
                 $paymentData = [
                     'user_id' => $user->id,
-                    'amount' => $transaction->data->amount / 100, // Convert kobo to Naira
+                    'amount' => $transaction->data->amount / 100,
                     'payment_method' => 'Paystack',
                     'payment_status' => 'Successful',
                     'transaction_id' => $transaction->data->reference,
@@ -188,9 +204,7 @@ class ApplicationProcessController extends Controller
                 ];
 
                 $payment = Payment::create($paymentData);
-                // dd($payment);
                 $application->update(['payment_id' => $payment->id]);
-
 
                 DB::commit();
 
@@ -212,7 +226,6 @@ class ApplicationProcessController extends Controller
             DB::rollBack();
             Log::error('Paystack Payment Error', [
                 'message' => $e->getMessage(),
-                // 'user_id' => auth()->id(),
                 'reference' => $request->reference
             ]);
             return $this->handlePaymentError($e->getMessage());
@@ -231,13 +244,6 @@ class ApplicationProcessController extends Controller
         return uniqid(auth()->id() . '', true);
     }
 
-
-
-
-
-
-
-
     // handle FLUTTER-WAVE payment callback
     public function handlePaymentCallBack(Request $request)
     {
@@ -247,15 +253,17 @@ class ApplicationProcessController extends Controller
 
                 $transactionId = Flutterwave::getTransactionIDFromCallback();
                 $data = Flutterwave::verifyTransaction($transactionId);
-                // dd($data);
 
                 $user = User::where('email', $data['data']['customer']['email'])->first();
 
                 if ($user) {
-                    $application = $user->applications;
-                    $paymentMethodId = PaymentMethod::where('name', 'Flutterwave')->first()->id;
-                    // dd($paymentMethodId);
+                    // Get current session application
+                    $currentSession = AcademicSession::where('status', 'current')->first();
+                    $application = $user->applications()
+                        ->where('academic_session_id', $currentSession->id)
+                        ->first();
 
+                    $paymentMethodId = PaymentMethod::where('name', 'Flutterwave')->first()->id;
 
                     $paymentData = [
                         'user_id' => $user->id,
@@ -271,10 +279,10 @@ class ApplicationProcessController extends Controller
                     if ($application) {
                         $application->update(['payment_id' => $payment->id]);
                     }
+
                     Mail::to($user->email)->send(new ApplicationStatusMail($user, $application, $payment));
 
                     $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
-
 
                     return view('student.payment.success', [
                         'user' => $user,
@@ -288,20 +296,15 @@ class ApplicationProcessController extends Controller
                         ->withErrors('Payment was not successful. Please try again.');
                 }
             } elseif ($status == 'cancelled') {
-
                 $userSlug = optional(auth()->user())->nameSlug;
                 return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
                     ->withErrors('Payment was cancelled.');
             } else {
-
                 $userSlug = optional(auth()->user())->nameSlug;
                 return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
                     ->withErrors('Payment was not successful. Please try again.');
             }
         } catch (\Exception $e) {
-            // dd($e->getMessage());
-
-            // Redirect with an error message
             $userSlug = optional(auth()->user())->nameSlug;
             return redirect()->route('payment.view.finalStep', ['userSlug' => $userSlug])
                 ->withErrors('An error occurred while processing the payment. Please try again.');
@@ -311,14 +314,15 @@ class ApplicationProcessController extends Controller
     public function showSuccess()
     {
         $user = auth()->user();
-        $application = $user->applications;
+        $currentSession = AcademicSession::where('status', 'current')->first();
+        $application = $user->applications()
+            ->where('academic_session_id', $currentSession->id)
+            ->first();
         $payment = $application ? $application->payment : null;
 
-        // Generate URL to the student details page
         $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
 
-
-        if (!$payment || !$user || $application) {
+        if (!$payment || !$user || !$application) {
             return redirect()->route('payment.view.finalStep', ['userSlug' => $user->nameSlug])
                 ->withErrors('An error occurred while processing the payment. Please try again.');
         }
@@ -329,9 +333,11 @@ class ApplicationProcessController extends Controller
     public function viewPaymentSlip()
     {
         $user = auth()->user();
-        $application = $user->applications;
+        $currentSession = AcademicSession::where('status', 'current')->first();
+        $application = $user->applications()
+            ->where('academic_session_id', $currentSession->id)
+            ->first();
 
-        // Generate URL to the student details page
         $barcodeUrl = route('student.details.show', ['nameSlug' => $user->nameSlug]);
 
         if (!$application || !$application->payment_id) {

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\Application;
+use App\Models\AcademicSession;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -17,7 +18,10 @@ class CheckApplicationStarted
     public function handle(Request $request, Closure $next): Response
     {
         $user = auth()->user();
+        $currentSession = AcademicSession::where('status', 'current')->first();
+
         $application = Application::where('user_id', $user->id)
+                                  ->where('academic_session_id', $currentSession->id ?? null)
                                   ->whereNotNull('invoice_number')
                                   ->first();
 
