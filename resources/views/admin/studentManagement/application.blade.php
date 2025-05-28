@@ -401,7 +401,6 @@
                             <li>Denied</li>
                         </ul>
                     </div>
-
                     <!-- Main Content -->
                     <div class="card-body">
                         <!-- Import Form -->
