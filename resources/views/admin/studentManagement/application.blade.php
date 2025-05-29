@@ -43,6 +43,7 @@
                 margin-bottom: 0.5rem;
             }
         }
+        
 
         /* Print styles */
         @media print {
